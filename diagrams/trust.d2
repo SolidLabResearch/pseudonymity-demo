@@ -1,0 +1,28 @@
+direction: down
+trust_third_party_service: |md
+Trust: Third Party Service solution
+| {
+  anonymizer
+  recruiter
+  idp_alice
+  idp_anon
+
+  anonymizer -> idp_alice
+  anonymizer -> idp_anon
+  recruiter -> idp_anon
+  recruiter -> idp_alice
+
+}
+
+trust_did: |md
+Trust: `did:key` solution
+| {
+  anonymizer
+  recruiter
+  idp_alice
+
+  anonymizer -> idp_alice
+ 
+  recruiter -> idp_alice
+
+}

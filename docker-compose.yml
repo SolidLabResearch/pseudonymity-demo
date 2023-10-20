@@ -1,0 +1,13 @@
+
+services:
+  css0:
+    image: solidproject/community-server
+    ports:
+      - 3000:3000
+
+  css1:
+    image: solidproject/community-server
+    environment:
+      - CSS_PORT=3001
+    ports:
+      - 3001:3001

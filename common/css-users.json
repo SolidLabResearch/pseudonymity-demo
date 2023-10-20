@@ -1,0 +1,23 @@
+[
+  {
+    "podName": "alice",
+    "email": "alice@example.com",
+    "password": "alice123",
+    "createWebId": true,
+    "createPod": true,
+    "register": true,
+    "webId": "http://id.be/alice",
+    "css": "http://localhost:3000"
+  },
+  {
+    "podName": "anon",
+    "email": "anon@example.com",
+    "password": "anon123",
+    "createWebId": true,
+    "createPod": true,
+    "register": true,
+    "webId": "http://anon.id/4l1c3",
+    "css": "http://localhost:3001"
+  }
+  
+]

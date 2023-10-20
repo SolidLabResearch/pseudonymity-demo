@@ -1,0 +1,103 @@
+css0: {
+  idp: {
+    db: |md
+    - alice (WebID: http://id.be/alice)
+    |
+  }
+
+  pod0: Alice's pod {
+  shape: image
+  icon: https://icons.terrastruct.com/essentials%2F117-database.svg
+}
+}
+css1: {
+  idp: {
+    db: |md
+    - anon (WebID: `http://anon.id/4l1c3`)
+    |
+  }
+}
+
+c: client {
+  icon: https://icons.terrastruct.com/azure%2FAI%20and%20ML%20Service%20Color%2FBot%20Services.svg
+  shape: image
+}
+
+r: recruitment {
+  shape: image
+  icon: https://icons.terrastruct.com/gcp%2FProducts%20and%20services%2FAI%20and%20Machine%20Learning%2FCloud%20Jobs%20API.svg
+}
+
+u: university {
+  shape: image
+  icon: https://www.svgrepo.com/download/46846/university.svg
+}
+
+g: government {
+  shape: image
+  icon: https://www.svgrepo.com/download/513283/building.svg
+}
+
+vc01: VC01 {
+  shape: image
+  icon: https://www.svgrepo.com/download/513339/price-tag.svg
+}
+
+vc02: VC02 {
+  shape: image
+  icon: https://www.svgrepo.com/download/513239/price-tag.svg
+}
+
+presentation_request: Presentation Request {
+  shape: image
+  icon: https://www.svgrepo.com/download/526911/checklist.svg
+}
+
+direction: up
+css_setup: 'CSS Setup' {
+  shape: circle
+}
+c --> css_setup
+css_setup --> css0 : register alice
+css_setup --> css1 : register anon
+
+# VCs are issued to Alice's pod
+g --> vc01 --> css0.pod0
+u --> vc02 --> css0.pod0
+
+# Job application process
+jap: 'Job application process' {
+  auth_alice: "Authenticated as Alice" {
+    fetch_vcs: "Fetch VCs"
+    
+  }
+  auth_anon: "Authenticated as Anon" {
+
+    fetch_presentation_request: "Fetch presentation request"
+    create_VP01: "Create VP01"
+    create_VP02: "Create VP02"
+    fetch_presentation_request -> create_VP01
+  }
+
+}
+c --> jap
+jap --> r
+jap.auth_alice.fetch_vcs <-- css0
+jap.auth_anon.fetch_presentation_request -- presentation_request -- r
+
+
+# webid: https://id.be/alice {
+#   shape: image
+#   icon: https://icons.terrastruct.com/azure%2FIdentity%20Service%20Color%2FIdentity%20governance.svg
+# }
+
+# s0: service {
+#   shape: image
+#   icon: https://icons.terrastruct.com/azure%2FIntune%20Service%20Color%2FClient%20Apps.svg
+# }
+
+# a0: agent {
+#   shape: image
+#   icon: https://icons.terrastruct.com/azure%2FAI%20and%20ML%20Service%20Color%2FBot%20Services.svg
+# }
+
