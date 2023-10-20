@@ -1,0 +1,63 @@
+seq: "DID Key solution" {
+  shape: sequence_diagram
+  anonymizer
+  recruiter
+  pod_alice
+  idp_alice
+
+  setup_auth_tokens: "Setup authentication tokens" {
+    auth_alice: "Authenticate: Alice" {
+      anonymizer -> idp_alice
+      idp_alice -> anonymizer: Token
+    }
+  }
+  
+  ctx_anon: "Context: Anon" {
+    anonymizer -> recruiter: "Get Presentation Request (Diploma)"
+    recruiter -> anonymizer: "Presentation Request (Diploma)"
+  }
+
+  ctx_alice: "Authenticated as Alice" {
+    anonymizer -> pod_alice: "Fetch diploma VC"
+    pod_alice -> anonymizer: "VC01"
+  }
+
+  ctx_anon2: "Context: Anon" {
+    diploma_exchange: "Diploma Exchange" {
+      anonymizer.|
+        1. Derive: dVC01 = SelectiveDisclosure(VC01, {degree})
+        2. Create Presentation: VP01 = [ dVC01 ]
+        3. Sign VP01
+      |
+      
+      anonymizer -> recruiter: "Present VP01"
+      recruiter."Verify VP01"
+      recruiter -> anonymizer: "Response: RVP01"
+    }
+
+    identity_verification: "Identity Verification" {
+      # Presentation Request: Identity
+      anonymizer -> idp_alice: "Get Presentation Request (Identity)"
+      idp_alice -> anonymizer: "Presentation Request (Identity)"
+
+      # Create VP02
+      anonymizer -> pod_alice: "Fetch identity VC"
+      pod_alice -> anonymizer: "VC02"
+      anonymizer.|
+        1. Derive: dVC02 = SelectiveDisclosure(VC02, {WebID})
+        2. Create Presentation: VP02 = [ dVC02 ]
+        3. Sign VP02
+      |
+
+      # Exchange VP02
+      anonymizer -> recruiter: "Present VP02"
+      recruiter."Verify VP02"
+      recruiter -> anonymizer: "Response: RVP02"
+    }
+
+  }
+    
+
+  
+
+}

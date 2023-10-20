@@ -34,7 +34,13 @@ The following diagram represents
 the sequence interactions between actors in case of the
 [third-party service solution](#third-party-service).
 
-![Sequence diagram: Third-party service solution](diagrams/sequence.png)
+![Sequence diagram: Third-party service solution](diagrams/sequence-3rd-party.png)
+
+The following diagram represents
+the sequence interactions between actors in case of the
+[DID Key solution](#did-key).
+
+![Sequence diagram: DID Key solution](diagrams/sequence-did-key.png)
 
 ### Trust
 
