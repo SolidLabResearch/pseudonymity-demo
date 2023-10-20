@@ -1,20 +1,63 @@
+vars: {
+  alice: {
+    webid: "http://id.be/alice"
+    idp: "http://id.be/"
+    pod: "http://storage.be/alice"
+    password: "*****"
+  }
+  anon: {
+    webid: "http://anon.id/hi"
+    idp: "http://anon.id/"
+    password: "*****"
+  }
+  recruiter: {
+    webid: "http://recruiter.be/"
+  }
+}
+
+VC01: {
+  shape: sql_table
+  webid: ${alice.webid}
+  identifier: "123456789"
+  birth_date: "1990-01-01"
+  gender: "F"
+}
+
+VC02: {
+  shape: sql_table
+  degree: "Msc. Physics"
+  graduation_date: "2020-06-30"
+  grade: "Distinction"
+  university: "Ghent University"
+}
+
 seq: "Third-party Service solution" {
   shape: sequence_diagram
+  alice
   anonymizer
-  recruiter
-  pod_alice
-  idp_alice
-  idp_anon
+  recruiter: "Recruiter\n${recruiter.webid}"
+  pod_alice: Pod Alice\n${alice.pod}
+  idp_alice: IDP Alice\n${alice.idp}
+  idp_anon: IDP Anon\n${anon.idp}
+
+  pod_alice."Contains VC01 and VC02"  
+  
+
+  register_anon: "Register anonymous account" {
+    alice -> anonymizer: "Register"
+    anonymizer -> idp_anon: "Create anonymous account for Alice"
+    idp_anon -> anonymizer: "Account created (WebID: ${anon.webid})"
+  }
 
   setup_auth_tokens: "Setup authentication tokens" {
     auth_alice: "Authenticate: Alice" {
-      anonymizer -> idp_alice
-      idp_alice -> anonymizer: Token
+      anonymizer -> idp_alice: "Authenticate(${alice.webid}, ${alice.password})"
+      idp_alice -> anonymizer: Token-A
     }
   
     auth_anon: "Authenticate: Anon" {
-      anonymizer -> idp_anon
-      idp_anon -> anonymizer: Token
+      anonymizer -> idp_anon: "Authenticate(${anon.webid}, ${anon.password})"
+      idp_anon -> anonymizer: Token-X
     }
   }
   
