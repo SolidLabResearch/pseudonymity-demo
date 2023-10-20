@@ -1,17 +1,14 @@
 {
-  "name": "eval-architecture",
-  "version": "1.0.0",
+  "name": "evaluation",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
-
     "docker:run": "docker compose -f docker-compose.yml up -d",
     "docker:stop": "docker compose stop -t 0",
     "docker:rm": "docker compose rm --force",
-    "docker:logs": "docker compose logs -f",
-    
+    "docker:logs": "docker compose logs -f",    
     "docker:clean-start": "npm run docker:stop && npm run docker:rm && npm run docker:run",
-
 
     "index": "npx ts-node src/index.ts",
     "index:dev": "nodemon --config nodemon.json --exec npm run index",
