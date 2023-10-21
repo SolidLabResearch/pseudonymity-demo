@@ -1,13 +1,22 @@
 
 services:
-  css0:
-    image: solidproject/community-server
+  css_alice:
+    image: solidproject/community-server:7
+    environment:
+      - CSS_PORT=3000
     ports:
       - 3000:3000
 
-  css1:
-    image: solidproject/community-server
+  css_anon:
+    image: solidproject/community-server:7
     environment:
       - CSS_PORT=3001
     ports:
       - 3001:3001
+
+  css_recruiter:
+    image: solidproject/community-server:7
+    environment:
+      - CSS_PORT=3002
+    ports:
+      - 3002:3002
