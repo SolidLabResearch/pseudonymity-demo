@@ -3,7 +3,7 @@ import { joinUrlPaths, readJsonFile } from './util';
 import {logger} from './logger';
 import {fetchJson, formatCssTokenHeader} from './util';
 
-export interface Credentials {
+export interface UserConfig {
   email: string;
   password: string;
   podName: string;
@@ -11,8 +11,8 @@ export interface Credentials {
   css?: string;
 }
 
-export async function register(credentials: Credentials) {  
-  const baseUrl = credentials.css ?? config.baseUrl;
+export async function register(UserConfig: UserConfig) {  
+  const baseUrl = UserConfig.css ?? config.baseUrl;
   
   const url = joinUrlPaths(baseUrl, '.account/');
   // Fetch control urls
@@ -32,7 +32,7 @@ export async function register(credentials: Credentials) {
   console.log({accountControls})
 
   // Add login method
-  const { email, password } = credentials;
+  const { email, password } = UserConfig;
   logger.info(`Adding login method for: ${email}`)
   let res = await fetchJson(accountControls.password.create, {
     method:'POST',
@@ -44,21 +44,25 @@ export async function register(credentials: Credentials) {
   })
 
   // Create pod
-  if(credentials.createPod) {
-    logger.info(`Creating pod ${credentials.podName}`)
-    res = await fetchJson(accountControls.account.pod, {
+  let podUrls = {}
+  if(UserConfig.createPod) {
+    logger.info(`Creating pod ${UserConfig.podName}`)
+    const {pod, podResource, webId} = await fetchJson(accountControls.account.pod, {
       method: 'POST',
       headers: {
         Authorization: formatCssTokenHeader(authorization),
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        name: credentials.podName
+        name: UserConfig.podName
       }),
     })
-
+    console.log('Pod created!')
+    podUrls = {pod, podResource}
   }
   
-
-  return accountControls;
+  return {
+    ...accountControls,
+    ...podUrls
+  };
 }
