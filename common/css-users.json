@@ -6,7 +6,7 @@
     "createWebId": true,
     "createPod": true,
     "register": true,
-    "webId": "http://id.be/alice",
+    "webId": "http://localhost:3000/alice/profile/card#me",
     "css": "http://localhost:3000"
   },
   {
@@ -16,8 +16,18 @@
     "createWebId": true,
     "createPod": true,
     "register": true,
-    "webId": "http://anon.id/4l1c3",
+    "webId": "http://localhost:3001/anon/profile/card#me",
     "css": "http://localhost:3001"
+  },
+  {
+    "podName": "recruiter",
+    "email": "recruiter@hr.com",
+    "password": "recruiter123",
+    "createWebId": true,
+    "createPod": true,
+    "register": true,
+    "webId": "http://localhost:3002/recruiter/profile/card#me",
+    "css": "http://localhost:3002"
   }
   
 ]
