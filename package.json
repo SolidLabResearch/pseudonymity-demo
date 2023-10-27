@@ -16,7 +16,8 @@
     "d2:setup:watch": "d2 --watch ./diagrams/setup.d2 ./diagrams/setup.png",
     "d2:sequence:3rdparty:watch": "d2 --watch ./diagrams/sequence-3rd-party.d2 ./diagrams/sequence-3rd-party.png",
     "d2:sequence:did:watch": "d2 --watch ./diagrams/sequence-did-key.d2 ./diagrams/sequence-did-key.png",
-    "d2:trust:watch": "d2 --watch ./diagrams/trust.d2 ./diagrams/trust.png"
+    "d2:trust:watch": "d2 --watch ./diagrams/trust.d2 ./diagrams/trust.png",
+    "d2:credential:watch": "d2 --watch ./diagrams/credential-exchange.d2 ./diagrams/credential-exchange.png"
   },
   "author": "GDM",
   "license": "MIT",
