@@ -3,3 +3,4 @@ node_modules
 /tmp
 usecase/sandbox.js
 .vscode
+sandbox.ts
