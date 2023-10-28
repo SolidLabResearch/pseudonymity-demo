@@ -44,7 +44,7 @@ DID Peer features are not supported by DID Key:
 
 ## Diagrams
 
-- [ ] Design of how CSS can be extended to support communication over one or more DID Methods (i.e. `did:key`, `did:peer`, etc.)
+- [ ] Design of how CSS can be extended to support communication over one or more DID Methods (i.e. `did:key`, `did:peer`, etc.)
 
 ### Sequence
 
@@ -70,3 +70,24 @@ the trust relations between actors for both solutions.
 ## Usage
 
 - [ ] TODO
+
+## Testing
+
+```bash
+npm install
+```
+
+### Recruiter service
+
+Start the recruiter service as follows:
+
+```bash
+npm run eval:hacky:recruiter:start
+```
+
+Open a new shell and run the tests as follows:
+
+```bash
+npm run test:eval:hacky:recruiter
+```
+

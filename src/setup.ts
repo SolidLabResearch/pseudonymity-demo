@@ -139,6 +139,19 @@ async function wip(userOnControls: Record<string, any>) {
   // This request will do a simple GET for example.
   let response = await authFetch(controls.pod);
   console.log(await response.text());
+
+  // WIP!!! Following example shows how to upload a signed VC to the pod
+  // const pocExport = readJsonFile('../solid-dif-poc/usecase/export/final-states/all.json');
+  // const {signedVC01} = pocExport;
+  // const urlPodCredentials = joinUrlPaths(controls.pod, 'credentials', 'signedVC01.jsonld').toString();
+  // response = await authFetch(urlPodCredentials, {
+  //   method: 'PUT',
+  //   headers: {
+  //     'content-type': 'application/json',
+  //   },
+  //   body: JSON.stringify(signedVC01),
+  // });
+  // console.log(await response.text());
 }
 
 preflight()
