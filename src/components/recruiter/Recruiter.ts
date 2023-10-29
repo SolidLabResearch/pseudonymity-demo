@@ -20,15 +20,7 @@ export class Recruiter {
     sign(d: any) : any {
         console.log('Recruiter.sign:' , d)
     }
-
-    /**
-     * TODO: continue here!!! (28/10/2023 - 02:48)
-     * Problems with integrating codesnippets from solid-dif-poc into this evaluation repo (probably due to the fact that
-     * the poc code is written in plain JS, while the current evaluation codebase is in TS.
-     * GO!
-     * @param vp
-     * @param challenge
-     */
+    
     async verify(vp: any, challenge: string) : Promise<any> {
         return await jsigs.verify(
             vp,
