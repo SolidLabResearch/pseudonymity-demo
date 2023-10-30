@@ -20,3 +20,18 @@ services:
       - CSS_PORT=3002
     ports:
       - 3002:3002
+
+
+  css_university:
+    image: solidproject/community-server:7
+    environment:
+      - CSS_PORT=3003
+    ports:
+      - 3003:3003
+
+  css_government:
+    image: solidproject/community-server:7
+    environment:
+      - CSS_PORT=3004
+    ports:
+      - 3004:3004
