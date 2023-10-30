@@ -7,6 +7,7 @@ import path from "path";
 import fetch from "cross-fetch";
 import {logger} from "./logger";
 import {CssProxy} from "./components/anonymizer/CssProxy";
+import { fileTypeFromFile } from 'file-type';
 
 const users: Array<CssUserConfig> = readJsonFile('./common/css-users.json')
 
@@ -73,16 +74,28 @@ async function transfer(rootDir: string, parentDir: string, _fetch: typeof fetch
     // Transfer files
     const srcFiles = dirents
         .filter(x => x.isFile())
-        .filter(x => x.name.endsWith('.json')) // TODO: generalize to other file extensions
 
     for await (const src of srcFiles) {
         const dst = path.join(controls.pod, relDir, src.name)
-        const srcData = fs.readFileSync(path.join(parentDir, src.name), { encoding: 'utf-8' })
+        const srcPath = path.join(parentDir, src.name);
+
+        const extOnMime = new Map(Object.entries({
+            'json': 'application/json',
+            'jsonld': 'application/ld+json',
+            'ttl': 'text/turtle'
+        }))
+
+        const [ext] = src.name.split('.').slice(-1)
+        const mt = extOnMime.get(ext)
+
+        if(!mt) {
+            throw new Error(`Cannot find mime-type for extension: ${ext} (file: ${src.name})`)
+        }
+
+        const srcData = fs.readFileSync(srcPath, { encoding: 'utf-8' })
         const response = await _fetch(dst, {
             method: 'PUT',
-            headers: {
-                'content-type': 'application/json',
-            },
+            headers: { 'content-type': mt! },
             body: srcData
         });
     }
