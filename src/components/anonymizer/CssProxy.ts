@@ -3,16 +3,21 @@ import {ClientCredentials} from "../../interfaces";
 import {obtainAccessToken} from "../../util";
 
 import {ISolidPod, ISolidProxy} from "./interfaces";
+import {createContainerAt} from "@inrupt/solid-client";
+import {logger} from "../../logger";
+import path from "path";
 
 export class CssProxy implements ISolidProxy {
     clientCredentials: ClientCredentials;
+    controls: any
     storage?: ISolidPod;
     webId: string;
     fetch?: typeof fetch
 
-    constructor(clientCredentials: ClientCredentials, webId: string) {
+    constructor(clientCredentials: ClientCredentials, webId: string, controls:any) {
         this.clientCredentials = clientCredentials;
         this.webId = webId;
+        this.controls = controls;
     }
 
     async intializeFetch(): Promise<typeof fetch> {
@@ -22,5 +27,18 @@ export class CssProxy implements ISolidProxy {
         const authFetch = await buildAuthenticatedFetch(fetch, accessToken, {dpopKey});
         this.fetch = authFetch;
         return authFetch
+    }
+
+    async createContainer(relPath: string) {
+        const dstContainer = path.join(this.controls!.pod, relPath) + '/'
+        logger.info(`Creating container: ${dstContainer}`)
+        const containerExists =  (await this.fetch!(dstContainer, { method: 'GET'})).status === 200
+        if(!containerExists) {
+            // Create container for subdir
+            const container = await createContainerAt(dstContainer, {fetch: this.fetch!})
+            logger.info(`Created container:\n${container}`)
+        } else {
+            logger.info(`Container ${dstContainer} already exists!`)
+        }
     }
 }

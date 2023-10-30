@@ -99,7 +99,7 @@ preflight()
         // load initial data on pods
         for await (const [email, userObject] of Object.entries(usersAndCredentials)) {
             const {credentials: { clientCredentials}, controls, user: { podName, webId}} = (userObject as any)
-            const cssProxy = new CssProxy(clientCredentials, webId)
+            const cssProxy = new CssProxy(clientCredentials, webId, controls)
             await cssProxy.intializeFetch();
             const pathActorDir = path.resolve(path.join('./actors', podName))
             // Initiate transfer
