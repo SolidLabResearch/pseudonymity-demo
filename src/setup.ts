@@ -100,12 +100,12 @@ preflight()
         for await (const [email, userObject] of Object.entries(usersAndCredentials)) {
             const {credentials: { clientCredentials}, controls, user: { podName, webId}} = (userObject as any)
             const cssProxy = new CssProxy(clientCredentials, webId)
-            const _fetch = await cssProxy.intializeFetch();
+            await cssProxy.intializeFetch();
             const pathActorDir = path.resolve(path.join('./actors', podName))
             // Initiate transfer
             const rootDir = pathActorDir
             const parentDir = pathActorDir
-            await transfer(rootDir, parentDir, _fetch, controls)
+            await transfer(rootDir, parentDir, cssProxy.fetch!, controls)
         }
     })
   .then(() => console.log('Done'))
