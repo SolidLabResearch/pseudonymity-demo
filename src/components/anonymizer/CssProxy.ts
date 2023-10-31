@@ -41,4 +41,24 @@ export class CssProxy implements ISolidProxy {
             logger.info(`Container ${dstContainer} already exists!`)
         }
     }
+
+    static async parseResponse(response: Response) {
+        if(!response.ok)
+            throw new Error(`Response has status code: ${response.status} (${response.statusText}).\nURL: ${response.url}`)
+
+        let payload = undefined;
+        switch (response.headers.get('content-type')) {
+            case 'application/json':
+            case 'application/ld+json':
+                payload = await response.json();
+                break;
+            case 'text/turtle':
+                payload = await response.text();
+                // TODO: parse with N3 & return N3 quad store
+                break;
+            default:
+                throw new Error('Not yet implemented: parsing of '+ response.headers.get('content-type'))
+        }
+        return payload
+    }
 }
