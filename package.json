@@ -23,7 +23,10 @@
     "eval:hacky:anonymizer:start": "npx ts-node src/components/anonymizer/service.ts",
     "eval:hacky:anonymizer:watch": "nodemon --config nodemon.json -w ./src/components/anonymizer --exec npm run eval:hacky:anonymizer:start",
     "test:eval:hacky:recruiter": "npx ts-node src/tests/components/recruiter-service.ts",
-    "test:eval:hacky:recruiter:watch": "nodemon --config nodemon.json --exec npm run test:eval:hacky:recruiter"
+    "test:eval:hacky:recruiter:watch": "nodemon --config nodemon.json --exec npm run test:eval:hacky:recruiter",
+
+    "sandbox": "npx ts-node sandbox.ts",
+    "sandbox:watch": "nodemon --config nodemon.json -w sandbox.ts --exec npm run sandbox"
   },
   "author": "GDM",
   "license": "MIT",
@@ -36,6 +39,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@comunica/query-sparql": "^2.10.0",
     "@digitalbazaar/did-method-key": "^5.1.0",
     "@digitalbazaar/vc": "^6.0.2",
     "@inrupt/solid-client": "^1.30.2",
