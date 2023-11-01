@@ -42,6 +42,10 @@ export class CssProxy implements ISolidProxy {
         }
     }
 
+    async parsedFetch(input: URL | RequestInfo,init?: RequestInit | undefined): Promise<any> {
+        return await CssProxy.parseResponse(await this.fetch!(input,init))
+    }
+    
     static async parseResponse(response: Response) {
         if(!response.ok)
             throw new Error(`Response has status code: ${response.status} (${response.statusText}).\nURL: ${response.url}`)
