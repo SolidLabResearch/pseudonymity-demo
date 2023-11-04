@@ -164,3 +164,9 @@ export function _hack_addEnsureContextFunction(suite: any) {
   };
   return suite;
 }
+
+import * as bls12381 from '@transmute/did-key-bls12381';
+export async function generateBls12381Keys(seed: string) {
+  return await bls12381.generate({secureRandom: () => Buffer.from(seed)}, {accept: 'application/did+ld+json'})
+
+}
