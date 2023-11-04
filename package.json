@@ -24,9 +24,8 @@
     "eval:hacky:anonymizer:watch": "nodemon --config nodemon.json -w ./src/components/anonymizer --exec npm run eval:hacky:anonymizer:start",
     "test:eval:hacky:recruiter": "npx ts-node src/tests/components/recruiter-service.ts",
     "test:eval:hacky:recruiter:watch": "nodemon --config nodemon.json --exec npm run test:eval:hacky:recruiter",
-
     "sandbox": "npx ts-node sandbox.ts",
-    "sandbox:watch": "nodemon --config nodemon.json -w sandbox.ts --exec npm run sandbox"
+    "sandbox:watch": "nodemon --config nodemon.json -w sandbox.ts -w src/components -w src/components/anonymizer --exec npm run sandbox"
   },
   "author": "GDM",
   "license": "MIT",
@@ -42,9 +41,11 @@
     "@comunica/query-sparql": "^2.10.0",
     "@digitalbazaar/did-method-key": "^5.1.0",
     "@digitalbazaar/vc": "^6.0.2",
+    "@digitalcredentials/vc-data-model": "^1.1.1",
     "@inrupt/solid-client": "^1.30.2",
     "@inrupt/solid-client-authn-core": "^1.17.3",
     "@mattrglobal/jsonld-signatures-bbs": "^1.2.0",
+    "@transmute/did-key-bls12381": "^0.3.0-unstable.10",
     "body-parser": "^1.20.2",
     "credentials-context": "^2.0.0",
     "cross-fetch": "^4.0.0",
@@ -52,6 +53,7 @@
     "express": "^4.18.2",
     "file-type": "^18.5.0",
     "jsonld-signatures": "^11.2.1",
+    "klona": "^2.0.6",
     "mime-types": "^2.1.35",
     "n3": "^1.17.1",
     "pino": "^8.16.0",
