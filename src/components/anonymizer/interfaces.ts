@@ -1,4 +1,5 @@
 import {ClientCredentials} from "../../interfaces";
+import {fetch} from '@inrupt/universal-fetch';
 
 export interface ISolidPod {
 
@@ -9,7 +10,7 @@ export interface ISolidProxy {
     clientCredentials?: ClientCredentials
     controls?: any
     storage?: ISolidPod
-    fetch?: Function
+    fetch?: typeof fetch
 }
 
 export interface IService {
