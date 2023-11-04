@@ -4,6 +4,7 @@ import * as didContext from "did-context";
 import credentialsContext from "credentials-context";
 import {customVocab} from "./customVocab";
 import {readJsonFile} from "../util";
+import {IDocumentLoader} from "./interfaces";
 
 const ctx = new Map();
 // DID context
@@ -21,7 +22,10 @@ ctx.set('https://w3id.org/security/v2', readJsonFile('./src/contexts/security-v2
 ctx.set("https://w3id.org/citizenship/v1",readJsonFile('./src/contexts/citizenVocab.json'))
 // Add VC02 specific context
 ctx.set(customVocab.url, customVocab.context)
-
+// Add credential examples context
+ctx.set('https://www.w3.org/2018/credentials/examples/v1', readJsonFile('./src/contexts/credentials-examples-v1.jsonld'))
+// ODRL context
+ctx.set('https://www.w3.org/ns/odrl.jsonld', readJsonFile('./src/contexts/odrl.jsonld'))
 // Actor contexts // TODO: dynamically add actors to context
 const alice = readJsonFile('./actors/alice/user.json');
 const government = readJsonFile('./actors/government/government.json');
@@ -40,7 +44,8 @@ Object.entries(actors)
 export {
     ctx
 }
-export function createCustomDocumentLoader(ctx: Map<any, any>) {
+
+export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader{
     return (url: any) => {
         const context = ctx.get(url);
         if (context !== undefined) {
@@ -53,3 +58,4 @@ export function createCustomDocumentLoader(ctx: Map<any, any>) {
         throw new Error(`Document loader unable to load URL "${url}".`);
     }
 }
+
