@@ -7,15 +7,17 @@ import {createContainerAt} from "@inrupt/solid-client";
 import {logger} from "../../logger";
 import path from "path";
 import {fetch} from "@inrupt/universal-fetch";
+import {Util} from "n3";
+import prefixes = Util.prefixes;
 
 export class CssProxy implements ISolidProxy {
     clientCredentials: ClientCredentials;
-    controls: any
+    controls?: any
     storage?: ISolidPod;
     webId: string;
     fetch?: typeof fetch
 
-    constructor(clientCredentials: ClientCredentials, webId: string, controls:any) {
+    constructor(clientCredentials: ClientCredentials, webId: string, controls?:any) {
         this.clientCredentials = clientCredentials;
         this.webId = webId;
         this.controls = controls;
@@ -65,5 +67,46 @@ export class CssProxy implements ISolidProxy {
                 throw new Error('Not yet implemented: parsing of '+ response.headers.get('content-type'))
         }
         return payload
+    }
+
+
+    async n3patch(url: string,
+                  where?:string,
+                  inserts?:string,
+                  deletes?:string,
+                  prefixes?: Record<string,string>
+                  ){
+
+        const clauses = [
+            where ? `solid:where { ${where} }` : where,
+            inserts ? `solid:inserts { ${inserts} }` : inserts,
+            deletes ? `solid:deletes { ${deletes} }` : deletes,
+        ].filter(c => c!!).join(';\n')
+
+
+        const n3Patch = `
+        @prefix solid: <http://www.w3.org/ns/solid/terms#>.
+        ${
+            prefixes! ? Object.entries(prefixes!).map(([p,ns])=>`@${p}: <${ns}> .`).join('\n') : ''
+        }
+        
+        _:rename a solid:InsertDeletePatch;
+            ${clauses}
+        .
+        `
+        const response = await this.fetch!(
+            url,
+            {
+                method: 'PATCH',
+                headers: {
+                    'content-type': "text/n3"
+                },
+                body: n3Patch
+            }
+        )
+
+        if(!response.ok)
+            throw new Error(`Response has status code: ${response.status} (${response.statusText}).\nURL: ${response.url}`)
+
     }
 }

@@ -24,13 +24,18 @@
     "eval:hacky:anonymizer:watch": "nodemon --config nodemon.json -w ./src/components/anonymizer --exec npm run eval:hacky:anonymizer:start",
     "test:eval:hacky:recruiter": "npx ts-node src/tests/components/recruiter-service.ts",
     "test:eval:hacky:recruiter:watch": "nodemon --config nodemon.json --exec npm run test:eval:hacky:recruiter",
+    "test:eval:hacky:university": "npx ts-node src/tests/components/university.ts",
+    "test:eval:hacky:university:watch": "nodemon --config nodemon.json --exec npm run test:eval:hacky:university",
     "sandbox": "npx ts-node sandbox.ts",
-    "sandbox:watch": "nodemon --config nodemon.json -w sandbox.ts -w src/components -w src/components/anonymizer --exec npm run sandbox"
+    "sandbox:watch": "nodemon --config nodemon.json -w sandbox.ts -w src/components -w src/components/anonymizer --exec npm run sandbox",
+    "scratch:update-webid-profile": "npx ts-node scratch/update-webid-profile.ts",
+    "scratch:update-webid-profile:watch": "nodemon --config nodemon.json -w scratch/ -w src/components --exec npm run scratch:update-webid-profile"
   },
   "author": "GDM",
   "license": "MIT",
   "devDependencies": {
     "@types/express": "^4.17.20",
+    "@types/jsonld": "^1.5.12",
     "@types/n3": "^1.16.3",
     "@types/node": "^20.8.7",
     "nodemon": "^3.0.1",
@@ -52,6 +57,7 @@
     "did-context": "^3.1.1",
     "express": "^4.18.2",
     "file-type": "^18.5.0",
+    "jsonld": "^8.3.1",
     "jsonld-signatures": "^11.2.1",
     "klona": "^2.0.6",
     "mime-types": "^2.1.35",
