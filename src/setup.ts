@@ -57,7 +57,9 @@ async function getUserCredentials(userOnControls: Record<string, any>) {
 }
 
 preflight()
+    // Instantiates SolidVCActors
     .then(async (usersAndCredentials): Promise<SolidVCActor[]> => {
+
         return Object.entries(usersAndCredentials)
             .map(([email,actorParams])=> {
                 const { user: { webId }, credentials, controls} = (actorParams as any)!
@@ -71,5 +73,17 @@ preflight()
                 const a = new SolidVCActor(proxy, webId, dl)
                 return a
             })
+    })
+    // Initializes SolidVCActors,
+    // creates G2 Keypairs and adds them to each actor's respective Solid pod,
+    // and links those keys to the Solid WebID Profile Documents
+    .then(async (actors:SolidVCActor[]) => {
+        await Promise.all(actors.map(
+            async (a) => {
+                await a.initialize()
+                await a.addKeysToSolidPod()
+                await a.linkKeysToWebIdProfileDocument()
+            return a
+        }))
     })
   .then(() => console.log('Done'))
