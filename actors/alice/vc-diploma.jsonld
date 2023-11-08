@@ -1,29 +1,28 @@
 {
   "@context": [
     "https://www.w3.org/2018/credentials/v1",
-    "https://www.w3.org/2018/credentials/examples/v1"
+    "https://w3id.org/security/bbs/v1",
+    "https://w3id.org/citizenship/v1",
+    "https://gddmulde.be/customvocab/"
   ],
-  "id": "vc:example:at:pod:alice",
+  "id": "urn:vc:02",
   "type": [
     "VerifiableCredential",
     "UniversityDegreeCredential"
   ],
-  "issuer": {
-    "id": "did:web:vc.transmute.world"
-  },
-  "issuanceDate": "2020-03-10T04:24:12.164Z",
+  "issuer": "did:key:z5TcEJwPUVgMbPEVUN8qUw66BEUuM7Kw1DwnTvopeNXE9YmA53xGcTdsWZpnvRP4kWFT5zrHSEPQfUDWgs3s7UoxcjLQvKUJ3hcKu73Q9iErBLoVJfmgw1rAnLdrM5oHeskvbnW5SS4XasLSfbkYrNyGqC1sH3ZeM3bkELPSLcWcZK5iQF5yQSYDfm1cBbSAubsHU5NtT",
+  "issuanceDate": "2021-06-19T18:53:11Z",
   "credentialSubject": {
-    "id": "did:example:ebfeb1f712ebc6f1c276e12ec21",
-    "degree": {
-      "type": "BachelorDegree",
-      "name": "Bachelor of Science and Arts"
-    }
+    "id": "urn:test:id000",
+    "identifier": "123456789ab",
+    "degree": "Msc. Physics",
+    "grade": "789/1000"
   },
   "proof": {
-    "type": "JsonWebSignature2020",
-    "created": "2020-03-21T17:51:48Z",
-    "verificationMethod": "did:web:vc.transmute.world#_Qq0UL2Fq651Q0Fjd6TvnYE-faHiOpRlPVQcY_-tA4A",
+    "type": "BbsBlsSignature2020",
+    "created": "2023-10-21T17:20:56Z",
     "proofPurpose": "assertionMethod",
-    "jws": "eyJiNjQiOmZhbHNlLCJjcml0IjpbImI2NCJdLCJhbGciOiJFZERTQSJ9..OPxskX37SK0FhmYygDk-S4csY_gNhCUgSOAaXFXDTZx86CmI5nU9xkqtLWg-f4cqkigKDdMVdtIqWAvaYx2JBA"
+    "proofValue": "iz2LwMt7fuLoCv+jwMlZCGr0Z+YDYHMB8snobgnrvjgGy/RWRIuTqoWVjDk6+fBdNfjywE+qjO0X4i8cmjUMsYTXN2LPXMTxJEvII+gyFtMUPky4TV9RCFhZYx7klIBTdjXSmqPgUXgC2Mcj8hMFVg==",
+    "verificationMethod": "did:key:z5TcEJwPUVgMbPEVUN8qUw66BEUuM7Kw1DwnTvopeNXE9YmA53xGcTdsWZpnvRP4kWFT5zrHSEPQfUDWgs3s7UoxcjLQvKUJ3hcKu73Q9iErBLoVJfmgw1rAnLdrM5oHeskvbnW5SS4XasLSfbkYrNyGqC1sH3ZeM3bkELPSLcWcZK5iQF5yQSYDfm1cBbSAubsHU5NtT#zUC7HWwUBK5kQ2QisHFgKhVYRgF1MAa1MzV1rqNLTq49h6njxVHYB22pZbUZB9L158b9Emd7CK6J4cbz7dSu3bd6i6ug63Gia2rgCg2UDo5K4WBJHULYJWTHyAQsQeWGLtvXUxB"
   }
 }
