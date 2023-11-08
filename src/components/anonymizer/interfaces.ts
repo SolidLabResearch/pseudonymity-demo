@@ -5,8 +5,10 @@ export interface ISolidPod {
 
 }
 
-export interface ISolidProxy {
+export interface ISolidActor {
     webId?: string
+}
+export interface ISolidProxy extends ISolidActor{
     clientCredentials?: ClientCredentials
     controls?: any
     storage?: ISolidPod

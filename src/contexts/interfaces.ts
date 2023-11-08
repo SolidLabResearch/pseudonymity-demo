@@ -5,5 +5,5 @@ export type DocumentLoaderResponse = {
 }
 
 export interface IDocumentLoader {
-    (url: any): DocumentLoaderResponse
+    (url: any): Promise<DocumentLoaderResponse>
 }

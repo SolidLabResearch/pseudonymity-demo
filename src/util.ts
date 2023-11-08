@@ -6,6 +6,7 @@ import { Parser } from 'n3';
 import {ClientCredentials, CssUserConfig} from "./interfaces";
 import {createDpopHeader, generateDpopKeyPair} from "@inrupt/solid-client-authn-core";
 import {register} from "./register";
+import jsonld from 'jsonld'
 
 export function joinUrlPaths(...paths: string[]) : URL{
   const [base, ...rest] = paths;
@@ -168,5 +169,27 @@ export function _hack_addEnsureContextFunction(suite: any) {
 import * as bls12381 from '@transmute/did-key-bls12381';
 export async function generateBls12381Keys(seed: string) {
   return await bls12381.generate({secureRandom: () => Buffer.from(seed)}, {accept: 'application/did+ld+json'})
+}
 
+function Vocab(ns: string) {
+  return (p: string) => ns.concat(p)
+}
+
+// https://solid.github.io/vocab/
+export const namespaces = {
+  sec: 'https://w3id.org/security#',
+  rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+  cert: 'http://www.w3.org/ns/auth/cert#',
+  foaf: 'http://xmlns.com/foaf/0.1/'
+}
+export const vocabs = Object.fromEntries(
+    Object.entries(namespaces).map(
+        ([prefix, ns]) => [
+          prefix, Vocab(ns as string)
+        ]
+    )
+)
+
+export async function jld2rdf(jld: object): Promise<object> {
+  return await jsonld.toRDF(jld, {format: 'application/n-quads'});
 }

@@ -18,12 +18,13 @@ export class CssProxy implements ISolidProxy {
     fetch?: typeof fetch
 
     constructor(clientCredentials: ClientCredentials, webId: string, controls?:any) {
-        this.clientCredentials = clientCredentials;
-        this.webId = webId;
-        this.controls = controls;
+        this.clientCredentials = clientCredentials!;
+        this.webId = webId!;
+        this.controls = controls!;
     }
 
     async intializeFetch(): Promise<typeof fetch> {
+        logger.debug(`[${this.webId}] initializeFetch`)
         const {accessToken, dpopKey} = await obtainAccessToken(this.clientCredentials, this.webId);
         // The DPoP key needs to be the same key as the one used in the previous step.
         // The Access token is the one generated in the previous step.
@@ -32,21 +33,12 @@ export class CssProxy implements ISolidProxy {
         return authFetch
     }
 
-    async createContainer(relPath: string) {
-        const dstContainer = path.join(this.controls!.pod, relPath) + '/'
-        logger.info(`Creating container: ${dstContainer}`)
-        const containerExists =  (await this.fetch!(dstContainer, { method: 'GET'})).status === 200
-        if(!containerExists) {
-            // Create container for subdir
-            const container = await createContainerAt(dstContainer, {fetch: this.fetch!})
-            logger.info(`Created container:\n${container}`)
-        } else {
-            logger.info(`Container ${dstContainer} already exists!`)
-        }
-    }
-
     async parsedFetch(input: URL | RequestInfo,init?: RequestInit | undefined): Promise<any> {
         return await CssProxy.parseResponse(await this.fetch!(input,init))
+    }
+
+    isInitialized(): boolean {
+        return this.fetch !== undefined
     }
 
     static async parseResponse(response: Response) {
@@ -70,6 +62,14 @@ export class CssProxy implements ISolidProxy {
     }
 
 
+    /**
+     * Spec: https://solid.github.io/specification/protocol#writing-resources
+     * @param url
+     * @param where
+     * @param inserts
+     * @param deletes
+     * @param prefixes
+     */
     async n3patch(url: string,
                   where?:string,
                   inserts?:string,
@@ -87,13 +87,14 @@ export class CssProxy implements ISolidProxy {
         const n3Patch = `
         @prefix solid: <http://www.w3.org/ns/solid/terms#>.
         ${
-            prefixes! ? Object.entries(prefixes!).map(([p,ns])=>`@${p}: <${ns}> .`).join('\n') : ''
+            prefixes! ? Object.entries(prefixes!).map(([p,ns])=>`@prefix ${p}: <${ns}> .`).join('\n') : ''
         }
         
         _:rename a solid:InsertDeletePatch;
             ${clauses}
         .
         `
+
         const response = await this.fetch!(
             url,
             {
@@ -105,8 +106,14 @@ export class CssProxy implements ISolidProxy {
             }
         )
 
-        if(!response.ok)
-            throw new Error(`Response has status code: ${response.status} (${response.statusText}).\nURL: ${response.url}`)
+        const {ok, status, statusText} = response
+        if(!ok)
+            throw new Error(`
+            N3 Patch failed.
+            Url: ${url}
+            Status: ${status} - ${statusText}
+            N3 Patch:\n${n3Patch}
+            `)
 
     }
 }

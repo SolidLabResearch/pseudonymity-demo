@@ -29,7 +29,11 @@
     "sandbox": "npx ts-node sandbox.ts",
     "sandbox:watch": "nodemon --config nodemon.json -w sandbox.ts -w src/components -w src/components/anonymizer --exec npm run sandbox",
     "scratch:update-webid-profile": "npx ts-node scratch/update-webid-profile.ts",
-    "scratch:update-webid-profile:watch": "nodemon --config nodemon.json -w scratch/ -w src/components --exec npm run scratch:update-webid-profile"
+    "scratch:update-webid-profile:watch": "nodemon --config nodemon.json -w scratch/ -w src/components --exec npm run scratch:update-webid-profile",
+    "scratch:fetch-webid-profiles": "npx ts-node scratch/fetch-webid-profiles.ts",
+    "scratch:fetch-webid-profiles:watch": "nodemon --config nodemon.json -w scratch/ -w src/components  --exec npm run scratch:fetch-webid-profiles",
+    "scratch:generate-keys": "npx ts-node scratch/generate-keys.ts",
+    "scratch:generate-keys:watch": "nodemon --config nodemon.json -w scratch/ --exec npm run scratch:generate-keys"
   },
   "author": "GDM",
   "license": "MIT",
@@ -63,6 +67,7 @@
     "mime-types": "^2.1.35",
     "n3": "^1.17.1",
     "pino": "^8.16.0",
-    "pino-pretty": "^10.2.3"
+    "pino-pretty": "^10.2.3",
+    "rdflib": "^2.2.32"
   }
 }

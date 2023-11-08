@@ -1,6 +1,6 @@
 import fs from 'fs';
-import { readJsonFile, writeJsonFile, obtainClientCredentials, registerUsersAndPods} from "./util"
-import { createContainerAt } from "@inrupt/solid-client";
+import {readJsonFile, writeJsonFile, obtainClientCredentials, registerUsersAndPods, generateBls12381Keys} from "./util"
+import {createContainerAt, getSolidDataset, getThing} from "@inrupt/solid-client";
 import {ClientCredentials, CssUserConfig} from './interfaces';
 import assert from "node:assert";
 import path from "path";

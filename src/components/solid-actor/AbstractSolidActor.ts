@@ -2,6 +2,7 @@ import {logger} from "../../logger";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {ISolidActor} from "../anonymizer/interfaces";
 import {CssProxy} from "../anonymizer/CssProxy";
+import {type} from "os";
 
 export class AbstractSolidActor implements ISolidActor {
     protected documentLoader: IDocumentLoader
@@ -18,6 +19,9 @@ export class AbstractSolidActor implements ISolidActor {
     async initialize() {
         logger.debug(`initializing actor: ${this.webId}`)
         await this.proxy.intializeFetch()
-        return this
+    }
+
+    isInitialized() {
+        return this.proxy.isInitialized()
     }
 }

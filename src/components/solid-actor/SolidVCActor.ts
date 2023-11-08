@@ -5,15 +5,16 @@ import {VerificationResult} from "./interfaces";
 import {VerifiableCredential, VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import {logger} from "../../logger";
 import {
+    AccessModes,
     buildThing,
-    createThing,
+    createThing, getJsonLdParser,
     getSolidDataset,
     getThing, isThing,
     saveFileInContainer,
     saveSolidDatasetAt,
     setThing, universalAccess
 } from "@inrupt/solid-client";
-import {_hack_addEnsureContextFunction, generateBls12381Keys, vocabs} from "../../util";
+import {_hack_addEnsureContextFunction, generateBls12381Keys, jld2rdf, namespaces, vocabs} from "../../util";
 import {Bls12381G1KeyPair} from "@transmute/did-key-bls12381";
 import {BbsBlsSignature2020, BbsBlsSignatureProof2020, Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {BlsKeys} from "../interfaces";
@@ -24,37 +25,66 @@ import {CredentialSubject} from "@digitalcredentials/vc-data-model/dist/Verifiab
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import assert from "node:assert";
-import jsonld from 'jsonld'
+import {stat} from "fs";
 
+
+export interface UploadConfiguration { // TODO: REFACTOR
+    o: object,
+    slug: string,
+    mimeType: string,
+    destContainer: string,
+    serialize?: (o: object) => string
+    access?: {
+        public?: AccessModes
+    }
+}
+export class NotYetImplementedError extends Error { // TODO: REFACTOR
+    constructor(props?: string) {
+        super("Not Yet Implemented!\n" + props);
+    }
+}
+
+export class NotInitializedError extends Error { // TODO: REFACTOR
+    constructor(props?: string) {
+        super("Instance has not yet been Initialized!\n" + props);
+    }
+}
 export class SolidVCActor
     extends AbstractSolidActor
 {
-    private _didDocument: any
+    private _didDocument?: object
     private signSuite: any
     private verifySuite: any
-    private keys?: BlsKeys
+    private keys?: BlsKeys // TODO: delete in favor of g2
+    private g2?: Bls12381G2KeyPair & { url?: string}
     private seed: string
+    private keysContainer: string
 
-
-    get didDocument(): any {
-        return this._didDocument;
+    get didDocument(): object {
+        return this._didDocument!;
     }
 
     constructor(proxy: CssProxy, webId: string, documentLoader: IDocumentLoader) {
         super(proxy, webId, documentLoader);
         this.seed = '|'.concat(webId, proxy.clientCredentials.id, proxy.clientCredentials.secret)
+        this.keysContainer = webId.replace('card#me', '')
     }
 
-    async initialize(): Promise<this> {
+    async initialize(){
+        console.log('super.initialize()')
         await super.initialize();
-        await this.initializeKeypairsAndDidDocument();
-        await this.uploadKeysToSolidPod()
-        // await this.uploadDidDocumentToPod()
-        logger.info('DEV: uploadDidDocumentToPod() currently disabled')
-        await this.initializeSuites();
-        await this.addDidDocumentToSolidWebIdProfileDocument()
+        await this.initializeBls1238G2KeyPair()
+        // await this.initializeKeypairsAndDidDocument();
+        this.initializeSuites();
+    }
 
-        return this;
+    isInitialized(): any {
+        return [
+            super.isInitialized(),
+            // this.keys!!, // TODO: deprecate & delete
+            // this.didDocument!!,// TODO: deprecate & delete
+            this.g2!!,
+        ].every(x => x)
     }
 
     /**
@@ -103,60 +133,131 @@ export class SolidVCActor
         )
     }
 
-    private async addDidDocumentToSolidWebIdProfileDocument() {
-        if(!this.didDocument!!) throw Error('this.didDocument is not initialized.')
+    async addDidDocumentToWebIdProfileDocument() {
+        logger.debug('addDidDocumentToSolidWebIdProfileDocument()')
+        if (!this.isInitialized())
+            throw new Error('SolidVCActor is not yet initialized!')
 
-        const serializedRDF = (await jsonld.toRDF(this.didDocument!, {format: "application/n-quads",})).toString()
-
-        const urlCard = this.webId.replace('#me', '')
-
-        await this.proxy.n3patch(urlCard,
-            undefined,
-            serializedRDF,
-            undefined,
-        )
+        const rdf = await jld2rdf(this.didDocument)
+        await this.proxy.n3patch(this.webId, undefined, rdf.toString())
     }
 
-    private async uploadDidDocumentToPod() {
-        logger.debug('uploadDidDocumentToPod()')
-        // First, make sure that the DID Document has been initialized
-        if(!this.didDocument!!) throw Error('this.didDocument is not initialized.')
-        const urlProfileDir = this.webId.replace('card#me', '')
+    /**
+     * TODO: refactor to CssProxy
+     * @param urlContainer
+     * @param data
+     * @param mimeType
+     * @param slug
+     * @param publicAccess
+     */
+    async addFileToContainer(
+        urlContainer: string,
+        data: Buffer,
+        mimeType = 'application/ld+json',
+        slug: string,
+        publicAccess?: AccessModes
 
-        const data = Buffer.from(JSON.stringify(this.didDocument!,null, 2))
-        const mimeType = "application/did+ld+json"
-        const filename = 'did.json'
-
-
+    ) {
+        logger.debug('addFileToSolidPod()')
         await saveFileInContainer(
-            urlProfileDir,
+            urlContainer,
             data,
-            {slug: filename, contentType: mimeType, fetch: this.proxy.fetch!}
+            {slug, contentType: mimeType, fetch: this.proxy.fetch!}
         )
+        const urlFile = new URL(slug, urlContainer).toString()
+        if(publicAccess!!) {
+            await universalAccess.setPublicAccess(urlFile,
+                publicAccess!, {fetch: this.proxy.fetch!})
+        }
+        return urlFile;
+    }
 
-        const urlFile = `${urlProfileDir}${filename}`
-        const updatedAccess = await universalAccess.setPublicAccess(urlFile,  {read: true, write: false}, {fetch: this.proxy.fetch!})
+    async initializeBls1238G2KeyPair() {
+        this.g2 = await Bls12381G2KeyPair.generate({
+            controller: this.webId,
+            id: new URL('g2', this.keysContainer).toString(),
+            seed: Buffer.from(this.webId)
+        })
 
-        assert(updatedAccess!.read)
+    }
+
+    checkInitialized() {
+        if(!this.isInitialized())
+            throw new NotInitializedError()
+    }
+
+    /**
+     * Adds public export of this.g2 key to Solid Pod.
+     */
+    async addKeysToSolidPod() {
+        this.checkInitialized()
+        const exportPublicG2 = (k: Bls12381G2KeyPair) => { // TODO: refactor to utils
+            const {id, publicKey, publicKeyJwk, type} = k
+            const publicKeyBase58 = "TODO: base58-encode(z, smth, keyvalue)"
+            return {
+                '@context': ['https://w3id.org/security#'],
+                id, type, publicKey, publicKeyJwk, publicKeyBase58
+            }
+        }
+
+        const uploadConfigurations = [
+            {
+                o: this.g2!,
+                serialize: (o: object) => JSON.stringify(exportPublicG2(o as Bls12381G2KeyPair),null,2),
+                destContainer: this.keysContainer,
+                slug: 'g2',
+                mimeType: 'application/ld+json',
+                access: { public: { read: true } as AccessModes }
+            } as UploadConfiguration
+        ]
+
+        const [uc]  = uploadConfigurations; // TODO: iterate over all upload configurations
+
+        this.g2!.url = await this.addFileToContainer(
+            uc.destContainer,
+            Buffer.from(uc.serialize!(uc.o)),
+            uc.mimeType,
+            uc.slug,
+            uc.access?.public)
+    }
+    async linkKeysToWebIdProfileDocument() {
+        logger.debug('linkKeysToWebIdProfileDocument()');
+        this.checkInitialized()
+        if(!this.g2?.url!!)
+            throw new Error('G2 keys has not been added to Solid pod yet!');
+
+        const inserts = `<${this.webId}> cert:key <${this.g2!.url!}> .`
+        const {cert, foaf} = namespaces
+        const prefixes = { cert, foaf }
+        await this.proxy.n3patch(this.webId,
+            undefined,
+            inserts,
+            undefined,
+            prefixes
+        )
     }
 
     private async initializeKeypairsAndDidDocument() {
         logger.debug('initializeKeypairs()')
         const {didDocument, keys: originalKeys} = await generateBls12381Keys(this.seed)
-
-        // this.originalKeys = originalKeys; // TODO delete originalKeys property
         this._didDocument = didDocument;
         const keys = Object.fromEntries(originalKeys.map(o => [o.type, o]))
 
-        this.keys = {
-            G1: await Bls12381G1KeyPair.from(keys['Bls12381G1Key2020']),
-            G2: await Bls12381G2KeyPair.from(keys['Bls12381G2Key2020'])
+        const G1 = await Bls12381G1KeyPair.from(keys['Bls12381G1Key2020'])
+        const G2 = await Bls12381G2KeyPair.from(keys['Bls12381G2Key2020'])
+        this.keys = {G1, G2}
+        return {
+            didDocument,
+            keys: this.keys!
         }
     }
 
     private initializeSuites() {
+        console.log('initializeSuites()')
+        if(!this.isInitialized())
+            throw new Error('SolidVCActor is not yet initialized')
         logger.debug('initializeSuites()')
-        this.signSuite = new BbsBlsSignature2020({key: this.keys!.G2})
+        this.signSuite = new BbsBlsSignature2020({key: this.g2!})
         this.signSuite = _hack_addEnsureContextFunction(this.signSuite)
         this.verifySuite = [
             new BbsBlsSignature2020(),

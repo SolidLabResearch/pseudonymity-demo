@@ -5,6 +5,7 @@ import credentialsContext from "credentials-context";
 import {customVocab} from "./customVocab";
 import {readJsonFile} from "../util";
 import {IDocumentLoader} from "./interfaces";
+import {fetch} from "@inrupt/universal-fetch";
 
 const ctx = new Map();
 // DID context
@@ -46,14 +47,26 @@ export {
 }
 
 export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader{
-    return (url: any) => {
+    return async (url: any) => {
         const context = ctx.get(url);
         if (context !== undefined) {
             return {
-                contextUrl: null,
-                documentUrl: url,
-                document: context
-            };
+                    contextUrl: null,
+                    documentUrl: url,
+                    document: context
+                }
+
+        } else {
+            const response = await fetch(url)
+            switch (response.headers.get('content-type')) {
+                case 'text/turtle':
+                    // TODO: parse response when content-type is text/turtle
+                    break
+                default:
+                    throw new Error(
+                        `${response.headers.get('content-type')} not yet supported`
+                    )
+            }
         }
         throw new Error(`Document loader unable to load URL "${url}".`);
     }
