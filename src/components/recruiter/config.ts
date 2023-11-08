@@ -1,3 +1,4 @@
+throw new Error('Resource paths have changed and need to be updated!')
 export const config = {
     name: 'recruiter-service',
     port: 4001,
