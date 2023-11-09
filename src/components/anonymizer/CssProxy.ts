@@ -3,7 +3,7 @@ import {ClientCredentials} from "../../interfaces";
 import {obtainAccessToken} from "../../util";
 
 import {ISolidPod, ISolidProxy} from "./interfaces";
-import {createContainerAt} from "@inrupt/solid-client";
+import {deleteContainer, deleteFile, getContainedResourceUrlAll, getSolidDataset} from "@inrupt/solid-client";
 import {logger} from "../../logger";
 import path from "path";
 import {fetch} from "@inrupt/universal-fetch";
@@ -116,4 +116,37 @@ export class CssProxy implements ISolidProxy {
             `)
 
     }
+    static async probeRequest(url: string, fetch: Function) {
+        const { status , statusText, headers } = await fetch(url)
+        return {
+            status,
+            statusText,
+            headers
+        }
+    }
+    static async resourceExists(url: string, fetch: Function) : Promise<boolean> {
+        const {status} = await CssProxy.probeRequest(url, fetch)
+        return status !== 404
+    }
+
+    /**
+     * Deletes container (and its constituent resources), if it exists.
+     * @param containerUrl
+     */
+    async deleteContainer(containerUrl: string) {
+        const opts = { fetch: this.fetch! }
+        // Delete container if it exists
+        const containerExists = await CssProxy.resourceExists(containerUrl, opts.fetch);
+        if(containerExists) {
+
+            // Delete container resources, if any
+            const containerResources = getContainedResourceUrlAll(await getSolidDataset(containerUrl, opts),)
+            for await (const cr of containerResources) {
+                await deleteFile(cr,opts)
+            }
+            // Then delete the container
+            await deleteContainer(containerUrl,opts)
+        }
+    }
+
 }
