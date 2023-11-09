@@ -8,7 +8,7 @@
     "docker:stop": "docker compose stop -t 0",
     "docker:rm": "docker compose rm --force",
     "docker:logs": "docker compose logs -f",
-    "docker:clean-start": "npm run docker:stop && npm run docker:rm && npm run docker:run",
+    "docker:clean-start": "./clean_tmp_files.sh && npm run docker:stop && npm run docker:rm && npm run docker:run",
     "index": "npx ts-node src/index.ts",
     "index:watch": "nodemon --config nodemon.json --exec npm run index",
     "setup": "npx ts-node src/setup.ts",
@@ -33,14 +33,16 @@
     "scratch:fetch-webid-profiles": "npx ts-node scratch/fetch-webid-profiles.ts",
     "scratch:fetch-webid-profiles:watch": "nodemon --config nodemon.json -w scratch/ -w src/components  --exec npm run scratch:fetch-webid-profiles",
     "scratch:generate-keys": "npx ts-node scratch/generate-keys.ts",
-    "scratch:generate-keys:watch": "nodemon --config nodemon.json -w scratch/ --exec npm run scratch:generate-keys"
+    "scratch:generate-keys:watch": "nodemon --config nodemon.json -w scratch/ --exec npm run scratch:generate-keys",
+    "scratch:sign-verify": "npx ts-node scratch/sign-verify-using-webid-controllers.ts",
+    "scratch:sign-verify:watch": "nodemon --config nodemon.json -w scratch/ -w src/ --exec npm run scratch:sign-verify"
   },
   "author": "GDM",
   "license": "MIT",
   "devDependencies": {
     "@types/express": "^4.17.20",
     "@types/jsonld": "^1.5.12",
-    "@types/n3": "^1.16.3",
+    "@types/n3": "^1.16.4",
     "@types/node": "^20.8.7",
     "nodemon": "^3.0.1",
     "ts-node": "^10.9.1",
@@ -56,6 +58,7 @@
     "@mattrglobal/jsonld-signatures-bbs": "^1.2.0",
     "@transmute/did-key-bls12381": "^0.3.0-unstable.10",
     "body-parser": "^1.20.2",
+    "bs58": "^5.0.0",
     "credentials-context": "^2.0.0",
     "cross-fetch": "^4.0.0",
     "did-context": "^3.1.1",
@@ -65,9 +68,10 @@
     "jsonld-signatures": "^11.2.1",
     "klona": "^2.0.6",
     "mime-types": "^2.1.35",
-    "n3": "^1.17.1",
+    "n3": "^1.17.2",
     "pino": "^8.16.0",
     "pino-pretty": "^10.2.3",
-    "rdflib": "^2.2.32"
+    "rdflib": "^2.2.32",
+    "rfc4648": "^1.5.3"
   }
 }

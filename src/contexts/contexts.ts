@@ -3,9 +3,11 @@ import * as didContext from "did-context";
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import {customVocab} from "./customVocab";
-import {readJsonFile} from "../util";
+import {namespaces, readJsonFile, ttl2jld, ttl2store, vocabs} from "../util";
 import {IDocumentLoader} from "./interfaces";
 import {fetch} from "@inrupt/universal-fetch";
+import {NotYetImplementedError} from "../components/solid-actor/SolidVCActor";
+import N3 from "n3";
 
 const ctx = new Map();
 // DID context
@@ -17,6 +19,7 @@ ctx.set('https://w3id.org/security/bbs/v1', readJsonFile('./src/contexts/vc-di-b
 ctx.set('https://w3id.org/security/suites/jws-2020/v1', readJsonFile('./src/contexts/suiteContext.json'))
 
 // Security contexts
+ctx.set(namespaces.sec, readJsonFile('./src/contexts/security.jsonld'))
 ctx.set('https://w3id.org/security/v1', readJsonFile('./src/contexts/security-v1.jsonld'))
 ctx.set('https://w3id.org/security/v2', readJsonFile('./src/contexts/security-v2.jsonld'))
 // Add VC01 specific context
@@ -27,7 +30,9 @@ ctx.set(customVocab.url, customVocab.context)
 ctx.set('https://www.w3.org/2018/credentials/examples/v1', readJsonFile('./src/contexts/credentials-examples-v1.jsonld'))
 // ODRL context
 ctx.set('https://www.w3.org/ns/odrl.jsonld', readJsonFile('./src/contexts/odrl.jsonld'))
-// Actor contexts // TODO: dynamically add actors to context
+
+
+// Actor contexts // TODO: DELETE ACTOR CONTEXTS
 const alice = readJsonFile('./actors/alice/user.json');
 const government = readJsonFile('./actors/government/government.json');
 const university = readJsonFile('./actors/university/university.json');
@@ -35,7 +40,7 @@ const recruiter = readJsonFile('./actors/recruiter/recruiter.json');
 const actors = {
     alice, government, university, recruiter
 }
-Object.entries(actors)
+Object.entries(actors) // TODO: DELETE THIS WHEN ABOVE ACTORS DELETED!!!
     .forEach(([a, o])=>{
         const { didObject: { didDocument, keys }} = o;
         ctx.set(didDocument.id, didDocument)
@@ -57,18 +62,40 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader{
                 }
 
         } else {
+            console.log(`Not in context register.
+            Fetching: ${url}`)
+
             const response = await fetch(url)
+            console.log({url,contentType:response.headers.get('content-type')})
+            let document = undefined
             switch (response.headers.get('content-type')) {
+                case 'application/json':
+                case 'application/ld+json':
+                case 'application/ld+did+json':
+                    document = await response.json()
+                    break;
                 case 'text/turtle':
-                    // TODO: parse response when content-type is text/turtle
-                    break
+                    const payload = await response.text();
+                    document = await ttl2jld(payload)
+                    break;
                 default:
                     throw new Error(
-                        `${response.headers.get('content-type')} not yet supported`
+                        `Error: ${response.headers.get('content-type')} not yet supported.
+                        Status: ${response.status} - ${response.statusText}
+                        URL: ${response.url}
+                        `
                     )
             }
+            if(!document)
+                throw new Error(
+                    `Error: could not resolve & parse URL: ${response.url}`
+                )
+            return {
+                contextUrl: null,
+                documentUrl: url,
+                document
+            }
         }
-        throw new Error(`Document loader unable to load URL "${url}".`);
     }
 }
 

@@ -7,6 +7,7 @@ import {ClientCredentials, CssUserConfig} from "./interfaces";
 import {createDpopHeader, generateDpopKeyPair} from "@inrupt/solid-client-authn-core";
 import {register} from "./register";
 import jsonld from 'jsonld'
+import N3 from 'n3'
 
 export function joinUrlPaths(...paths: string[]) : URL{
   const [base, ...rest] = paths;
@@ -167,6 +168,7 @@ export function _hack_addEnsureContextFunction(suite: any) {
 }
 
 import * as bls12381 from '@transmute/did-key-bls12381';
+import {createCustomDocumentLoader, ctx} from "./contexts/contexts";
 export async function generateBls12381Keys(seed: string) {
   return await bls12381.generate({secureRandom: () => Buffer.from(seed)}, {accept: 'application/did+ld+json'})
 }
@@ -177,11 +179,22 @@ function Vocab(ns: string) {
 
 // https://solid.github.io/vocab/
 export const namespaces = {
-  sec: 'https://w3id.org/security#',
+  // WARNING: 'https://w3id.org/security/' causes remote context loading errors
+  // WARNING: 'https://w3c.github.io/vc-di-bbs/contexts/v1/' causes remote context loading errors
+  // sec: 'https://w3id.org/security/v2',
+  // sec: 'https://w3id.org/security/',
+  // sec: 'https://w3id.org/security/v2',
+  // sec: 'https://w3id.org/security/v2/',
+  // sec: 'https://w3c.github.io/vc-di-bbs/contexts/v1/',
+  // sec: 'http://example.org/security#',
+  sec: "https://w3id.org/security/v2",
   rdf: 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
   cert: 'http://www.w3.org/ns/auth/cert#',
-  foaf: 'http://xmlns.com/foaf/0.1/'
+  foaf: 'http://xmlns.com/foaf/0.1/',
+  did: 'https://www.w3.org/ns/did/v1',
+
 }
+
 export const vocabs = Object.fromEntries(
     Object.entries(namespaces).map(
         ([prefix, ns]) => [
@@ -191,5 +204,20 @@ export const vocabs = Object.fromEntries(
 )
 
 export async function jld2rdf(jld: object): Promise<object> {
-  return await jsonld.toRDF(jld, {format: 'application/n-quads'});
+  let rdf = await jsonld.toRDF(jld, {format: 'application/n-quads'});
+  return rdf
+}
+
+export async function ttl2store(ttl: string): Promise<N3.Store> {
+  const quads = await new N3.Parser({format: 'text/turtle'}).parse(ttl);
+  return new N3.Store(quads)
+}
+export async function store2ttl(store: N3.Store): Promise<string> {
+  const writer = new N3.Writer({format: "text/turtle"})
+  return writer.quadsToString(store.getQuads(null, null, null, null))
+}
+export async function ttl2jld(ttl: string): Promise<object> {
+  const store = await ttl2store(ttl)
+  const jld = await jsonld.fromRDF(store,)
+  return jld
 }
