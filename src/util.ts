@@ -177,6 +177,7 @@ function Vocab(ns: string) {
   return (p: string) => ns.concat(p)
 }
 
+// TODO: [CRITICAL] CLEAN UP NAMESPACES.
 // https://solid.github.io/vocab/
 export const namespaces = {
   // WARNING: 'https://w3id.org/security/' causes remote context loading errors
