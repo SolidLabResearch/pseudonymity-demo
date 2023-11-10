@@ -1,16 +1,10 @@
 import fs from 'fs';
-import {readJsonFile, writeJsonFile, obtainClientCredentials, registerUsersAndPods, generateBls12381Keys} from "./util"
-import {createContainerAt, getSolidDataset, getThing} from "@inrupt/solid-client";
+import {readJsonFile, writeJsonFile, obtainClientCredentials, registerUsersAndPods} from "./util"
 import {ClientCredentials, CssUserConfig} from './interfaces';
 import assert from "node:assert";
-import path from "path";
-import fetch from "cross-fetch";
-import {logger} from "./logger";
 import {CssProxy} from "./components/anonymizer/CssProxy";
-import { fileTypeFromFile } from 'file-type';
 import {SolidVCActor} from "./components/solid-actor/SolidVCActor";
 import {createCustomDocumentLoader, ctx} from "./contexts/contexts";
-
 
 const users: Array<CssUserConfig> = readJsonFile('./common/css-users.json')
 
@@ -52,38 +46,8 @@ async function getUserCredentials(userOnControls: Record<string, any>) {
         }]
       }))
   )
-
     return usersAndCredentials
 }
 
 preflight()
-    // Instantiates SolidVCActors
-    .then(async (usersAndCredentials): Promise<SolidVCActor[]> => {
-
-        return Object.entries(usersAndCredentials)
-            .map(([email,actorParams])=> {
-                const { user: { webId }, credentials, controls} = (actorParams as any)!
-                const proxy = new CssProxy(
-                    credentials.clientCredentials,
-                    webId,
-                    controls
-                )
-
-                const dl = createCustomDocumentLoader(ctx)
-                const a = new SolidVCActor(proxy, webId, dl)
-                return a
-            })
-    })
-    // Initializes SolidVCActors,
-    // creates G2 Keypairs and adds them to each actor's respective Solid pod,
-    // and links those keys to the Solid WebID Profile Documents
-    .then(async (actors:SolidVCActor[]) => {
-        await Promise.all(actors.map(
-            async (a) => {
-                await a.initialize()
-                await a.addKeysToSolidPod()
-                await a.linkKeysToWebIdProfileDocument()
-            return a
-        }))
-    })
   .then(() => console.log('Done'))
