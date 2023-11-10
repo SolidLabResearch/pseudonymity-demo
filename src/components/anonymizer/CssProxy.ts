@@ -1,48 +1,45 @@
-import { buildAuthenticatedFetch } from "@inrupt/solid-client-authn-core";
+import {buildAuthenticatedFetch} from "@inrupt/solid-client-authn-core";
 import {ClientCredentials} from "../../interfaces";
-import {obtainAccessToken} from "../../util";
 
 import {ISolidPod, ISolidProxy} from "./interfaces";
-import {deleteContainer, deleteFile, getContainedResourceUrlAll, getSolidDataset} from "@inrupt/solid-client";
+import {
+    AccessModes,
+    buildThing,
+    deleteContainer,
+    deleteFile,
+    getContainedResourceUrlAll, getResourceInfo,
+    getSolidDataset, getThing, overwriteFile, saveSolidDatasetAt, setThing, ThingPersisted, universalAccess, UrlString
+} from "@inrupt/solid-client";
 import {logger} from "../../logger";
 import path from "path";
 import {fetch} from "@inrupt/universal-fetch";
 import {Util} from "n3";
 import prefixes = Util.prefixes;
+import {obtainAccessToken} from "../../utils/css";
 
 export class CssProxy implements ISolidProxy {
     clientCredentials: ClientCredentials;
     controls?: any
     storage?: ISolidPod;
-    webId: string;
     fetch?: typeof fetch
+    webId: string;
 
-    constructor(clientCredentials: ClientCredentials, webId: string, controls?:any) {
+    constructor(clientCredentials: ClientCredentials, webId: string, controls?: any) {
         this.clientCredentials = clientCredentials!;
         this.webId = webId!;
         this.controls = controls!;
     }
 
-    async intializeFetch(): Promise<typeof fetch> {
-        logger.debug(`[${this.webId}] initializeFetch`)
-        const {accessToken, dpopKey} = await obtainAccessToken(this.clientCredentials, this.webId);
-        // The DPoP key needs to be the same key as the one used in the previous step.
-        // The Access token is the one generated in the previous step.
-        const authFetch = await buildAuthenticatedFetch(fetch, accessToken, {dpopKey});
-        this.fetch = authFetch;
-        return authFetch
+    get cardUrl() {
+        return this.webId.replace('#me', '')
     }
 
-    async parsedFetch(input: URL | RequestInfo,init?: RequestInit | undefined): Promise<any> {
-        return await CssProxy.parseResponse(await this.fetch!(input,init))
-    }
-
-    isInitialized(): boolean {
-        return this.fetch !== undefined
+    get podUrl(): string {
+        return this.controls.pod;
     }
 
     static async parseResponse(response: Response) {
-        if(!response.ok)
+        if (!response.ok)
             throw new Error(`Response has status code: ${response.status} (${response.statusText}).\nURL: ${response.url}`)
 
         let payload = undefined;
@@ -56,11 +53,42 @@ export class CssProxy implements ISolidProxy {
                 // TODO: parse with N3 & return N3 quad store
                 break;
             default:
-                throw new Error('Not yet implemented: parsing of '+ response.headers.get('content-type'))
+                throw new Error('Not yet implemented: parsing of ' + response.headers.get('content-type'))
         }
         return payload
     }
 
+    static async probeRequest(url: string, fetch: Function) {
+        const {status, statusText, headers} = await fetch(url)
+        return {
+            status,
+            statusText,
+            headers
+        }
+    }
+
+    static async resourceExists(url: string, fetch: Function): Promise<boolean> {
+        const {status} = await CssProxy.probeRequest(url, fetch)
+        return status !== 404
+    }
+
+    async intializeFetch(): Promise<typeof fetch> {
+        logger.debug(`[${this.webId}] initializeFetch`)
+        const {accessToken, dpopKey} = await obtainAccessToken(this.clientCredentials, this.webId);
+        // The DPoP key needs to be the same key as the one used in the previous step.
+        // The Access token is the one generated in the previous step.
+        const authFetch = await buildAuthenticatedFetch(fetch, accessToken, {dpopKey});
+        this.fetch = authFetch;
+        return authFetch
+    }
+
+    async parsedFetch(input: URL | RequestInfo, init?: RequestInit | undefined): Promise<any> {
+        return await CssProxy.parseResponse(await this.fetch!(input, init))
+    }
+
+    isInitialized(): boolean {
+        return this.fetch !== undefined
+    }
 
     /**
      * Spec: https://solid.github.io/specification/protocol#writing-resources
@@ -71,11 +99,11 @@ export class CssProxy implements ISolidProxy {
      * @param prefixes
      */
     async n3patch(url: string,
-                  where?:string,
-                  inserts?:string,
-                  deletes?:string,
-                  prefixes?: Record<string,string>
-                  ){
+                  where?: string,
+                  inserts?: string,
+                  deletes?: string,
+                  prefixes?: Record<string, string>
+    ) {
 
         const clauses = [
             where ? `solid:where { ${where} }` : where,
@@ -87,7 +115,7 @@ export class CssProxy implements ISolidProxy {
         const n3Patch = `
         @prefix solid: <http://www.w3.org/ns/solid/terms#>.
         ${
-            prefixes! ? Object.entries(prefixes!).map(([p,ns])=>`@prefix ${p}: <${ns}> .`).join('\n') : ''
+            prefixes! ? Object.entries(prefixes!).map(([p, ns]) => `@prefix ${p}: <${ns}> .`).join('\n') : ''
         }
         
         _:rename a solid:InsertDeletePatch;
@@ -107,7 +135,7 @@ export class CssProxy implements ISolidProxy {
         )
 
         const {ok, status, statusText} = response
-        if(!ok)
+        if (!ok)
             throw new Error(`
             N3 Patch failed.
             Url: ${url}
@@ -116,17 +144,38 @@ export class CssProxy implements ISolidProxy {
             `)
 
     }
-    static async probeRequest(url: string, fetch: Function) {
-        const { status , statusText, headers } = await fetch(url)
-        return {
-            status,
-            statusText,
-            headers
+
+    /**
+     * TODO: refactor to CssProxy
+     * @param urlContainer
+     * @param data
+     * @param mimeType
+     * @param slug
+     * @param publicAccess
+     */
+    async addFileToContainer(
+        urlContainer: string,
+        data: Buffer,
+        mimeType = 'application/ld+json',
+        slug: string,
+        publicAccess?: AccessModes
+    ) {
+        logger.debug('addFileToSolidPod()')
+        const file = new Blob([data])
+        const fileUrl = new URL(slug, urlContainer).toString() as UrlString
+
+        await overwriteFile(
+            fileUrl,
+            file,
+            {contentType: mimeType, fetch: this.fetch!}
+        )
+
+        const serverResourceInformation = await getResourceInfo(fileUrl, {fetch: this.fetch!})
+        if (publicAccess!!) {
+            await universalAccess.setPublicAccess(serverResourceInformation.internal_resourceInfo.sourceIri, publicAccess!, {fetch: this.fetch!})
         }
-    }
-    static async resourceExists(url: string, fetch: Function) : Promise<boolean> {
-        const {status} = await CssProxy.probeRequest(url, fetch)
-        return status !== 404
+        return serverResourceInformation.internal_resourceInfo.sourceIri
+
     }
 
     /**
@@ -134,19 +183,45 @@ export class CssProxy implements ISolidProxy {
      * @param containerUrl
      */
     async deleteContainer(containerUrl: string) {
-        const opts = { fetch: this.fetch! }
+        const opts = {fetch: this.fetch!}
         // Delete container if it exists
         const containerExists = await CssProxy.resourceExists(containerUrl, opts.fetch);
-        if(containerExists) {
+        if (containerExists) {
 
             // Delete container resources, if any
             const containerResources = getContainedResourceUrlAll(await getSolidDataset(containerUrl, opts),)
             for await (const cr of containerResources) {
-                await deleteFile(cr,opts)
+                await deleteFile(cr, opts)
             }
             // Then delete the container
-            await deleteContainer(containerUrl,opts)
+            await deleteContainer(containerUrl, opts)
         }
     }
+
+    async getCard() {
+        return await getSolidDataset(this.cardUrl, {fetch: this.fetch!})
+    }
+
+    async getProfileBuilder() {
+
+        const card = await getSolidDataset(this.cardUrl, {fetch: this.fetch!})
+        return buildThing(
+            getThing(card, this.webId)!
+        )
+    }
+
+    async updateProfile(profileUpdate: ThingPersisted) {
+        const meUpdate = setThing(
+            await this.getCard(),
+            profileUpdate
+        )
+
+        await saveSolidDatasetAt(
+            this.cardUrl,
+            meUpdate,
+            {fetch: this.fetch!}
+        )
+    }
+
 
 }

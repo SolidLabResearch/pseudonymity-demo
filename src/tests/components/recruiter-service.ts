@@ -1,8 +1,9 @@
 import assert from 'node:assert';
-import {fetchJson, readJsonFile} from "../../util";
 
 import {endpoints} from '../../components/recruiter/config';
 import {TestResult} from "../TestResult";
+import {fetchJson} from "../../utils/fetching";
+import {readJsonFile} from "../../utils/io";
 
 
 /**
@@ -19,7 +20,7 @@ let globals = {
 }
 
 const phase1Tests = {
-    'Initiating the exchange of diploma generates and returns a new exchangeId and the path to the next endpoint': async ()=> {
+    'Initiating the exchange of diploma generates and returns a new exchangeId and the path to the next endpoint': async () => {
         const {exchangeId, next} = await fetchJson(endpoints.recruiter.exchange.diploma.init, {
             method: 'GET',
         })
@@ -28,7 +29,7 @@ const phase1Tests = {
         assert(endpoints.recruiter.exchange.diploma.presentationRequest.endsWith(next))
         globals.exchangeId = exchangeId;
     },
-    'After initiating diploma exchange, a derivation frame is returned (which serves as the presentation request)': async ()=> {
+    'After initiating diploma exchange, a derivation frame is returned (which serves as the presentation request)': async () => {
         let {derivationFrame, next} = await fetchJson(endpoints.recruiter.exchange.diploma.presentationRequest, {
             method: 'POST',
             headers: {
@@ -50,9 +51,9 @@ const phase1Tests = {
         assert(credentialSubject.degree!!)
         globals.diploma.derivationFrame = derivationFrame
     },
-    'Verifies VP01': async ()=> {
+    'Verifies VP01': async () => {
         const exportedState = readJsonFile('./all.json')
-        const { vp1 } = exportedState;
+        const {vp1} = exportedState;
         const verifiablePresentation = vp1
 
         const response = await fetch(endpoints.recruiter.exchange.diploma.presentation, {
@@ -68,7 +69,7 @@ const phase1Tests = {
 
         const {verificationResult, next} = await response.json();
         assert(verificationResult!!)
-        const { verified, error} = verificationResult;
+        const {verified, error} = verificationResult;
         console.log(JSON.stringify(error, null, 2))
         assert(verified)
         assert(endpoints.recruiter.exchange.identity.init.endsWith(next))
@@ -76,14 +77,14 @@ const phase1Tests = {
 }
 
 const phase2Tests = {
-    'Initiating the exchange of identity returns the path to the next endpoint': async ()=> {
+    'Initiating the exchange of identity returns the path to the next endpoint': async () => {
         const {next} = await fetchJson(endpoints.recruiter.exchange.identity.init, {
             method: 'POST',
         })
         assert(next!!)
         assert(endpoints.recruiter.exchange.identity.presentationRequest.endsWith(next))
     },
-    'After initiating identity exchange, a derivation frame is returned (which serves as the presentation request)': async ()=> {
+    'After initiating identity exchange, a derivation frame is returned (which serves as the presentation request)': async () => {
         let {derivationFrame, next} = await fetchJson(endpoints.recruiter.exchange.identity.presentationRequest, {
             method: 'POST',
             headers: {
@@ -104,7 +105,7 @@ const phase2Tests = {
         assert(credentialSubject['solid:webid']!!)
         globals.identity.derivationFrame = derivationFrame
     },
-    'Verifies VP02': async ()=> {
+    'Verifies VP02': async () => {
         const exportedState = readJsonFile('./all.json')
         const verifiablePresentation = exportedState.vp2;
         const response = await fetch(endpoints.recruiter.exchange.identity.presentation, {
@@ -120,7 +121,7 @@ const phase2Tests = {
 
         const {verificationResult, next} = await response.json();
         assert(verificationResult!!)
-        const { verified, error} = verificationResult;
+        const {verified, error} = verificationResult;
         console.log(JSON.stringify(error, null, 2))
         assert(verified)
         // TODO: assert value of next?
@@ -132,11 +133,11 @@ const tests = {
 }
 
 async function run() {
-    const testResults= new Array<TestResult>()
+    const testResults = new Array<TestResult>()
     let i = 0;
 
-    for await (const [n,t] of Object.entries(tests)) {
-        let e : any;
+    for await (const [n, t] of Object.entries(tests)) {
+        let e: any;
 
         console.log(n)
         try {
@@ -151,4 +152,5 @@ async function run() {
         console.log(tr)
     })
 }
+
 run().then().catch(console.error)

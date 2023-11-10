@@ -3,11 +3,15 @@ import * as didContext from "did-context";
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import {customVocab} from "./customVocab";
-import {namespaces, readJsonFile, ttl2jld, ttl2store, vocabs} from "../util";
 import {IDocumentLoader} from "./interfaces";
 import {fetch} from "@inrupt/universal-fetch";
-import {NotYetImplementedError} from "../components/solid-actor/SolidVCActor";
 import N3 from "n3";
+import {inspect} from 'util';
+import {getJsonLdParser} from "@inrupt/solid-client";
+import {NotYetImplementedError} from "../components/solid-actor/errors";
+import {ttl2jld, ttl2store} from "../utils/parsing";
+import {readJsonFile} from "../utils/io";
+import {namespaces, vocabs} from "../utils/namespace";
 
 const ctx = new Map();
 // DID context
@@ -23,7 +27,7 @@ ctx.set(namespaces.sec, readJsonFile('./src/contexts/security.jsonld'))
 ctx.set('https://w3id.org/security/v1', readJsonFile('./src/contexts/security-v1.jsonld'))
 ctx.set('https://w3id.org/security/v2', readJsonFile('./src/contexts/security-v2.jsonld'))
 // Add VC01 specific context
-ctx.set("https://w3id.org/citizenship/v1",readJsonFile('./src/contexts/citizenVocab.json'))
+ctx.set("https://w3id.org/citizenship/v1", readJsonFile('./src/contexts/citizenVocab.json'))
 // Add VC02 specific context
 ctx.set(customVocab.url, customVocab.context)
 // Add credential examples context
@@ -41,32 +45,32 @@ const actors = {
     alice, government, university, recruiter
 }
 Object.entries(actors) // TODO: DELETE THIS WHEN ABOVE ACTORS DELETED!!!
-    .forEach(([a, o])=>{
-        const { didObject: { didDocument, keys }} = o;
+    .forEach(([a, o]) => {
+        const {didObject: {didDocument, keys}} = o;
         ctx.set(didDocument.id, didDocument)
-        keys.forEach((k:any) => ctx.set(k.id, k))
+        keys.forEach((k: any) => ctx.set(k.id, k))
     })
 
 export {
     ctx
 }
 
-export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader{
+export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader {
     return async (url: any) => {
         const context = ctx.get(url);
         if (context !== undefined) {
             return {
-                    contextUrl: null,
-                    documentUrl: url,
-                    document: context
-                }
+                contextUrl: null,
+                documentUrl: url,
+                document: context
+            }
 
         } else {
             console.log(`Not in context register.
             Fetching: ${url}`)
 
             const response = await fetch(url)
-            console.log({url,contentType:response.headers.get('content-type')})
+            console.log({url, contentType: response.headers.get('content-type')})
             let document = undefined
             switch (response.headers.get('content-type')) {
                 case 'application/json':
@@ -77,6 +81,7 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader{
                 case 'text/turtle':
                     const payload = await response.text();
                     document = await ttl2jld(payload)
+
                     break;
                 default:
                     throw new Error(
@@ -86,7 +91,7 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader{
                         `
                     )
             }
-            if(!document)
+            if (!document)
                 throw new Error(
                     `Error: could not resolve & parse URL: ${response.url}`
                 )

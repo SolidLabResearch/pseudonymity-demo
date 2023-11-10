@@ -1,15 +1,13 @@
 import express, {Express, Request, Response} from 'express';
 import crypto from 'node:crypto';
-import {readJsonFile} from "../../util";
 import {UUID} from "crypto";
-import bodyParser  from "body-parser";
+import bodyParser from "body-parser";
 import {config, origin, endpoints} from './config'
 import {Anonymizer} from "./Anonymizer";
 import {origin as recruiterOrigin} from '../recruiter/config';
 import {CssProxy} from "./CssProxy";
 import {IService, ISolidProxy} from "./interfaces";
-
-
+import {readJsonFile} from "../../utils/io";
 
 
 async function run() {
@@ -17,7 +15,7 @@ async function run() {
     // const anonymizer = new Anonymizer(proxy, targetService)
     const usersAndCredentials = readJsonFile('./usersAndClientCredentials.json')
     const aliceCredentials = usersAndCredentials['alice@example.com'];
-    const anonCredentials  = usersAndCredentials['anon@example.com'];
+    const anonCredentials = usersAndCredentials['anon@example.com'];
     const cssProxy = new CssProxy(aliceCredentials.credentials.clientCredentials, aliceCredentials.user.webId)
     await cssProxy.intializeFetch();
 
@@ -26,7 +24,6 @@ async function run() {
 }
 
 run().then().catch(console.error)
-
 
 
 //

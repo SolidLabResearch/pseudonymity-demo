@@ -1,27 +1,30 @@
 // @ts-ignore
-import jsigs, { purposes } from 'jsonld-signatures';
+import jsigs, {purposes} from 'jsonld-signatures';
 import {BbsBlsSignature2020, BbsBlsSignatureProof2020, Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 
-import {readJsonFile} from "../../util";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
+import {readJsonFile} from "../../utils/io";
+
 export class Recruiter {
 
     didDocument?: any
     keys?: any
     documentLoader: any
     verifySuite: any
+
     constructor() {
         const state = readJsonFile('./actors/recruiter/recruiter.json');
-        const { didObject: {didDocument, keys}} = state
+        const {didObject: {didDocument, keys}} = state
         this.didDocument = didDocument;
         this.keys = keys;
         this.documentLoader = createCustomDocumentLoader(ctx)
     }
-    sign(d: any) : any {
-        console.log('Recruiter.sign:' , d)
+
+    sign(d: any): any {
+        console.log('Recruiter.sign:', d)
     }
-    
-    async verify(vp: any, challenge: string) : Promise<any> {
+
+    async verify(vp: any, challenge: string): Promise<any> {
         return await jsigs.verify(
             vp,
             {
