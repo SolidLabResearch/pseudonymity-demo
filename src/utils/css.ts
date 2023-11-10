@@ -110,8 +110,8 @@ export const config = {
     baseUrl: 'http://localhost:3000'
 }
 
-export async function register(UserConfig: UserConfig) {
-    const baseUrl = UserConfig.css ?? config.baseUrl;
+export async function register(uc: UserConfig) {
+    const baseUrl = uc.css ?? config.baseUrl;
 
     const url = joinUrlPaths(baseUrl, '.account/');
     // Fetch control urls
@@ -132,7 +132,7 @@ export async function register(UserConfig: UserConfig) {
     // console.log({accountControls})
 
     // Add login method
-    const {email, password} = UserConfig;
+    const {email, password} = uc;
     logger.info(`Adding login method for: ${email}`)
     let res = await fetchJson(accountControls.password.create, {
         method: 'POST',
@@ -145,8 +145,8 @@ export async function register(UserConfig: UserConfig) {
 
     // Create pod
     let podUrls: { pod: string, podResource: string } // TODO: delete
-    if (UserConfig.createPod) {
-        logger.info(`Creating pod ${UserConfig.podName}`)
+    if (uc.createPod) {
+        logger.info(`Creating pod ${uc.podName}`)
         const {pod, podResource, webId} = await fetchJson(accountControls.account.pod, {
             method: 'POST',
             headers: {
@@ -154,7 +154,7 @@ export async function register(UserConfig: UserConfig) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: UserConfig.podName
+                name: uc.podName
             }),
         })
         console.log('Pod created!')
