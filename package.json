@@ -12,6 +12,7 @@
     "docker:test:run": "docker compose -f docker-compose.test.yml up -d --wait",
     "docker:test:stop": "docker compose -f docker-compose.test.yml stop -t 0",
     "docker:test:rm": "docker compose -f docker-compose.test.yml rm --force",
+    "docker:test:logs": "docker compose -f docker-compose.test.yml logs -f",
     "docker:test:clean-start": "npm run docker:test:stop && npm run docker:test:rm && npm run docker:test:run",
     "index": "npx ts-node src/index.ts",
     "index:watch": "nodemon --config nodemon.json --exec npm run index",
