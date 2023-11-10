@@ -32,6 +32,8 @@
     "scratch:update-webid-profile:watch": "nodemon --config nodemon.json -w scratch/ -w src/components --exec npm run scratch:update-webid-profile",
     "scratch:fetch-webid-profiles": "npx ts-node scratch/fetch-webid-profiles.ts",
     "scratch:fetch-webid-profiles:watch": "nodemon --config nodemon.json -w scratch/ -w src/components  --exec npm run scratch:fetch-webid-profiles",
+    "scratch:fetch-did-resources": "npx ts-node scratch/fetch-did-resources.ts",
+    "scratch:fetch-did-resources:watch": "nodemon --config nodemon.json -w scratch/ -w src/components  --exec npm run scratch:fetch-did-resources",
     "scratch:generate-keys": "npx ts-node scratch/generate-keys.ts",
     "scratch:generate-keys:watch": "nodemon --config nodemon.json -w scratch/ --exec npm run scratch:generate-keys",
     "scratch:sign-verify": "npx ts-node scratch/sign-verify-using-webid-controllers.ts",
