@@ -2,10 +2,9 @@ import {ClientCredentials, CssUserConfig} from "../interfaces";
 import fetch from "cross-fetch";
 import {createDpopHeader, generateDpopKeyPair} from "@inrupt/solid-client-authn-core";
 import {logger} from "../logger";
-import {register} from "../register";
 import {Parser} from "n3";
-import {joinUrlPaths} from "../util";
 import {fetchJson} from "./fetching";
+import {joinUrlPaths} from "./url";
 
 export function formatCssTokenHeader(token: string) {
     return `CSS-Account-Token ${token}`;
@@ -97,6 +96,74 @@ export async function obtainAccessToken(cc: ClientCredentials, webId: string) {
     // which you can use to know when you need request a new Access token.
     const {access_token: accessToken} = await response.json();
     return {accessToken, dpopKey};
+}
+
+export interface UserConfig {
+    email: string;
+    password: string;
+    podName: string;
+    createPod: boolean;
+    css?: string;
+}
+
+export const config = {
+    baseUrl: 'http://localhost:3000'
+}
+
+export async function register(UserConfig: UserConfig) {
+    const baseUrl = UserConfig.css ?? config.baseUrl;
+
+    const url = joinUrlPaths(baseUrl, '.account/');
+    // Fetch control urls
+    const {controls} = await fetchJson(url);
+
+    // Create account
+    const {authorization} = await fetchJson(controls.account.create, {
+        method: 'POST',
+    })
+
+    // Get account controls
+    const {controls: accountControls} = await fetchJson(controls.account.create, {
+        headers: {
+            Authorization: formatCssTokenHeader(authorization),
+        }
+    })
+    console.log({accountControls})
+
+    // Add login method
+    const {email, password} = UserConfig;
+    logger.info(`Adding login method for: ${email}`)
+    let res = await fetchJson(accountControls.password.create, {
+        method: 'POST',
+        headers: {
+            Authorization: formatCssTokenHeader(authorization),
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({email, password})
+    })
+
+    // Create pod
+    let podUrls = {}
+    if (UserConfig.createPod) {
+        logger.info(`Creating pod ${UserConfig.podName}`)
+        const {pod, podResource, webId} = await fetchJson(accountControls.account.pod, {
+            method: 'POST',
+            headers: {
+                Authorization: formatCssTokenHeader(authorization),
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: UserConfig.podName
+            }),
+        })
+        console.log('Pod created!')
+        podUrls = {pod, podResource}
+    }
+
+    return {
+        ...accountControls,
+        ...podUrls
+    };
 }
 
 export async function registerUsersAndPods(users: any): Promise<Record<string, any>> {

@@ -1,9 +1,6 @@
 import fs from 'fs';
 import {ClientCredentials, CssUserConfig} from './interfaces';
 import assert from "node:assert";
-import {CssProxy} from "./components/anonymizer/CssProxy";
-import {SolidVCActor} from "./components/solid-actor/SolidVCActor";
-import {createCustomDocumentLoader, ctx} from "./contexts/contexts";
 import {obtainClientCredentials, registerUsersAndPods} from "./utils/css";
 import {readJsonFile, writeJsonFile} from "./utils/io";
 

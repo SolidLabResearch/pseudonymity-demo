@@ -1,7 +1,6 @@
 import {IService, ISolidProxy} from "./interfaces";
 import {CssProxy} from "./CssProxy";
 import path from "path";
-import {joinUrlPaths} from "../../util";
 import * as bbs from '@mattrglobal/jsonld-signatures-bbs';
 import {BbsBlsSignature2020, BbsBlsSignatureProof2020, Bls12381G2KeyPair} from '@mattrglobal/jsonld-signatures-bbs';
 // @ts-ignore
@@ -16,6 +15,7 @@ import {BlsKeys} from "../interfaces";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
 import {generateBls12381Keys} from "../../utils/keypair";
 import {readJsonFile} from "../../utils/io";
+import {joinUrlPaths} from "../../utils/url";
 
 export class Anonymizer {
 
