@@ -37,6 +37,6 @@ function combineCssTestConfigAndUserConfig(tc: ICssTestConfig): ActorTestConfigu
 const config = joinFilePath(__dirname, '../config/default.json')
 
 export const cssTestConfigRecords = [
-    {name: 'alice', port: 4000, config,},
-    {name: 'bob', port: 4001, config,},
+    {name: 'alice', port: 3000, config,},
+    {name: 'recruiter', port: 3002, config,},
 ].map(combineCssTestConfigAndUserConfig)
