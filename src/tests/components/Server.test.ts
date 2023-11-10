@@ -18,7 +18,7 @@ describe('CSS Servers for test actors', (): void => {
                         // Tell Components.js where to start looking for component configurations.
                         // We need to make sure it finds the components we made in our project
                         // so this needs to point to the root directory of our project.
-                        mainModulePath: joinFilePath(__dirname, '../../'),
+                        mainModulePath: joinFilePath(__dirname, '.'),
                         // We don't want Components.js to create an error dump in case something goes wrong with our test.
                         dumpErrorState: false,
                     },
