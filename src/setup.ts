@@ -1,6 +1,5 @@
 import fs from 'fs';
-import {ClientCredentials, CssUserConfig} from './interfaces';
-import assert from "node:assert";
+import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from './interfaces';
 import {obtainClientCredentials, registerUsersAndPods} from "./utils/css";
 import {readJsonFile, writeJsonFile} from "./utils/io";
 
@@ -24,27 +23,30 @@ async function preflight() {
     return readJsonFile(fpathUsersAndCredentials)
 }
 
-async function getUserCredentials(userOnControls: Record<string, any>) {
-    const entries = Object.entries(userOnControls) as [string, Record<string, any>][];
+export async function getUserCredentials(userOnControls: Record<string, CssControlsApiResponse>) {
+    const entries = Object.entries(userOnControls) as [string, CssControlsApiResponse][];
     const usersAndCredentials = Object.fromEntries(
         await Promise.all(entries.map(async (e) => {
             const [email, controls] = e;
-            const user = users.find((u: any) => u.email === email);
-            assert(user!!)
+            const user = users.find((u: any) => u.email === email)!
+
             // Client Credentials
             const cc: ClientCredentials = await obtainClientCredentials(user!, controls);
-            // // Access Token & DPoP Key
-            // const {accessToken, dpopKey} = await obtainAccessToken(cc, user.webId);
+            // Access Token & DPoP Key
             return [user!.email, {
                 user,
                 controls,
-                credentials: {
-                    clientCredentials: cc,
-                }
+                clientCredentials: cc
             }]
         }))
     )
-    return usersAndCredentials
+    return usersAndCredentials as {
+        [email: string]: {
+            user: CssUserConfig,
+            controls: CssControlsApiResponse,
+            clientCredentials: ClientCredentials
+        }
+    }
 }
 
 preflight()

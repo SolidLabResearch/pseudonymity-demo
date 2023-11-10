@@ -1,4 +1,4 @@
-import {ClientCredentials, CssUserConfig} from "../interfaces";
+import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../interfaces";
 import fetch from "cross-fetch";
 import {createDpopHeader, generateDpopKeyPair} from "@inrupt/solid-client-authn-core";
 import {logger} from "../logger";
@@ -22,7 +22,7 @@ export async function extractOidcIssuerValue(webIdProfileDocument: string): Prom
     })
 }
 
-export async function obtainClientCredentials(user: CssUserConfig, controls: Record<string, any>): Promise<ClientCredentials> {
+export async function obtainClientCredentials(user: CssUserConfig, controls: CssControlsApiResponse): Promise<ClientCredentials> {
     /**
      * Login and get authorization token
      * @param user
@@ -110,12 +110,13 @@ export const config = {
     baseUrl: 'http://localhost:3000'
 }
 
-export async function register(UserConfig: UserConfig) {
-    const baseUrl = UserConfig.css ?? config.baseUrl;
+export async function register(uc: UserConfig) {
+    const baseUrl = uc.css ?? config.baseUrl;
 
     const url = joinUrlPaths(baseUrl, '.account/');
     // Fetch control urls
-    const {controls} = await fetchJson(url);
+    let {controls} = await fetchJson(url);
+    controls = controls as CssControlsApiResponse
 
     // Create account
     const {authorization} = await fetchJson(controls.account.create, {
@@ -128,10 +129,10 @@ export async function register(UserConfig: UserConfig) {
             Authorization: formatCssTokenHeader(authorization),
         }
     })
-    console.log({accountControls})
+    // console.log({accountControls})
 
     // Add login method
-    const {email, password} = UserConfig;
+    const {email, password} = uc;
     logger.info(`Adding login method for: ${email}`)
     let res = await fetchJson(accountControls.password.create, {
         method: 'POST',
@@ -143,9 +144,9 @@ export async function register(UserConfig: UserConfig) {
     })
 
     // Create pod
-    let podUrls = {}
-    if (UserConfig.createPod) {
-        logger.info(`Creating pod ${UserConfig.podName}`)
+    let podUrls: { pod: string, podResource: string } // TODO: delete
+    if (uc.createPod) {
+        logger.info(`Creating pod ${uc.podName}`)
         const {pod, podResource, webId} = await fetchJson(accountControls.account.pod, {
             method: 'POST',
             headers: {
@@ -153,23 +154,23 @@ export async function register(UserConfig: UserConfig) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                name: UserConfig.podName
+                name: uc.podName
             }),
         })
         console.log('Pod created!')
-        podUrls = {pod, podResource}
+        podUrls = {pod, podResource} // TODO: delete
     }
 
     return {
         ...accountControls,
-        ...podUrls
-    };
+        // ...podUrls // TODO: delete
+    } as CssControlsApiResponse //& { pod: string, podResource: string }
 }
 
-export async function registerUsersAndPods(users: any): Promise<Record<string, any>> {
-    const userOnControls: Record<string, any> = {}
+export async function registerUsersAndPods(users: CssUserConfig[]): Promise<Record<string, CssControlsApiResponse>> {
+    const userOnControls: Record<string, CssControlsApiResponse> = {}
     for await (const u of users) {
-        logger.info(`Registering ${u.email} at ${u.podName}`)
+        logger.info(`Registering ${u.email} at ${u.css}`)
         // ref: https://communitysolidserver.github.io/CommunitySolidServer/7.x/usage/account/json-api/#example
         const controls = await register(u);
         userOnControls[u.email] = controls
