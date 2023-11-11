@@ -6,7 +6,7 @@ module.exports = {
     },
     // Only run tests in the unit and integration folders.
     // All test files need to have the suffix `.test.ts`.
-    testRegex: 'src/tests/components/.*\\.test\\.ts$',
+    testRegex: 'src/tests/(components|usecases)/.*\\.test\\.ts$',
     moduleFileExtensions: [
         'ts',
         'js',
