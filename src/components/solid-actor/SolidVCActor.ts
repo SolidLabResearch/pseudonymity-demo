@@ -65,6 +65,26 @@ export class SolidVCActor extends SolidDidActor {
         )
     }
 
+    /**
+     * TODO: ability to extend VP types (e.g. CredentialManagerPresentation)
+     * @param credentials
+     * @param holder
+     */
+    createPresentation(
+        credentials: VerifiableCredential[],
+        holder: undefined|string = undefined
+    ): VerifiablePresentation {
+        return {
+            '@context': [
+                'https://w3id.org/security/bbs/v1'
+            ],
+            type: ['VerifiablePresentation'],
+            issuer: this.controllerId,
+            holder,
+            verifiableCredential: credentials
+        } as VerifiablePresentation
+    }
+
     async signPresentation(p: VerifiablePresentation,
                            challenge: string,
                            purpose = new purposes.AssertionProofPurpose()
@@ -92,9 +112,19 @@ export class SolidVCActor extends SolidDidActor {
         );
     }
 
-    async verifyPresentation(p: VerifiablePresentation): Promise<VerificationResult> {
-        throw new Error('Not Yet Implemented')
-        return undefined;
+    async verifyPresentation(vp: VerifiablePresentation,
+                             challenge: string,
+                             purpose = new purposes.AssertionProofPurpose()
+    ): Promise<VerificationResult> {
+        return await jsigs.verify(
+            vp,
+            {
+                suite: this.verifySuite,
+                documentLoader: this.documentLoader,
+                challenge,
+                purpose
+            }
+        );
     }
 
     private initializeSuites() {
