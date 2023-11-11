@@ -22,20 +22,10 @@ Table of Contents
 npm install
 ```
 
-Before running the tests,
-the test infrastructure (defined
-in [`docker-compose.test.yml`](./docker-compose.test.yml)) needs to be set up,
-as follows:
+Run the tests as follows:
 
 ```bash
-npm run docker:test:clean-start
-```
-
-When the previous command finished successfully,
-run the tests as follows:
-
-```bash
-npm run test
+npm run test:components
 ```
 
 To teardown the test infrastructure, execute:
