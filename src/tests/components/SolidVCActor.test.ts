@@ -1,21 +1,13 @@
-import {afterAll, beforeAll, describe, expect, test, it} from '@jest/globals';
-import {App, AppRunner, joinFilePath} from '@solid/community-server';
-import fetch from 'cross-fetch';
-import {
-    cssTestConfigRecords, ICssTestConfig
-} from "../config/actorsOnCssTestConfigs";
+import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
+import {App} from '@solid/community-server';
+import {cssTestConfigRecords, ICssTestConfig} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
 
 import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../../interfaces";
 import {CssProxy} from "../../components/anonymizer/CssProxy";
-import {SolidDidActor} from "../../components/solid-actor/SolidDidActor";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
-import {AccessModes} from "@inrupt/solid-client";
-import * as path from "path";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
-import {AbstractSolidActor} from "../../components/solid-actor/AbstractSolidActor";
-import {VerifiableCredential} from "@digitalcredentials/vc-data-model";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 
 describe('SolidVCActor', (): void => {
@@ -82,6 +74,19 @@ describe('SolidVCActor', (): void => {
             const verificationResult = await solidVCActor.verifyCredential(vc)
             expect(verificationResult.valid)
         })
+
+        it.skip(`[${r.testConfig.name}] Can create, sign, and verify a VP`, async () => {
+            // TODO
+        })
+
+        it.skip(`[${r.testConfig.name}] Can derive a VC`, async () => {
+            // TODO
+        })
+
+        it.skip(`[${r.testConfig.name}] Can create, sign, and verify a VP containing derived VCs`, async () => {
+            // TODO
+        })
+
 
     }
 
