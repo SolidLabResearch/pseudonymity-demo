@@ -1,0 +1,28 @@
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://w3id.org/security/bbs/v1",
+    "https://w3id.org/citizenship/v1",
+    "https://gddmulde.be/customvocab/"
+  ],
+  "id": "urn:vc:02",
+  "type": [
+    "VerifiableCredential",
+    "UniversityDegreeCredential"
+  ],
+  "issuer": "did:key:z5TcEJwPUVgMbPEVUN8qUw66BEUuM7Kw1DwnTvopeNXE9YmA53xGcTdsWZpnvRP4kWFT5zrHSEPQfUDWgs3s7UoxcjLQvKUJ3hcKu73Q9iErBLoVJfmgw1rAnLdrM5oHeskvbnW5SS4XasLSfbkYrNyGqC1sH3ZeM3bkELPSLcWcZK5iQF5yQSYDfm1cBbSAubsHU5NtT",
+  "issuanceDate": "2021-06-19T18:53:11Z",
+  "credentialSubject": {
+    "id": "urn:test:id000",
+    "identifier": "123456789ab",
+    "degree": "Msc. Physics",
+    "grade": "789/1000"
+  },
+  "proof": {
+    "type": "BbsBlsSignature2020",
+    "created": "2023-10-21T17:20:56Z",
+    "proofPurpose": "assertionMethod",
+    "proofValue": "iz2LwMt7fuLoCv+jwMlZCGr0Z+YDYHMB8snobgnrvjgGy/RWRIuTqoWVjDk6+fBdNfjywE+qjO0X4i8cmjUMsYTXN2LPXMTxJEvII+gyFtMUPky4TV9RCFhZYx7klIBTdjXSmqPgUXgC2Mcj8hMFVg==",
+    "verificationMethod": "did:key:z5TcEJwPUVgMbPEVUN8qUw66BEUuM7Kw1DwnTvopeNXE9YmA53xGcTdsWZpnvRP4kWFT5zrHSEPQfUDWgs3s7UoxcjLQvKUJ3hcKu73Q9iErBLoVJfmgw1rAnLdrM5oHeskvbnW5SS4XasLSfbkYrNyGqC1sH3ZeM3bkELPSLcWcZK5iQF5yQSYDfm1cBbSAubsHU5NtT#zUC7HWwUBK5kQ2QisHFgKhVYRgF1MAa1MzV1rqNLTq49h6njxVHYB22pZbUZB9L158b9Emd7CK6J4cbz7dSu3bd6i6ug63Gia2rgCg2UDo5K4WBJHULYJWTHyAQsQeWGLtvXUxB"
+  }
+}

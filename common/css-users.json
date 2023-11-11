@@ -28,6 +28,26 @@
     "register": true,
     "webId": "http://localhost:3002/recruiter/profile/card#me",
     "css": "http://localhost:3002"
+  },
+  {
+    "podName": "university",
+    "email": "info@university.com",
+    "password": "university123",
+    "createWebId": true,
+    "createPod": true,
+    "register": true,
+    "webId": "http://localhost:3003/university/profile/card#me",
+    "css": "http://localhost:3003"
+  },
+  {
+    "podName": "government",
+    "email": "info@government.com",
+    "password": "government123",
+    "createWebId": true,
+    "createPod": true,
+    "register": true,
+    "webId": "http://localhost:3004/government/profile/card#me",
+    "css": "http://localhost:3004"
   }
-  
+
 ]

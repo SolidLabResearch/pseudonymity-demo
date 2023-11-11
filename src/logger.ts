@@ -1,4 +1,4 @@
-const LEVEL = 'debug';
+const LEVEL = 'debug'; // warn info debug, ...
 
 import { pino } from 'pino'
 export const logger = pino({
