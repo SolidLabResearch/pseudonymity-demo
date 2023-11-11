@@ -1,17 +1,19 @@
 import {CssProxy} from "../anonymizer/CssProxy";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {VerificationResult} from "./interfaces";
-import {VerifiableCredential, VerifiablePresentation} from "@digitalcredentials/vc-data-model";
+import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import {logger} from "../../logger";
 import {BbsBlsSignature2020} from "@mattrglobal/jsonld-signatures-bbs";
 import {klona} from "klona";
 // @ts-ignore
 import jsigs, {purposes} from 'jsonld-signatures';
-import {CredentialSubject} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
+import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
 import {SolidDidActor} from "./SolidDidActor";
+
+export type VerifiableCredential = VCDIVerifiableCredential
 
 export class SolidVCActor extends SolidDidActor {
     private signSuite: any

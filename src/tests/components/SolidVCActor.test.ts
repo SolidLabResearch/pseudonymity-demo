@@ -15,6 +15,8 @@ import {AccessModes} from "@inrupt/solid-client";
 import * as path from "path";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {AbstractSolidActor} from "../../components/solid-actor/AbstractSolidActor";
+import {VerifiableCredential} from "@digitalcredentials/vc-data-model";
+import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
@@ -57,6 +59,28 @@ describe('SolidVCActor', (): void => {
             const solidVCActor = new SolidVCActor(proxy, r.userConfig.webId, documentLoader)
             await solidVCActor.initialize()
             expect(solidVCActor.isInitialized())
+            // Sanity check
+            expect(solidVCActor.g2).toBeDefined()
+        })
+
+        it(`[${r.testConfig.name}] Can create, sign, and verify a VC`, async () => {
+            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
+            const solidVCActor = new SolidVCActor(proxy, r.userConfig.webId, documentLoader)
+            await solidVCActor.initialize()
+            expect(solidVCActor.isInitialized())
+
+            // Create
+            const c = solidVCActor.createCredential({'id': 'urn:test'});
+
+            // Sign
+            const vc: VCDIVerifiableCredential = await solidVCActor.signCredential(c)
+            expect(vc.proof).toBeDefined()
+            // vc.proof 's verificationMethod must point to the actor's g2 key id
+            expect(vc.proof.verificationMethod).toEqual(solidVCActor.g2!.id)
+
+            // Verify
+            const verificationResult = await solidVCActor.verifyCredential(vc)
+            expect(verificationResult.valid)
         })
 
     }
