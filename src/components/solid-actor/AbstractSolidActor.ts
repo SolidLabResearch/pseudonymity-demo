@@ -40,7 +40,6 @@ export class AbstractSolidActor implements ISolidActor {
 
         for await (const uc of uploadConfigurations) {
             const ser = await uc.serialize!(uc.o());
-            console.log({ser, ct: uc.mimeType})
             await this.proxy.addFileToContainer(
                 uc.destContainer,
                 Buffer.from(ser),

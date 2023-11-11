@@ -39,10 +39,6 @@ export class SolidDidActor extends AbstractSolidActor {
     }
 
     get didsContainerUrl(): string {
-        console.log({
-            proxy: this.proxy.controls,
-            podUrl: this.proxy.podUrl
-        })
         return path.join(this.proxy.podUrl!, '/dids/')
     }
 
