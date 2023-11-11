@@ -7,15 +7,9 @@ import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../../in
 import {CssProxy} from "../../components/anonymizer/CssProxy";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {ITestRecord} from "../interfaces";
 
-export interface ITestRecord {
-    testConfig: ICssTestConfig;
-    userConfig: CssUserConfig;
-    app?: App;
-    controls?: CssControlsApiResponse;
-    clientCredentials?: ClientCredentials,
-    actor?: SolidVCActor
-}
+
 
 describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
 
