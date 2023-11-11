@@ -38,5 +38,5 @@ const config = joinFilePath(__dirname, '../config/default.json')
 
 export const cssTestConfigRecords = [
     {name: 'alice', port: 3000, config,},
-    // {name: 'recruiter', port: 3002, config,},
+    {name: 'recruiter', port: 3002, config,},
 ].map(combineCssTestConfigAndUserConfig)
