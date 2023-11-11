@@ -20,6 +20,8 @@ export interface ITestRecord {
 describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
 
     let records: Array<ITestRecord> = cssTestConfigRecords
+    let alice: SolidVCActor
+    let recruiter: SolidVCActor
 
     async function createInitializedSolidVCActor(r: ITestRecord): Promise<SolidVCActor> {
         const documentLoader = createCustomDocumentLoader(ctx)
@@ -42,8 +44,11 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
             r.clientCredentials = await obtainClientCredentials(r.userConfig, r.controls!)
             // Attach initialized SolidVCActor
             r.actor = await createInitializedSolidVCActor(r)
-
         }
+
+        alice = records.find(r => r.testConfig.name === 'alice')!.actor!
+        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor!
+
     });
 
     afterAll(async (): Promise<void> => {
@@ -51,8 +56,6 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
     });
 
     it(`[recruiter] verifies VC created by [alice]`, async () => {
-        const alice = records.find(r => r.testConfig.name === 'alice')!.actor!
-        const recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor!
         const c = alice.createCredential({id: 'urn:test:vc'})
         const vc = await alice.signCredential(c)
         const verificationResult = await recruiter.verifyCredential(vc)
