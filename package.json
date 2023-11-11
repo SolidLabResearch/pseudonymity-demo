@@ -20,8 +20,6 @@
     "docker:test:usecases:setup:stop": "docker compose --env-file $(pwd)/.test.usecases.env -f docker-compose.test.usecases.yml --profile usecases down -t 0",
     "docker:test:usecases:setup:start": "docker compose --env-file $(pwd)/.test.usecases.env -f docker-compose.test.usecases.yml --profile usecases up --remove-orphans -d --wait",
     "docker:test:usecases:setup": "npm run docker:test:usecases:setup:stop && npm run docker:test:usecases:setup:start",
-    "index": "npx ts-node src/index.ts",
-    "index:watch": "nodemon --config nodemon.json --exec npm run index",
     "setup": "npx ts-node src/setup.ts",
     "setup:watch": "nodemon --config nodemon.json --exec npm run setup",
     "d2:setup:watch": "d2 --watch ./diagrams/setup.d2 ./diagrams/setup.png",
