@@ -13,16 +13,16 @@ services:
       retries: 65
       start_period: 30s
 
-  css_recruiter:
-    image: solidproject/community-server:7
-    environment:
-      - CSS_PORT=3002
-    ports:
-      - 3002:3002
-    healthcheck:
-      test: "[ -e healthy.flag ] || if wget --no-check-certificate http://localhost:3002 --spider; then touch healthy.flag; else false; fi"
-      interval: 5s
-      timeout: 10s
-      retries: 65
-      start_period: 30s
+#  css_recruiter:
+#    image: solidproject/community-server:7
+#    environment:
+#      - CSS_PORT=3002
+#    ports:
+#      - 3002:3002
+#    healthcheck:
+#      test: "[ -e healthy.flag ] || if wget --no-check-certificate http://localhost:3002 --spider; then touch healthy.flag; else false; fi"
+#      interval: 5s
+#      timeout: 10s
+#      retries: 65
+#      start_period: 30s
 

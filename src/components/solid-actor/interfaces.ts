@@ -13,7 +13,8 @@ export interface UploadConfiguration { // TODO: REFACTOR
     serialize?: (o: object) => Promise<string>
     access?: {
         public?: AccessModes
-    }
+    },
+    description?: string
 }
 
 export interface IKeyPairBase {

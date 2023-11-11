@@ -7,9 +7,7 @@ import {exportPublicG2} from "../../utils/keypair";
 import {AccessModes} from "@inrupt/solid-client";
 import path from "path";
 import {IDidDocument} from "./did-interfaces";
-import {NotInitializedError} from "./errors";
 import {logger} from "../../logger";
-import {string} from "rdflib/lib/utils-js";
 
 export class SolidDidActor extends AbstractSolidActor {
     g2?: Bls12381G2KeyPair
@@ -20,11 +18,13 @@ export class SolidDidActor extends AbstractSolidActor {
 
     constructor(proxy: CssProxy, webId: string, documentLoader: IDocumentLoader) {
         super(proxy, webId, documentLoader);
+
         this.seed = '|'.concat(webId, proxy.clientCredentials.id, proxy.clientCredentials.secret)
         this.g2Slug = '#key-g2'
         this.g2DestinationContainer = this.controllerId
         this.uploadConfigurations = [
             {
+                description: `Upload the JSON-LD serialization of the public export of the BLS12381 G2 Key.`,
                 o: () => this.g2,
                 serialize: async (o: object) => {
                     let xp = exportPublicG2(o as Bls12381G2KeyPair)
@@ -39,7 +39,11 @@ export class SolidDidActor extends AbstractSolidActor {
     }
 
     get didsContainerUrl(): string {
-        return path.join(this.proxy.podUrl, '/dids/')
+        console.log({
+            proxy: this.proxy.controls,
+            podUrl: this.proxy.podUrl
+        })
+        return path.join(this.proxy.podUrl!, '/dids/')
     }
 
     get controllerId(): string {

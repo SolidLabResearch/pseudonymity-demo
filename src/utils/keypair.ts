@@ -1,6 +1,5 @@
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {IKeyPairPublicExport} from "../components/solid-actor/interfaces";
-import * as bls12381 from "@transmute/did-key-bls12381";
 import {namespaces} from "./namespace";
 
 export function exportPublicG2(k: Bls12381G2KeyPair) {
@@ -24,6 +23,3 @@ export function exportPublicG2(k: Bls12381G2KeyPair) {
     } as IKeyPairPublicExport
 }
 
-export async function generateBls12381Keys(seed: string) {
-    return await bls12381.generate({secureRandom: () => Buffer.from(seed)}, {accept: 'application/did+ld+json'})
-}

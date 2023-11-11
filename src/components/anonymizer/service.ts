@@ -1,12 +1,4 @@
-import express, {Express, Request, Response} from 'express';
-import crypto from 'node:crypto';
-import {UUID} from "crypto";
-import bodyParser from "body-parser";
-import {config, origin, endpoints} from './config'
-import {Anonymizer} from "./Anonymizer";
-import {origin as recruiterOrigin} from '../recruiter/config';
 import {CssProxy} from "./CssProxy";
-import {IService, ISolidProxy} from "./interfaces";
 import {readJsonFile} from "../../utils/io";
 
 

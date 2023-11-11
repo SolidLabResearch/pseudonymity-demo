@@ -5,13 +5,9 @@ import credentialsContext from "credentials-context";
 import {customVocab} from "./customVocab";
 import {IDocumentLoader} from "./interfaces";
 import {fetch} from "@inrupt/universal-fetch";
-import N3 from "n3";
-import {inspect} from 'util';
-import {getJsonLdParser} from "@inrupt/solid-client";
-import {NotYetImplementedError} from "../components/solid-actor/errors";
-import {ttl2jld, ttl2store} from "../utils/parsing";
+import {ttl2jld} from "../utils/parsing";
 import {readJsonFile} from "../utils/io";
-import {namespaces, vocabs} from "../utils/namespace";
+import {namespaces} from "../utils/namespace";
 
 const ctx = new Map();
 // DID context

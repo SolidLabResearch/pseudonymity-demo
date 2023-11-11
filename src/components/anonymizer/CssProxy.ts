@@ -25,6 +25,9 @@ export class CssProxy implements ISolidProxy {
     webId: string;
 
     constructor(clientCredentials: ClientCredentials, webId: string, controls?: any) {
+        if (!clientCredentials!!)
+            throw new Error('Client Credentials are required!')
+
         this.clientCredentials = clientCredentials!;
         this.webId = webId!;
         this.controls = controls!;
@@ -35,7 +38,9 @@ export class CssProxy implements ISolidProxy {
     }
 
     get podUrl(): string {
-        return this.controls.pod;
+        // TODO: dynamically determine pod url
+        return this.webId.replace('/profile/card#me', '')
+        // return this.controls.pod!
     }
 
     static async parseResponse(response: Response) {
@@ -74,7 +79,13 @@ export class CssProxy implements ISolidProxy {
 
     async intializeFetch(): Promise<typeof fetch> {
         logger.debug(`[${this.webId}] initializeFetch`)
-        const {accessToken, dpopKey} = await obtainAccessToken(this.clientCredentials, this.webId);
+        const all = await obtainAccessToken(this.clientCredentials, this.webId);
+        const {accessToken, dpopKey} = all
+        console.log({
+            name: this.webId,
+            accessToken,
+            dpopKey
+        })
         // The DPoP key needs to be the same key as the one used in the previous step.
         // The Access token is the one generated in the previous step.
         const authFetch = await buildAuthenticatedFetch(fetch, accessToken, {dpopKey});

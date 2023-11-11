@@ -2,8 +2,7 @@
   "extends": "@tsconfig/node18/tsconfig.json",
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
-    "moduleResolution": "node16",
+    "module": "Node16",
     "lib": [
       "es2021"
     ],
