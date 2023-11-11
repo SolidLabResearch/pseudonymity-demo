@@ -22,6 +22,16 @@ Table of Contents
 npm install
 ```
 
+Run all tests with a single script as follows:
+
+```bash
+npm run test
+```
+
+Otherwise,
+the following sections demonstrate how to run
+tests for components and use cases separately.
+
 ### Components
 
 Run the tests as follows:
