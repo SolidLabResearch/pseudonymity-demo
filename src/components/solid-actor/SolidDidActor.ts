@@ -25,12 +25,15 @@ export class SolidDidActor extends AbstractSolidActor {
         this.uploadConfigurations = [
             {
                 description: `Upload the JSON-LD serialization of the public export of the BLS12381 G2 Key.`,
-                o: () => this.g2,
-                serialize: async (o: object) => {
-                    let xp = exportPublicG2(o as Bls12381G2KeyPair)
-                    return JSON.stringify(xp, null, 2)
-                },
-                destContainer: this.g2DestinationContainer,
+                // o: () => this.g2,
+                // serialize: async (o: object) => {
+                //     let xp = exportPublicG2(o as Bls12381G2KeyPair)
+                //     return JSON.stringify(xp, null, 2)
+                // },
+                // destContainer: this.g2DestinationContainer,
+                o: () => this.controllerDocument,
+                serialize: async (o: object) => JSON.stringify(o, null, 2),
+                destContainer: this.controllerId,
                 slug: this.g2Slug,
                 mimeType: 'application/ld+json',
                 access: {public: {read: true} as AccessModes}
