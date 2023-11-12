@@ -10,6 +10,26 @@ import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
+import {readJsonFile} from "../../utils/io";
+// @ts-ignore
+import credentialsContext from 'credentials-context';
+
+/**
+ * Build context map
+ * @param actors
+ * @returns {Map<any, any>}
+ */
+export function getContextMap() {
+    const ctx = new Map();
+
+    // VC
+    ctx.set(credentialsContext.CONTEXT_URL_V1, credentialsContext.contexts.get(credentialsContext.CONTEXT_URL_V1))
+    // BBS context
+    ctx.set('https://w3id.org/security/bbs/v1', readJsonFile('src/contexts/vc-di-bbs-v1.json'))
+
+    ctx.set('https://w3id.org/security/suites/jws-2020/v1', readJsonFile('src/contexts/suiteContext.json'))
+    return ctx
+}
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
@@ -20,7 +40,7 @@ describe('SolidVCActor', (): void => {
 
     beforeAll(async (): Promise<void> => {
 
-        documentLoader = createCustomDocumentLoader(ctx)
+        documentLoader = createCustomDocumentLoader(getContextMap())
 
         // Create & start each actor's app (server)
         for await (const r of records) {
@@ -93,8 +113,31 @@ describe('SolidVCActor', (): void => {
             expect(verificationResult.valid)
         })
 
-        it.skip(`[${r.testConfig.name}] can derive a VC`, async () => {
-            // TODO
+        it(`[${r.testConfig.name}] can derive a VC`, async () => {
+            const actor = await createInitializedActor(r)
+            const c = actor.createCredential(
+                {id: 'urn:test:id000',
+                    'ex:identifier': '123456789ab',
+                    'ex:familyName': "Doe",
+                    'ex:webid': "https://gov.be/john.doe"
+                })
+            const frame = {
+                "@context": actor.credentialContext,
+                "type": ["VerifiableCredential"],
+                "credentialSubject": {
+                    "@explicit": true,
+                    'ex:webid': {}
+                }
+            }
+            // Create VC
+            const vc = await actor.signCredential(c)
+            // Derive VC
+            const dvc = await actor.deriveCredential(vc, frame)
+            // Claim attributes that should be defined
+            expect(dvc.credentialSubject['ex:webid']).toBeDefined()
+            // Claim attributes that should NOT be defined
+            expect(dvc.credentialSubject['ex:identifier']).not.toBeDefined()
+            expect(dvc.credentialSubject['ex:familyName']).not.toBeDefined()
         })
 
         it.skip(`[${r.testConfig.name}] can create, sign, and verify a VP containing derived VCs`, async () => {

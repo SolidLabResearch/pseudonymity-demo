@@ -3,7 +3,7 @@ import {IDocumentLoader} from "../../contexts/interfaces";
 import {VerificationResult} from "./interfaces";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import {logger} from "../../logger";
-import {BbsBlsSignature2020} from "@mattrglobal/jsonld-signatures-bbs";
+import {BbsBlsSignature2020, BbsBlsSignatureProof2020, deriveProof} from "@mattrglobal/jsonld-signatures-bbs";
 import {klona} from "klona";
 // @ts-ignore
 import jsigs, {purposes} from 'jsonld-signatures';
@@ -12,6 +12,7 @@ import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/v
 import credentialsContext from "credentials-context";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
 import {SolidDidActor} from "./SolidDidActor";
+import {JsonLdDocument} from "jsonld";
 
 export type VerifiableCredential = VCDIVerifiableCredential
 
@@ -25,8 +26,8 @@ export class SolidVCActor extends SolidDidActor {
 
     get credentialContext(): string[] {
         return [
-            credentialsContext.CONTEXT_URL_V1,
-            'https://w3id.org/security/bbs/v1'
+            'https://www.w3.org/2018/credentials/v1',
+            "https://w3id.org/security/bbs/v1",
         ]
     }
 
@@ -65,6 +66,17 @@ export class SolidVCActor extends SolidDidActor {
         )
     }
 
+    async deriveCredential(vc: VerifiableCredential, frame: JsonLdDocument): Promise<VerifiableCredential> {
+     return deriveProof(
+            vc,
+            frame,
+            {
+                suite: new BbsBlsSignatureProof2020(true),
+                documentLoader: this.documentLoader,
+            }
+        )
+    }
+
     /**
      * TODO: ability to extend VP types (e.g. CredentialManagerPresentation)
      * @param credentials
@@ -76,10 +88,10 @@ export class SolidVCActor extends SolidDidActor {
     ): VerifiablePresentation {
         return {
             '@context': [
+                "https://www.w3.org/2018/credentials/v1",
                 'https://w3id.org/security/bbs/v1'
             ],
             type: ['VerifiablePresentation'],
-            issuer: this.controllerId,
             holder,
             verifiableCredential: credentials
         } as VerifiablePresentation
