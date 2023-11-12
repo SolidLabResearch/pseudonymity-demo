@@ -91,7 +91,7 @@ describe('SolidVCActor', (): void => {
 
             // Verify
             const verificationResult = await actor.verifyCredential(vc)
-            expect(verificationResult.valid)
+            expect(verificationResult).toHaveProperty('verified', true)
         })
 
         it(`[${r.testConfig.name}] can create, sign, and verify a VP`, async () => {
@@ -110,7 +110,7 @@ describe('SolidVCActor', (): void => {
             const vp = await actor.signPresentation(p, challenge)
             // Verify VP
             const verificationResult = await actor.verifyPresentation(vp,challenge)
-            expect(verificationResult.valid)
+            expect(verificationResult).toHaveProperty('verified', true)
         })
 
         it(`[${r.testConfig.name}] can derive a VC`, async () => {
