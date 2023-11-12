@@ -144,11 +144,6 @@ describe('SolidVCActor', (): void => {
             expect(dvc.credentialSubject['ex:familyName']).not.toBeDefined()
         })
 
-        it.skip(`[${r.testConfig.name}] can create, sign, and verify a VP containing derived VCs`, async () => {
-            // TODO: test "can create, sign, and verify a VP containing derived VCs"
-        })
-
-
     }
 
 });

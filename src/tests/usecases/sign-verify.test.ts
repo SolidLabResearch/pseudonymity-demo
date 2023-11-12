@@ -231,8 +231,7 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
         }
     })
 
-    it(`
-    [government] issues VC01 to [alice] ;
+    it(`[government] issues VC01 to [alice] ;
     [university] issues VC02 to [alice] ; 
     [alice] creates VP with derived VC01 & derived VC02 ; 
     [recruiter] verifies VP`, async () => {
