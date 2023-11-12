@@ -91,6 +91,8 @@ describe('SolidVCActor', (): void => {
 
             // Verify
             const verificationResult = await actor.verifyCredential(vc)
+            if(verificationResult.verified !== true)
+                console.error(verificationResult)
             expect(verificationResult).toHaveProperty('verified', true)
         })
 
@@ -110,6 +112,8 @@ describe('SolidVCActor', (): void => {
             const vp = await actor.signPresentation(p, challenge)
             // Verify VP
             const verificationResult = await actor.verifyPresentation(vp,challenge)
+            if(verificationResult.verified !== true)
+                console.error(verificationResult)
             expect(verificationResult).toHaveProperty('verified', true)
         })
 

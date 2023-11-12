@@ -65,9 +65,9 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
         const vp = await alice.signPresentation(p,challenge)
         // [recruiter] verifies the VP from [alice]
         const verificationResult = await recruiter.verifyPresentation(vp, challenge)
+        if(verificationResult.verified !== true)
+            console.error(verificationResult)
         expect(verificationResult).toHaveProperty('verified', true)
-
-        console.log(verificationResult)
     })
 
     // TODO
@@ -103,9 +103,12 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
         const vp = await alice.signPresentation(p,challenge)
         // [recruiter] verifies the VP from [alice]
         const verificationResult = await recruiter.verifyPresentation(vp, challenge)
+
+        if(verificationResult.verified !== true)
+            console.error(verificationResult)
+
         expect(verificationResult).not.toHaveProperty('error')
         expect(verificationResult).toHaveProperty('verified', true)
-
 
     })
 
