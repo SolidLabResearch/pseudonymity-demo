@@ -12,6 +12,10 @@ Table of Contents
     - [Testing](#testing)
     - [Background](#background)
 
+## Prerequisites
+
+- Docker Compose
+
 ## Usage
 
 - [ ] TODO
