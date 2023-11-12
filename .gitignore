@@ -6,3 +6,4 @@ usecase/sandbox.js
 sandbox.ts
 scratch
 /build
+/coverage

@@ -1,4 +1,6 @@
 module.exports = {
+    collectCoverage: true,
+    coverageReporters: ['clover', 'json', 'lcov', ['text', {skipFull: true}]],
     transform: {
         '^.+\\.ts$': ['ts-jest', {
             tsconfig: 'tsconfig.json',
@@ -14,5 +16,6 @@ module.exports = {
     testEnvironment: 'node',
     // Make sure our tests have enough time to start a server
     testTimeout: 60000,
-    verbose: false
+    verbose: true,
+
 };
