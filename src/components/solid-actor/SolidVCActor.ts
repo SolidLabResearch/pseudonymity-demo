@@ -35,7 +35,6 @@ export class SolidVCActor extends SolidDidActor {
      * SolidVCActor is considered initialized when its sign & verify suites are.
      */
     async initialize() {
-        console.log('super.initialize()')
         await super.initialize();
         this.initializeSuites();
     }

@@ -157,7 +157,6 @@ export async function register(uc: UserConfig) {
                 name: uc.podName
             }),
         })
-        console.log('Pod created!')
         podUrls = {pod, podResource} // TODO: delete
     }
 

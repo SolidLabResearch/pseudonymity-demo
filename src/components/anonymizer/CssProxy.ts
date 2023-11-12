@@ -81,11 +81,6 @@ export class CssProxy implements ISolidProxy {
         logger.debug(`[${this.webId}] initializeFetch`)
         const all = await obtainAccessToken(this.clientCredentials, this.webId);
         const {accessToken, dpopKey} = all
-        console.log({
-            name: this.webId,
-            accessToken,
-            dpopKey
-        })
         // The DPoP key needs to be the same key as the one used in the previous step.
         // The Access token is the one generated in the previous step.
         const authFetch = await buildAuthenticatedFetch(fetch, accessToken, {dpopKey});

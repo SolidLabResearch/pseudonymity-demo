@@ -14,4 +14,5 @@ module.exports = {
     testEnvironment: 'node',
     // Make sure our tests have enough time to start a server
     testTimeout: 60000,
+    verbose: false
 };

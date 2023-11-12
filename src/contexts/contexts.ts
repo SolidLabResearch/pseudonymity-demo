@@ -62,11 +62,7 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader 
             }
 
         } else {
-            console.log(`Not in context register.
-            Fetching: ${url}`)
-
             const response = await fetch(url)
-            console.log({url, contentType: response.headers.get('content-type')})
             let document = undefined
             switch (response.headers.get('content-type')) {
                 case 'application/json':
