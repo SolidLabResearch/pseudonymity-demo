@@ -34,3 +34,37 @@ services:
       retries: 65
       start_period: 30s
 
+  css_university:
+    profiles:
+      - all
+      - usecases
+    image: solidproject/community-server:7
+    environment:
+      - CSS_PORT=${CSS_PORT_UNIVERSITY}
+      - CSS_SHOW_STACK_TRACE=${CSS_SHOW_STACK_TRACE}
+    ports:
+      - ${CSS_PORT_UNIVERSITY}:${CSS_PORT_UNIVERSITY}
+    healthcheck:
+      test: "[ -e healthy.flag ] || if wget --no-check-certificate http://localhost:${CSS_PORT_UNIVERSITY} --spider; then touch healthy.flag; else false; fi"
+      interval: 5s
+      timeout: 10s
+      retries: 65
+      start_period: 30s
+
+  css_government:
+    profiles:
+      - all
+      - usecases
+    image: solidproject/community-server:7
+    environment:
+      - CSS_PORT=${CSS_PORT_GOVERNMENT}
+      - CSS_SHOW_STACK_TRACE=${CSS_SHOW_STACK_TRACE}
+    ports:
+      - ${CSS_PORT_GOVERNMENT}:${CSS_PORT_GOVERNMENT}
+    healthcheck:
+      test: "[ -e healthy.flag ] || if wget --no-check-certificate http://localhost:${CSS_PORT_GOVERNMENT} --spider; then touch healthy.flag; else false; fi"
+      interval: 5s
+      timeout: 10s
+      retries: 65
+      start_period: 30s
+
