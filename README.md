@@ -28,6 +28,8 @@ npm install
 
 Run all tests with a single script as follows:
 
+> Make sure that `collectCoverage` is set to `false` in [`jest.config.js`](./jest.config.js) when running all tests (`npm run test`), since Jest reports to `stderr`, which will break the subsequent npm scripts from executing.
+
 ```bash
 npm run test
 ```

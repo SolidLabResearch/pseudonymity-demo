@@ -1,5 +1,5 @@
 module.exports = {
-    collectCoverage: true,
+    collectCoverage: false,
     coverageReporters: ['clover', 'json', 'lcov', ['text', {skipFull: true}]],
     coveragePathIgnorePatterns: [
         '/dist/',
