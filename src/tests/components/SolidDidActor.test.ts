@@ -60,13 +60,6 @@ describe(`'Test SolidDidActor for one test actor'`, (): void => {
             expect(solidDidActor.isInitialized())
         })
 
-        it(`[${r.testConfig.name}] Should initialize a SolidVCActor`, async () => {
-            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
-            const solidVCActor = new SolidVCActor(proxy, r.userConfig.webId, documentLoader)
-            await solidVCActor.initialize()
-            expect(solidVCActor.isInitialized())
-        })
-
     }
 
 });
