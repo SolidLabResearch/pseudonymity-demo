@@ -145,7 +145,7 @@ describe('SolidVCActor', (): void => {
         })
 
         it.skip(`[${r.testConfig.name}] can create, sign, and verify a VP containing derived VCs`, async () => {
-            // TODO
+            // TODO: test "can create, sign, and verify a VP containing derived VCs"
         })
 
 
