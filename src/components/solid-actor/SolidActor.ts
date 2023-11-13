@@ -34,7 +34,7 @@ export class SolidActor implements ISolidActor {
             throw new NotInitializedError()
     }
 
-    protected async uploadResourcesToPod(uploadConfigurations: UploadConfiguration[]) {
+    async uploadResourcesToPod(uploadConfigurations: UploadConfiguration[]) {
         logger.debug('uploadResourcesToPod()')
 
         for await (const uc of uploadConfigurations) {

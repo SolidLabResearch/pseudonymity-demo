@@ -40,10 +40,10 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
             r.actor = await createInitializedSolidVCActor(r)
         }
 
-        alice = records.find(r => r.testConfig.name === 'alice')!.actor!
-        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor!
-        government = records.find(r => r.testConfig.name === 'government')!.actor!
-        university = records.find(r => r.testConfig.name === 'university')!.actor!
+        alice = records.find(r => r.testConfig.name === 'alice')!.actor! as SolidVCActor
+        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor! as SolidVCActor
+        government = records.find(r => r.testConfig.name === 'government')!.actor! as SolidVCActor
+        university = records.find(r => r.testConfig.name === 'university')!.actor! as SolidVCActor
 
     });
 

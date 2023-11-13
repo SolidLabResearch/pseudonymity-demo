@@ -61,6 +61,4 @@ export interface ISolidProxy extends ISolidActor {
     fetch?: typeof fetch
 }
 
-interface IDidActor extends IActor {
-    did: string
-}
+
