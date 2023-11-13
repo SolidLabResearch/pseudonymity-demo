@@ -1,9 +1,6 @@
-import {afterAll, beforeAll, describe, expect, test, it} from '@jest/globals';
-import {App, AppRunner, joinFilePath} from '@solid/community-server';
-import fetch from 'cross-fetch';
-import {
-    cssTestConfigRecords, ICssTestConfig
-} from "../config/actorsOnCssTestConfigs";
+import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
+import {App} from '@solid/community-server';
+import {cssTestConfigRecords, ICssTestConfig} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
 
 import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../../interfaces";
@@ -11,10 +8,6 @@ import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {SolidDidActor} from "../../components/solid-actor/SolidDidActor";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
-import {AccessModes} from "@inrupt/solid-client";
-import * as path from "path";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
-import {SolidActor} from "../../components/solid-actor/SolidActor";
 
 describe(`'Test SolidDidActor for one test actor'`, (): void => {
     const SELECTED_TEST_ACTOR = 'alice'

@@ -1,25 +1,8 @@
-import {IActor} from "./interfaces";
-import {string} from "rdflib/lib/utils-js";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {IDidDocument} from "./did-interfaces";
 import {exportPublicG2} from "../../utils/keypair";
+import {IBls12381G2KeyPairActor} from "./KeyPairActor";
 
-export abstract class KeyPairActor<K> implements IActor {
-    key?: K
-    abstract initialize(): Promise<void>
-
-    isInitialized(): boolean {
-        return this.key !==undefined
-    }
-
-}
-
-interface IBls12381G2KeyPairActor extends KeyPairActor<Bls12381G2KeyPair> {
-    seed: string
-    controller: string
-    id: string
-    keyName: string
-}
 export class DidActor implements IBls12381G2KeyPairActor {
     key?: Bls12381G2KeyPair;
     seed: string;
