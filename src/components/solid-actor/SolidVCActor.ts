@@ -1,4 +1,4 @@
-import {CssProxy} from "../anonymizer/CssProxy";
+import {CssProxy} from "./CssProxy";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {VerificationResult} from "./interfaces";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";

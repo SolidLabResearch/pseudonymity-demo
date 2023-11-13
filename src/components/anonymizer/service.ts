@@ -1,4 +1,4 @@
-import {CssProxy} from "./CssProxy";
+import {CssProxy} from "../solid-actor/CssProxy";
 import {readJsonFile} from "../../utils/io";
 
 

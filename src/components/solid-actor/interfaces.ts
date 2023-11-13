@@ -1,4 +1,5 @@
 import {AccessModes} from "@inrupt/solid-client";
+import {ClientCredentials} from "../../interfaces";
 
 export type VerificationResult = any // Joachim is sad now :(
 /**
@@ -37,4 +38,29 @@ export interface IKeyPairPublicExport extends IKeyPairBase {
      * https://w3c-ccg.github.io/security-vocab/#publicKeyBase58
      */
     publicKeyBase58?: string
+}
+
+export interface ISolidPod {
+
+}
+
+export interface IActor {
+    initialize(): Promise<void>
+
+    isInitialized(): boolean
+}
+
+export interface ISolidActor extends IActor {
+    webId: string
+}
+
+export interface ISolidProxy extends ISolidActor {
+    clientCredentials?: ClientCredentials
+    controls?: any
+    storage?: ISolidPod
+    fetch?: typeof fetch
+}
+
+interface IDidActor extends IActor {
+    did: string
 }

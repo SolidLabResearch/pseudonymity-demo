@@ -7,7 +7,7 @@ import {
 import {obtainClientCredentials, register} from "../../utils/css";
 
 import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../../interfaces";
-import {CssProxy} from "../../components/anonymizer/CssProxy";
+import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {SolidDidActor} from "../../components/solid-actor/SolidDidActor";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";

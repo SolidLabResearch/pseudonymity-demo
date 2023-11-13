@@ -1,7 +1,7 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
-import {CssProxy} from "../../components/anonymizer/CssProxy";
+import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {ITestRecord} from "../interfaces";
