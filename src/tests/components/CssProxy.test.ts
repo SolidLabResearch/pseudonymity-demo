@@ -14,7 +14,7 @@ import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {AccessModes} from "@inrupt/solid-client";
 import * as path from "path";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
-import {AbstractSolidActor} from "../../components/solid-actor/AbstractSolidActor";
+import {SolidActor} from "../../components/solid-actor/SolidActor";
 
 
 describe(`'Test CSSProxy for one test actor'`, (): void => {
@@ -60,13 +60,13 @@ describe(`'Test CSSProxy for one test actor'`, (): void => {
 
         it(`[${r.testConfig.name}] Should initialize a CSSProxy`, async () => {
             const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
-            await proxy.intializeFetch()
+            await proxy.initialize()
             expect(proxy.isInitialized())
         })
 
         it(`[${r.testConfig.name}] CSSProxy can add plain text file to Solid Pod`, async () => {
             const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
-            await proxy.intializeFetch();
+            await proxy.initialize();
 
             const containerUrl = proxy.webId.replace('card#me', '')
             const slug = 'textfile'
@@ -90,7 +90,7 @@ describe(`'Test CSSProxy for one test actor'`, (): void => {
 
         it(`[${r.testConfig.name}] CSSProxy allows WebIDProfile to be updated using its profile builder.`, async () => {
             const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
-            await proxy.intializeFetch();
+            await proxy.initialize();
 
             const pb = await proxy.getProfileBuilder()
             const params = {

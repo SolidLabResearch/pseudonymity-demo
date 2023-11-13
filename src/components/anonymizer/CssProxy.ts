@@ -77,7 +77,13 @@ export class CssProxy implements ISolidProxy {
         return status !== 404
     }
 
-    async intializeFetch(): Promise<typeof fetch> {
+
+
+    async parsedFetch(input: URL | RequestInfo, init?: RequestInit | undefined): Promise<any> {
+        return await CssProxy.parseResponse(await this.fetch!(input, init))
+    }
+
+    async initialize() {
         logger.debug(`[${this.webId}] initializeFetch`)
         const all = await obtainAccessToken(this.clientCredentials, this.webId);
         const {accessToken, dpopKey} = all
@@ -85,11 +91,6 @@ export class CssProxy implements ISolidProxy {
         // The Access token is the one generated in the previous step.
         const authFetch = await buildAuthenticatedFetch(fetch, accessToken, {dpopKey});
         this.fetch = authFetch;
-        return authFetch
-    }
-
-    async parsedFetch(input: URL | RequestInfo, init?: RequestInit | undefined): Promise<any> {
-        return await CssProxy.parseResponse(await this.fetch!(input, init))
     }
 
     isInitialized(): boolean {

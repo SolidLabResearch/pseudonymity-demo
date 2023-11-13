@@ -9,7 +9,7 @@ async function run() {
     const aliceCredentials = usersAndCredentials['alice@example.com'];
     const anonCredentials = usersAndCredentials['anon@example.com'];
     const cssProxy = new CssProxy(aliceCredentials.credentials.clientCredentials, aliceCredentials.user.webId)
-    await cssProxy.intializeFetch();
+    await cssProxy.initialize();
 
     // const response = await (await cssProxy.fetch!(aliceCredentials.user.webId)).text()
     // console.log(response)

@@ -1,4 +1,4 @@
-import {AbstractSolidActor} from "./AbstractSolidActor";
+import {SolidActor} from "./SolidActor";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {UploadConfiguration} from "./interfaces";
 import {CssProxy} from "../anonymizer/CssProxy";
@@ -9,7 +9,7 @@ import path from "path";
 import {IDidDocument} from "./did-interfaces";
 import {logger} from "../../logger";
 
-export class SolidDidActor extends AbstractSolidActor {
+export class SolidDidActor extends SolidActor {
     g2?: Bls12381G2KeyPair
     g2Slug: string
     g2DestinationContainer: string

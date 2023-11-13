@@ -14,7 +14,7 @@ import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {AccessModes} from "@inrupt/solid-client";
 import * as path from "path";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
-import {AbstractSolidActor} from "../../components/solid-actor/AbstractSolidActor";
+import {SolidActor} from "../../components/solid-actor/SolidActor";
 
 describe(`'Test SolidDidActor for one test actor'`, (): void => {
     const SELECTED_TEST_ACTOR = 'alice'

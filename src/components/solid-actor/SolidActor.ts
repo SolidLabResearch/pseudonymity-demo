@@ -5,7 +5,7 @@ import {CssProxy} from "../anonymizer/CssProxy";
 import {UploadConfiguration} from "./interfaces";
 import {NotInitializedError} from "./errors";
 
-export class AbstractSolidActor implements ISolidActor {
+export class SolidActor implements ISolidActor {
     webId: string;
     protected documentLoader: IDocumentLoader
 
@@ -23,7 +23,7 @@ export class AbstractSolidActor implements ISolidActor {
 
     async initialize() {
         logger.debug(`initializing actor: ${this.webId}`)
-        await this._proxy.intializeFetch()
+        await this._proxy.initialize()
     }
 
     isInitialized() {
