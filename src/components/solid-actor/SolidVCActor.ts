@@ -70,7 +70,7 @@ export class SolidVCActor extends SolidDidActor {
             vc,
             frame,
             {
-                suite: new BbsBlsSignatureProof2020(true),
+                suite: new BbsBlsSignatureProof2020(),
                 documentLoader: this.documentLoader,
             }
         )
