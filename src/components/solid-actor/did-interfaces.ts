@@ -9,6 +9,7 @@ export interface IVerificationMethod {
     type: string
     publicKeyJwk?: object
     publicKeyMultibase?: string
+    publicKeyBase58?: string
 }
 
 export interface IServiceEndpoint {
