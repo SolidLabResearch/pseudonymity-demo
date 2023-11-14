@@ -12,8 +12,8 @@ services:
 stages:
   - test
 before_script:
-  - apk update && apk upgrade
   - apk add git nodejs npm
+  - apk update && apk upgrade
 test:
   stage: test
   script:
