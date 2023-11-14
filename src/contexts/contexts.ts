@@ -3,11 +3,14 @@ import * as didContext from "did-context";
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import {customVocab} from "./customVocab";
-import {IDocumentLoader} from "./interfaces";
+import {DocumentLoaderResponse, IDocumentLoader} from "./interfaces";
 import {fetch} from "@inrupt/universal-fetch";
 import {ttl2jld} from "../utils/parsing";
 import {readJsonFile} from "../utils/io";
 import {namespaces} from "../utils/namespace";
+import {NotYetImplementedError} from "../components/solid-actor/errors";
+import {toDidKeyDocument} from "../utils/keypair";
+import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 
 const ctx = new Map();
 // DID context
@@ -54,14 +57,41 @@ export {
 export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader {
     return async (url: any) => {
         const context = ctx.get(url);
+        //
         if (context !== undefined) {
+
             return {
                 contextUrl: null,
                 documentUrl: url,
                 document: context
             }
 
-        } else {
+        } else if(url.startsWith('did:')){ // DID Resolving
+            const [scheme, method, identifier] = url.split(':')
+            let didResolver: IDocumentLoader
+            switch (method) {
+                case 'key':
+                    if(identifier.startsWith('zUC7')) {
+                        // https://w3c-ccg.github.io/did-method-key/#bls-12381
+                        didResolver = (url) => {
+                            const [controller] = identifier.split('#')
+                            const key = Bls12381G2KeyPair.fromFingerprint({fingerprint: controller})
+                            const didDocument = toDidKeyDocument(key)
+                            const response = {
+                                contextUrl: null,
+                                documentUrl: url,
+                                document: didDocument
+                            } as DocumentLoaderResponse
+                            return Promise.resolve(response)
+                        }
+                    }
+                    break
+                default:
+                    throw new NotYetImplementedError(`DID Method: ${method} is not yet implemented!`)
+            }
+            return await didResolver!(url)
+        }
+        else { // Resolve using fetch
             const response = await fetch(url)
             let document = undefined
             switch (response.headers.get('content-type')) {
@@ -95,4 +125,3 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader 
         }
     }
 }
-
