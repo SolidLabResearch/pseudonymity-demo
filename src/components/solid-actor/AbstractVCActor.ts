@@ -172,8 +172,9 @@ export class Bls12381G2VCActor
 
     initializeSuites(): void {
         this.signSuite = new BbsBlsSignature2020({key: this.key})
+        this.signSuite = _hack_addEnsureContextFunction(this.signSuite)
         this.verifySuite = new BbsBlsSignature2020()
-
+        this.deriveSuite = new BbsBlsSignatureProof2020()
     }
 
     get controllerId(): string {
