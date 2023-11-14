@@ -1,26 +1,14 @@
-import {CssProxy} from "./CssProxy";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {VerificationResult} from "./interfaces";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
-import {logger} from "../../logger";
-import {
-    BbsBlsSignature2020,
-    BbsBlsSignatureProof2020,
-    Bls12381G2KeyPair,
-    deriveProof
-} from "@mattrglobal/jsonld-signatures-bbs";
+import {deriveProof} from "@mattrglobal/jsonld-signatures-bbs";
 import {klona} from "klona";
 // @ts-ignore
 import jsigs, {purposes} from 'jsonld-signatures';
 import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 // @ts-ignore
 import credentialsContext from "credentials-context";
-import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
-import {SolidDidActor} from "./SolidDidActor";
-import {frame, JsonLdDocument} from "jsonld";
-import {string} from "rdflib/lib/utils-js";
-import {IBls12381G2KeyPairActor, KeyPairActor} from "./KeyPairActor";
-import {CompoundActor} from "./CompoundActor";
+import {JsonLdDocument} from "jsonld";
 
 export type VerifiableCredential = VCDIVerifiableCredential
 
@@ -151,35 +139,3 @@ export abstract class AbstractVCActor<S,V,D> {
 }
 
 
-export class Bls12381G2VCActor
-    extends AbstractVCActor<BbsBlsSignature2020, BbsBlsSignature2020, BbsBlsSignatureProof2020>
-    implements KeyPairActor<Bls12381G2KeyPair>
-
-{
-    signSuite?: BbsBlsSignature2020 | undefined;
-    verifySuite?: BbsBlsSignature2020 | undefined;
-    deriveSuite?: BbsBlsSignatureProof2020 | undefined;
-    key: Bls12381G2KeyPair;
-    keyName: string
-
-
-    constructor(key: Bls12381G2KeyPair,documentLoader: IDocumentLoader) {
-        super(documentLoader);
-        this.key = key;
-        this.keyName = key.fingerprint()
-
-    }
-
-    initializeSuites(): void {
-        this.signSuite = new BbsBlsSignature2020({key: this.key})
-        this.signSuite = _hack_addEnsureContextFunction(this.signSuite)
-        this.verifySuite = new BbsBlsSignature2020()
-        this.deriveSuite = new BbsBlsSignatureProof2020()
-    }
-
-    get controllerId(): string {
-        return `did:key:${this.key.fingerprint()}`
-    }
-
-
-}

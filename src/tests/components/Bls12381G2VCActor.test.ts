@@ -4,10 +4,10 @@ import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {readJsonFile} from "../../utils/io";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
-import {Bls12381G2VCActor} from "../../components/solid-actor/AbstractVCActor";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
 import {IVerificationMethod} from "../../components/solid-actor/did-interfaces";
+import {Bls12381G2VCActor} from "../../components/solid-actor/Bls12381G2VCActor";
 
 /**
  * Build context map
