@@ -11,7 +11,8 @@ services:
   - docker:dind
 stages:
   - test
-
+before_script:
+  - apk add git nodejs npm
 test:
   stage: test
   script:
