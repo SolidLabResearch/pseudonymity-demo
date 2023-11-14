@@ -1,0 +1,19 @@
+image:
+  name: docker/compose:latest
+
+# When using dind, it's wise to use the overlayfs driver for
+# improved performance.
+variables:
+  DOCKER_DRIVER: overlay
+
+
+services:
+  - docker:dind
+stages:
+  - test
+
+test:
+  stage: test
+  script:
+    - npm install
+    - npm run test
