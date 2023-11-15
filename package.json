@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "docker:stop": "docker compose --env-file $(pwd)/.test.env -f docker-compose.yml --profile all down -t 0",
     "docker:start": "docker compose --env-file $(pwd)/.test.env -f docker-compose.yml --profile all up --remove-orphans -d --wait",
     "docker:logs": "docker compose --env-file $(pwd)/.test.env -f docker-compose.yml --profile all logs -f",
@@ -40,11 +41,17 @@
     "test:usecases:setup": "npm run docker:test:usecases:setup:stop && npm run docker:test:usecases:setup:start",
     "test:usecases:teardown": "npm run docker:test:usecases:setup:stop",
     "test:usecases:sign-verify": "npm run test:usecases:setup && jest -i src/tests/usecases/sign-verify.test.ts",
-    "test:usecases": "npm run test:usecases:sign-verify && npm run test:usecases:teardown"
+    "test:usecases": "npm run test:usecases:sign-verify && npm run test:usecases:teardown",
+    "test:evaluation:setup": "npm run docker:test:usecases:setup:stop && npm run docker:test:usecases:setup:start",
+    "test:evaluation:teardown": "npm run docker:test:evaluation:setup:stop",
+    "test:evaluation:web-resolvable": "npm run test:evaluation:setup && jest -i src/tests/evaluation/verify-using-web-resolvable-did-document.test.ts",
+    "test:evaluation:did-key": "npm run test:evaluation:setup && jest -i src/tests/evaluation/verify-using-did-key.test.ts",
+    "test:evaluation": "npm run test:evaluation:did-key && npm run test:evaluation:teardown"
   },
   "author": "GDM",
   "license": "MIT",
   "devDependencies": {
+    "@jest-performance-reporter/core": "^2.1.3",
     "@jest/globals": "^29.7.0",
     "@mattrglobal/jsonld-signatures-bbs": "^1.2.0",
     "@solid/community-server": "^7.0.1",

@@ -22,10 +22,20 @@ module.exports = {
     },
     reporters: [
         'default',
+        [
+            "@jest-performance-reporter/core",
+            {
+                "errorAfterMs": 1000,
+                "warnAfterMs": 500,
+                "logLevel": "warn",
+                "maxItems": 5,
+                "jsonReportPath": "performance-report.json",
+            }
+        ]
     ],
     // Only run tests in the unit and integration folders.
     // All test files need to have the suffix `.test.ts`.
-    testRegex: 'src/tests/(components|usecases|utils)/.*\\.test\\.ts$',
+    testRegex: 'src/tests/(components|usecases|utils|evaluation)/.*\\.test\\.ts$',
     moduleFileExtensions: [
         'ts',
         'js',
