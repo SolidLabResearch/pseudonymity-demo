@@ -5,7 +5,6 @@ import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {ITestRecord} from "../interfaces";
-import {writeJsonFile} from "../../utils/io";
 
 
 describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
