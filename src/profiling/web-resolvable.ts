@@ -4,9 +4,9 @@ import {ITestRecord} from "../tests/interfaces";
 import {CssProxy} from "../components/solid-actor/CssProxy";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../utils/css";
-import {evaluate} from "./evaluator";
+import { runEvaluation} from "./evaluator";
 
-async function createInitializedActor(): Promise<SolidVCActor> {
+export async function createInitializedActor(): Promise<SolidVCActor> {
     const r = cssTestConfigRecords.find(r => r.testConfig.name === 'alice')! as ITestRecord
     // Build record
     // Register users & pods, and get each actor's controls object
@@ -23,6 +23,6 @@ async function createInitializedActor(): Promise<SolidVCActor> {
 }
 
 createInitializedActor()
-    .then(evaluate)
+    .then(runEvaluation)
     .then()
     .catch(console.error)

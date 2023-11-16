@@ -4,9 +4,12 @@ import {toDidKeyDocument} from "../utils/keypair";
 import {IVerificationMethod} from "../components/solid-actor/did-interfaces";
 import {createCustomDocumentLoader} from "../contexts/contexts";
 
-import {evaluate, getContextMap} from "./evaluator";
+import {getContextMap, runEvaluation} from "./evaluator";
+import {writeFileSync} from "fs";
+import path from "path";
+import {dirProfilingReports} from "./config";
 
-async function createInitializedActor(): Promise<Bls12381G2VCActor> {
+export async function createInitializedActor(): Promise<Bls12381G2VCActor> {
     // Generate BLS12381 G2 Key using a seed
     const seed = Uint8Array.from(Buffer.from('testseed'))
     let key = await Bls12381G2KeyPair.generate({ seed })
@@ -28,6 +31,6 @@ async function createInitializedActor(): Promise<Bls12381G2VCActor> {
 }
 
 createInitializedActor()
-    .then(evaluate)
+    .then(runEvaluation)
     .then()
     .catch(console.error)

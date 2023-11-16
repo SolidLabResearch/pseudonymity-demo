@@ -46,7 +46,9 @@
     "test:evaluation:teardown": "npm run docker:test:evaluation:setup:stop",
     "test:evaluation:web-resolvable": "npm run test:evaluation:setup && jest -i src/tests/evaluation/verify-using-web-resolvable-did-document.test.ts",
     "test:evaluation:did-key": "npm run test:evaluation:setup && jest -i src/tests/evaluation/verify-using-did-key.test.ts",
-    "test:evaluation": "npm run test:evaluation:did-key && npm run test:evaluation:teardown"
+    "test:evaluation": "npm run test:evaluation:did-key && npm run test:evaluation:teardown",
+    "profile:did-key": "npx ts-node src/profiling/did-key.ts",
+    "profile:web-resolvable": "npx ts-node src/profiling/web-resolvable.ts"
   },
   "author": "GDM",
   "license": "MIT",
