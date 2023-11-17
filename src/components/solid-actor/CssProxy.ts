@@ -15,7 +15,7 @@ import {fetch} from "@inrupt/universal-fetch";
 import {Util} from "n3";
 import prefixes = Util.prefixes;
 import {obtainAccessToken} from "../../utils/css";
-import {ISolidPod, ISolidProxy} from "./interfaces";
+import {ISolidPod, ISolidProxy, UploadConfiguration} from "./interfaces";
 
 export class CssProxy implements ISolidProxy {
     clientCredentials: ClientCredentials;
@@ -229,6 +229,8 @@ export class CssProxy implements ISolidProxy {
             {fetch: this.fetch!}
         )
     }
+
+
 
 
 }

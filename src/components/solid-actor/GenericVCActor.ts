@@ -12,7 +12,7 @@ import {JsonLdDocument} from "jsonld";
 
 export type VerifiableCredential = VCDIVerifiableCredential
 
-export abstract class AbstractVCActor<S,V,D> {
+export abstract class GenericVCActor<S,V,D> {
     abstract signSuite?: S
     abstract verifySuite?: V
     abstract deriveSuite?: D
