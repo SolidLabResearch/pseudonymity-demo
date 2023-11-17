@@ -6,7 +6,7 @@ import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {ITestRecord} from "../interfaces";
 import {writeJsonFile} from "../../utils/io";
-import {Bls12381G2VCActor} from "../../components/solid-actor/Bls12381G2VCActor";
+import {DidVCActor} from "../../components/solid-actor/DidVCActor";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
 import {IVerificationMethod} from "../../components/solid-actor/did-interfaces";
@@ -18,13 +18,13 @@ import {getContextMap} from "../config/contextmap";
 describe('Evaluation - Phase 1 - Using did:key', (): void => {
 
     let records: Array<ITestRecord> = cssTestConfigRecords
-    let alice: Bls12381G2VCActor
-    let recruiter: Bls12381G2VCActor
-    let government: Bls12381G2VCActor
-    let university: Bls12381G2VCActor
+    let alice: DidVCActor
+    let recruiter: DidVCActor
+    let government: DidVCActor
+    let university: DidVCActor
 
 
-    async function createInitializedActor(seedString: string): Promise<Bls12381G2VCActor> {
+    async function createInitializedActor(seedString: string): Promise<DidVCActor> {
         // Generate BLS12381 G2 Key using a seed
         const seed = Uint8Array.from(Buffer.from(seedString))
         let key = await Bls12381G2KeyPair.generate({ seed })
@@ -40,7 +40,7 @@ describe('Evaluation - Phase 1 - Using did:key', (): void => {
             publicKeyBase58: key.publicKey
         })
         const documentLoader: IDocumentLoader = createCustomDocumentLoader(getContextMap())
-        const actor = new Bls12381G2VCActor(key,documentLoader);
+        const actor = new DidVCActor(key,documentLoader);
         await actor.initialize()
         return actor
     }
@@ -59,10 +59,10 @@ describe('Evaluation - Phase 1 - Using did:key', (): void => {
             r.actor = await createInitializedActor(r.testConfig.name)
         }
 
-        alice = records.find(r => r.testConfig.name === 'alice')!.actor! as Bls12381G2VCActor
-        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor! as Bls12381G2VCActor
-        government = records.find(r => r.testConfig.name === 'government')!.actor! as Bls12381G2VCActor
-        university = records.find(r => r.testConfig.name === 'university')!.actor! as Bls12381G2VCActor
+        alice = records.find(r => r.testConfig.name === 'alice')!.actor! as DidVCActor
+        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor! as DidVCActor
+        government = records.find(r => r.testConfig.name === 'government')!.actor! as DidVCActor
+        university = records.find(r => r.testConfig.name === 'university')!.actor! as DidVCActor
 
     });
 

@@ -1,4 +1,4 @@
-import {Bls12381G2VCActor} from "../components/solid-actor/Bls12381G2VCActor";
+import {DidVCActor} from "../components/solid-actor/DidVCActor";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../utils/keypair";
 import {IVerificationMethod} from "../components/solid-actor/did-interfaces";
@@ -9,7 +9,7 @@ import {writeFileSync} from "fs";
 import path from "path";
 import {dirProfilingReports} from "./config";
 
-export async function createInitializedActor(): Promise<Bls12381G2VCActor> {
+export async function createInitializedActor(): Promise<DidVCActor> {
     // Generate BLS12381 G2 Key using a seed
     const seed = Uint8Array.from(Buffer.from('testseed'))
     let key = await Bls12381G2KeyPair.generate({ seed })
@@ -25,7 +25,7 @@ export async function createInitializedActor(): Promise<Bls12381G2VCActor> {
         publicKeyBase58: key.publicKey
     })
     const documentLoader = createCustomDocumentLoader(getContextMap())
-    const actor = new Bls12381G2VCActor(key,documentLoader);
+    const actor = new DidVCActor(key,documentLoader);
     await actor.initialize()
     return actor
 }

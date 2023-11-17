@@ -7,7 +7,7 @@ import credentialsContext from 'credentials-context';
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
 import {IVerificationMethod} from "../../components/solid-actor/did-interfaces";
-import {Bls12381G2VCActor} from "../../components/solid-actor/Bls12381G2VCActor";
+import {DidVCActor} from "../../components/solid-actor/DidVCActor";
 
 /**
  * Build context map
@@ -39,7 +39,7 @@ describe('Bls12381G2VCActor extends AbstractVCActor', (): void => {
     });
 
 
-    async function createInitializedActor(): Promise<Bls12381G2VCActor> {
+    async function createInitializedActor(): Promise<DidVCActor> {
         // Generate BLS12381 G2 Key using a seed
         const seed = Uint8Array.from(Buffer.from('testseed'))
         let key = await Bls12381G2KeyPair.generate({ seed })
@@ -54,7 +54,7 @@ describe('Bls12381G2VCActor extends AbstractVCActor', (): void => {
             privateKeyBase58: key.privateKey,
             publicKeyBase58: key.publicKey
         })
-        const actor = new Bls12381G2VCActor(key,documentLoader);
+        const actor = new DidVCActor(key,documentLoader);
         await actor.initialize()
         return actor
     }

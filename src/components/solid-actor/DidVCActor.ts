@@ -11,7 +11,7 @@ import {ICredentialActor, VerifiableCredential, VerificationResult} from "./inte
 
 
 
-export class Bls12381G2VCActor
+export class DidVCActor
     extends AbstractVCActor<BbsBlsSignature2020, BbsBlsSignature2020, BbsBlsSignatureProof2020>
     implements ICredentialActor, KeyPairActor<Bls12381G2KeyPair> {
     signSuite?: BbsBlsSignature2020 | undefined;
