@@ -3,10 +3,17 @@ import {KeyPairActor} from "./KeyPairActor";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
 import {AbstractVCActor} from "./AbstractVCActor";
+import {CredentialSubject} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
+import {JsonLdDocument} from "jsonld";
+import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
+import {ICredentialActor, VerifiableCredential, VerificationResult} from "./interfaces";
+
+
+
 
 export class Bls12381G2VCActor
     extends AbstractVCActor<BbsBlsSignature2020, BbsBlsSignature2020, BbsBlsSignatureProof2020>
-    implements KeyPairActor<Bls12381G2KeyPair> {
+    implements ICredentialActor, KeyPairActor<Bls12381G2KeyPair> {
     signSuite?: BbsBlsSignature2020 | undefined;
     verifySuite?: BbsBlsSignature2020 | undefined;
     deriveSuite?: BbsBlsSignatureProof2020 | undefined;
@@ -17,7 +24,10 @@ export class Bls12381G2VCActor
         super(documentLoader);
         this.key = key;
         this.keyName = key.fingerprint()
+    }
 
+    get identifier(): string {
+        return this.key.controller!
     }
 
     get controllerId(): string {

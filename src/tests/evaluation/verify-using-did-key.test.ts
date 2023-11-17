@@ -5,24 +5,44 @@ import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {ITestRecord} from "../interfaces";
+import {writeJsonFile} from "../../utils/io";
+import {Bls12381G2VCActor} from "../../components/solid-actor/Bls12381G2VCActor";
+import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
+import {toDidKeyDocument} from "../../utils/keypair";
+import {IVerificationMethod} from "../../components/solid-actor/did-interfaces";
+import {IDocumentLoader} from "../../contexts/interfaces";
+import {getContextMap} from "../config/contextmap";
 
 
-describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
+
+describe('Evaluation - Phase 1 - Using did:key', (): void => {
 
     let records: Array<ITestRecord> = cssTestConfigRecords
-    let alice: SolidVCActor
-    let recruiter: SolidVCActor
-    let government: SolidVCActor
-    let university: SolidVCActor
+    let alice: Bls12381G2VCActor
+    let recruiter: Bls12381G2VCActor
+    let government: Bls12381G2VCActor
+    let university: Bls12381G2VCActor
 
 
-    async function createInitializedSolidVCActor(r: ITestRecord): Promise<SolidVCActor> {
-        const documentLoader = createCustomDocumentLoader(ctx)
-        const actor = new SolidVCActor(
-            new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
-            , r.userConfig.webId, documentLoader)
+    async function createInitializedActor(seedString: string): Promise<Bls12381G2VCActor> {
+        // Generate BLS12381 G2 Key using a seed
+        const seed = Uint8Array.from(Buffer.from(seedString))
+        let key = await Bls12381G2KeyPair.generate({ seed })
+        // Create its corresponding did:key DID Document
+        const didKeyDocument = toDidKeyDocument(key)
+        const {id, verificationMethod} = didKeyDocument
+        const vm = (verificationMethod as IVerificationMethod[])[0]
+        // Re-instantiate BLS12381 G2, but with set with the did:key identifiers
+        key = new Bls12381G2KeyPair({
+            id: vm.id,
+            controller: id,
+            privateKeyBase58: key.privateKey,
+            publicKeyBase58: key.publicKey
+        })
+        const documentLoader: IDocumentLoader = createCustomDocumentLoader(getContextMap())
+        const actor = new Bls12381G2VCActor(key,documentLoader);
         await actor.initialize()
-        return actor;
+        return actor
     }
 
     beforeAll(async (): Promise<void> => {
@@ -36,13 +56,13 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
             // Obtain client credentials
             r.clientCredentials = await obtainClientCredentials(r.userConfig, r.controls!)
             // Attach initialized SolidVCActor
-            r.actor = await createInitializedSolidVCActor(r)
+            r.actor = await createInitializedActor(r.testConfig.name)
         }
 
-        alice = records.find(r => r.testConfig.name === 'alice')!.actor! as SolidVCActor
-        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor! as SolidVCActor
-        government = records.find(r => r.testConfig.name === 'government')!.actor! as SolidVCActor
-        university = records.find(r => r.testConfig.name === 'university')!.actor! as SolidVCActor
+        alice = records.find(r => r.testConfig.name === 'alice')!.actor! as Bls12381G2VCActor
+        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor! as Bls12381G2VCActor
+        government = records.find(r => r.testConfig.name === 'government')!.actor! as Bls12381G2VCActor
+        university = records.find(r => r.testConfig.name === 'university')!.actor! as Bls12381G2VCActor
 
     });
 
@@ -61,7 +81,7 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
         // [alice] creates a VC, and uses it to create a VP
         const c = alice.createCredential({id: 'urn:test:vc'})
         const vc = await alice.signCredential(c)
-        const p = alice.createPresentation([vc], alice.webId)
+        const p = alice.createPresentation([vc], alice.controllerId)
         const challenge = 'ch4ll3ng3'
         const vp = await alice.signPresentation(p, challenge)
         // [recruiter] verifies the VP from [alice]
@@ -97,7 +117,7 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
 
         // Create VP
         const constituentCredentials = [dvc]
-        const p = alice.createPresentation(constituentCredentials, alice.webId)
+        const p = alice.createPresentation(constituentCredentials, alice.controllerId)
         const challenge = 'ch4ll3ng3'
         const vp = await alice.signPresentation(p, challenge)
         // [recruiter] verifies the VP from [alice]
@@ -170,7 +190,7 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
 
         // Create VP
         const constituentCredentials = [dvc, dvc2]
-        const p = alice.createPresentation(constituentCredentials, alice.webId)
+        const p = alice.createPresentation(constituentCredentials, alice.controllerId)
         const challenge = 'ch4ll3ng3'
         const vp = await alice.signPresentation(p, challenge)
         expect(vp.verifiableCredential).toHaveLength(constituentCredentials.length)
@@ -212,7 +232,7 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
 
         // Create VP
         const constituentCredentials = [dvc]
-        const p = alice.createPresentation(constituentCredentials, alice.webId)
+        const p = alice.createPresentation(constituentCredentials, alice.controllerId)
         const challenge = 'ch4ll3ng3'
         const vp = await alice.signPresentation(p, challenge)
         // [recruiter] verifies the VP from [alice]
@@ -287,7 +307,7 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
         expect(dvc02.credentialSubject['ex:university']).not.toBeDefined()
         // Create VP
         const constituentCredentials = [dvc, dvc02]
-        const p = alice.createPresentation(constituentCredentials, alice.webId)
+        const p = alice.createPresentation(constituentCredentials, alice.controllerId)
         const challenge = 'ch4ll3ng3'
         const vp = await alice.signPresentation(p, challenge)
 
@@ -305,4 +325,3 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
     })
 
 });
-

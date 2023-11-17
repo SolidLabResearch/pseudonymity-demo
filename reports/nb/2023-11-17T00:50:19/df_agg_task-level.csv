@@ -1,0 +1,15 @@
+actor,name,mean,std,min,max,count
+Bls12381G2VCActor,createCredential,0.26,0.4408440022768082,0,1,100
+Bls12381G2VCActor,createJSONLDFrame,0.01,0.09999999999999998,0,1,100
+Bls12381G2VCActor,createPresentationWithDerivedVC,0.26,0.46319051646752724,0,2,100
+Bls12381G2VCActor,createVerifiableCredential,25.7,1.585922922197518,23,29,100
+Bls12381G2VCActor,deriveCredential,2765.9,1590.813561634043,2415,18330,100
+Bls12381G2VCActor,signPresentation,23.58,6.510566392217712,12,46,100
+Bls12381G2VCActor,verifyPresentation,730.25,1544.494951121694,447,15839,100
+SolidVCActor,createCredential,0.17,0.5135536717202729,0,4,100
+SolidVCActor,createJSONLDFrame,0.04,0.19694638556693236,0,1,100
+SolidVCActor,createPresentationWithDerivedVC,0.02,0.1407052941362897,0,1,100
+SolidVCActor,createVerifiableCredential,31.6,7.2794161160012685,24,59,100
+SolidVCActor,deriveCredential,42.97,3.0233268183418516,36,51,100
+SolidVCActor,signPresentation,13.64,1.766809599706816,12,24,100
+SolidVCActor,verifyPresentation,38.01,2.11533601695959,34,44,100

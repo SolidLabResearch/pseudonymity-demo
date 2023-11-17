@@ -1,24 +1,22 @@
 import {CssProxy} from "./CssProxy";
 import {IDocumentLoader} from "../../contexts/interfaces";
-import {VerificationResult} from "./interfaces";
+import {ICredentialActor, VerifiableCredential, VerificationResult} from "./interfaces";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import {logger} from "../../logger";
 import {BbsBlsSignature2020, BbsBlsSignatureProof2020, deriveProof} from "@mattrglobal/jsonld-signatures-bbs";
 import {klona} from "klona";
 // @ts-ignore
 import jsigs, {purposes} from 'jsonld-signatures';
-import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
+import {CredentialSubject} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
 import {SolidDidActor} from "./SolidDidActor";
 import {JsonLdDocument} from "jsonld";
 
-export type VerifiableCredential = VCDIVerifiableCredential
-
-export class SolidVCActor extends SolidDidActor {
-    private signSuite: any
-    private verifySuite: any
+export class SolidVCActor extends SolidDidActor implements ICredentialActor {
+    signSuite: any
+    verifySuite: any
 
     constructor(proxy: CssProxy, webId: string, documentLoader: IDocumentLoader) {
         super(proxy, webId, documentLoader);
@@ -29,6 +27,10 @@ export class SolidVCActor extends SolidDidActor {
             'https://www.w3.org/2018/credentials/v1',
             "https://w3id.org/security/bbs/v1",
         ]
+    }
+
+    get identifier(): string {
+        return this.webId;
     }
 
     /**

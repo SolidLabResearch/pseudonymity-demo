@@ -1,35 +1,15 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
-import {App} from '@solid/community-server';
-import {cssTestConfigRecords, ICssTestConfig} from "../config/actorsOnCssTestConfigs";
+import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
-
-import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../../interfaces";
 import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {IDocumentLoader} from "../../contexts/interfaces";
-import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
+import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
-import {readJsonFile} from "../../utils/io";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
-
-/**
- * Build context map
- * @param actors
- * @returns {Map<any, any>}
- */
-export function getContextMap() {
-    const ctx = new Map();
-
-    // VC
-    ctx.set(credentialsContext.CONTEXT_URL_V1, credentialsContext.contexts.get(credentialsContext.CONTEXT_URL_V1))
-    // BBS context
-    ctx.set('https://w3id.org/security/bbs/v1', readJsonFile('src/contexts/vc-di-bbs-v1.json'))
-
-    ctx.set('https://w3id.org/security/suites/jws-2020/v1', readJsonFile('src/contexts/suiteContext.json'))
-    return ctx
-}
+import {getContextMap} from "../config/contextmap";
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
