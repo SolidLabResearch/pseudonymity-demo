@@ -3,12 +3,7 @@ import {KeyPairActor} from "./KeyPairActor";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
 import {AbstractVCActor} from "./AbstractVCActor";
-import {CredentialSubject} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
-import {JsonLdDocument} from "jsonld";
-import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
-import {ICredentialActor, VerifiableCredential, VerificationResult} from "./interfaces";
-
-
+import {ICredentialActor} from "./interfaces";
 
 
 export class DidVCActor
