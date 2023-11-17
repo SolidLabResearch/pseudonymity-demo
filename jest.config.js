@@ -1,5 +1,6 @@
 module.exports = {
     collectCoverage: false,
+    coverageDirectory: "<rootDir>/reports/jest",
     coverageReporters: ['clover', 'json', 'lcov', ['text', {skipFull: true}]],
     coveragePathIgnorePatterns: [
         '/dist/',
@@ -21,17 +22,7 @@ module.exports = {
         }],
     },
     reporters: [
-        'default',
-        [
-            "@jest-performance-reporter/core",
-            {
-                "errorAfterMs": 1000,
-                "warnAfterMs": 500,
-                "logLevel": "warn",
-                "maxItems": 5,
-                "jsonReportPath": "performance-report.json",
-            }
-        ]
+        'default'
     ],
     // Only run tests in the unit and integration folders.
     // All test files need to have the suffix `.test.ts`.
