@@ -5,24 +5,47 @@ import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {ITestRecord} from "../interfaces";
+import {SolidVCActorV2} from "../../components/solid-actor/DidVCActor";
+import path from "path";
+import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
+import {getContextMap} from "../config/contextmap";
 
 
 describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
 
     let records: Array<ITestRecord> = cssTestConfigRecords
-    let alice: SolidVCActor
-    let recruiter: SolidVCActor
-    let government: SolidVCActor
-    let university: SolidVCActor
+    let alice: SolidVCActorV2
+    let recruiter: SolidVCActorV2
+    let government: SolidVCActorV2
+    let university: SolidVCActorV2
 
 
-    async function createInitializedSolidVCActor(r: ITestRecord): Promise<SolidVCActor> {
-        const documentLoader = createCustomDocumentLoader(ctx)
-        const actor = new SolidVCActor(
-            new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
-            , r.userConfig.webId, documentLoader)
-        await actor.initialize()
-        return actor;
+    async function createInitializedActor(r: ITestRecord): Promise<SolidVCActorV2> {
+        const { webId } = r.userConfig;
+        const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
+        // Determine URL for DIDs container, based on the pod url
+        const didsContainer = path.join(proxy.podUrl!, 'dids') + '/';
+        const controllerId = path.join(didsContainer, 'controller')
+        // Generate BLS12381 G2 Key using a seed
+        const seed = Uint8Array.from(Buffer.from('testseed'))
+        const keyName = "key"
+        const keyId = `${controllerId}#${keyName}`;
+        const key = await Bls12381G2KeyPair.generate({
+            id: keyId,
+            seed,
+            controller: controllerId
+        })
+
+
+
+        const a = new SolidVCActorV2(
+            key,
+            keyName,
+            createCustomDocumentLoader(getContextMap()),
+            proxy
+        )
+        await a.initialize()
+        return a
     }
 
     beforeAll(async (): Promise<void> => {
@@ -36,13 +59,13 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
             // Obtain client credentials
             r.clientCredentials = await obtainClientCredentials(r.userConfig, r.controls!)
             // Attach initialized SolidVCActor
-            r.actor = await createInitializedSolidVCActor(r)
+            r.actor = await createInitializedActor(r)
         }
 
-        alice = records.find(r => r.testConfig.name === 'alice')!.actor! as SolidVCActor
-        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor! as SolidVCActor
-        government = records.find(r => r.testConfig.name === 'government')!.actor! as SolidVCActor
-        university = records.find(r => r.testConfig.name === 'university')!.actor! as SolidVCActor
+        alice = records.find(r => r.testConfig.name === 'alice')!.actor! as SolidVCActorV2
+        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor! as SolidVCActorV2
+        government = records.find(r => r.testConfig.name === 'government')!.actor! as SolidVCActorV2
+        university = records.find(r => r.testConfig.name === 'university')!.actor! as SolidVCActorV2
 
     });
 
