@@ -4,7 +4,6 @@ import {obtainClientCredentials, register} from "../../utils/css";
 import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
 // @ts-ignore
