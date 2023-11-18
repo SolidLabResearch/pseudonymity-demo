@@ -18,10 +18,7 @@ export function exportPublicG2(k: Bls12381G2KeyPair) {
         ],
         id: id!,
         type,
-        // publicKey,
-        publicKeyJwk,
-        // Bls12381G2KeyPair.publicKey returns the base58 encoded public key
-        publicKeyBase58: publicKey,
+        publicKeyBase58: publicKey, // Bls12381G2KeyPair.publicKey returns the base58 encoded public key
         controller: controller!
     } as IKeyPairPublicExport
 }
