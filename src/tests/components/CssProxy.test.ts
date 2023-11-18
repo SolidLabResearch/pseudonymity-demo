@@ -1,20 +1,15 @@
-import {afterAll, beforeAll, describe, expect, test, it} from '@jest/globals';
-import {App, AppRunner, joinFilePath} from '@solid/community-server';
+import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
+import {App} from '@solid/community-server';
 import fetch from 'cross-fetch';
-import {
-    cssTestConfigRecords, ICssTestConfig
-} from "../config/actorsOnCssTestConfigs";
+import {cssTestConfigRecords, ICssTestConfig} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
 
 import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../../interfaces";
 import {CssProxy} from "../../components/solid-actor/CssProxy";
-import {SolidDidActor} from "../../components/solid-actor/SolidDidActor";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {AccessModes} from "@inrupt/solid-client";
 import * as path from "path";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
-import {SolidActor} from "../../components/solid-actor/SolidActor";
 
 
 describe(`'Test CSSProxy for one test actor'`, (): void => {
@@ -105,20 +100,6 @@ describe(`'Test CSSProxy for one test actor'`, (): void => {
             expect(status).toBe(200)
             expect(headers.get('content-type')).toBe('text/turtle')
 
-        })
-
-        it(`[${r.testConfig.name}] Should initialize a SolidDidActor`, async () => {
-            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
-            const solidDidActor = new SolidDidActor(proxy, r.userConfig.webId, documentLoader)
-            await solidDidActor.initialize()
-            expect(solidDidActor.isInitialized())
-        })
-
-        it(`[${r.testConfig.name}] Should initialize a SolidVCActor`, async () => {
-            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
-            const solidVCActor = new SolidVCActor(proxy, r.userConfig.webId, documentLoader)
-            await solidVCActor.initialize()
-            expect(solidVCActor.isInitialized())
         })
 
     }
