@@ -6,6 +6,7 @@ import {CssProxy} from "./CssProxy";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import path from "path";
 import {AccessModes} from "@inrupt/solid-client";
+import {joinUrlPaths} from "../../utils/url";
 
 export class SolidDidActorV2 extends CompoundActor<SolidActor, DidActor> {
 
@@ -14,8 +15,8 @@ export class SolidDidActorV2 extends CompoundActor<SolidActor, DidActor> {
 
     constructor(proxy: CssProxy, webId: string, documentLoader: IDocumentLoader) {
         const solidActor = new SolidActor(proxy, webId, documentLoader)
-        const didsContainer = path.join(solidActor.proxy.podUrl!, 'dids') + '/';
-        const controllerId = path.join(didsContainer, 'controller')
+        const didsContainer = joinUrlPaths(solidActor.proxy.podUrl!, 'dids') + '/';
+        const controllerId = joinUrlPaths(didsContainer, 'controller')
         const didActor = new DidActor(webId, controllerId)
         super(solidActor, didActor);
         this._didsContainer = didsContainer

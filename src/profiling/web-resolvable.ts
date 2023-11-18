@@ -7,6 +7,7 @@ import {runEvaluation} from "./evaluator";
 import path from "path";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {SolidVCActor} from "../components/solid-actor/SolidVCActor";
+import {joinUrlPaths} from "../utils/url";
 
 export async function createInitializedActor(): Promise<SolidVCActor> {
     const r = cssTestConfigRecords.find(r => r.testConfig.name === 'alice')! as ITestRecord
@@ -19,8 +20,8 @@ export async function createInitializedActor(): Promise<SolidVCActor> {
     const documentLoader = createCustomDocumentLoader(ctx)
     const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
     // Determine URL for DIDs container, based on the pod url
-    const didsContainer = path.join(proxy.podUrl!, 'dids') + '/';
-    const controllerId = path.join(didsContainer, 'controller')
+    const didsContainer = joinUrlPaths(proxy.podUrl!, 'dids') + '/';
+    const controllerId = joinUrlPaths(didsContainer, 'controller')
     // Generate BLS12381 G2 Key using a seed
     const seed = Uint8Array.from(Buffer.from('testseed'))
     const keyName = "key"

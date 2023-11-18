@@ -8,6 +8,7 @@ import path from "path";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {getContextMap} from "../config/contextmap";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {joinUrlPaths} from "../../utils/url";
 
 
 describe('Evaluation - Phase 1 - Using Web Resolvable DID Document', (): void => {
@@ -23,8 +24,8 @@ describe('Evaluation - Phase 1 - Using Web Resolvable DID Document', (): void =>
         const { webId } = r.userConfig;
         const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
         // Determine URL for DIDs container, based on the pod url
-        const didsContainer = path.join(proxy.podUrl!, 'dids') + '/';
-        const controllerId = path.join(didsContainer, 'controller')
+        const didsContainer = joinUrlPaths(proxy.podUrl!, 'dids') + '/';
+        const controllerId = joinUrlPaths(didsContainer, 'controller')
         // Generate BLS12381 G2 Key using a seed
         const seed = Uint8Array.from(Buffer.from('testseed'))
         const keyName = "key"

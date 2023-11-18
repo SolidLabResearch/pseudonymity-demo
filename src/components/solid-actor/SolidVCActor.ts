@@ -8,6 +8,7 @@ import {IDidDocument} from "./did-interfaces";
 import {exportPublicG2} from "../../utils/keypair";
 import {logger} from "../../logger";
 import {AbstractBls12381G2VCActor} from "./DidVCActor";
+import {joinUrlPaths} from "../../utils/url";
 
 export class SolidVCActor
     extends AbstractBls12381G2VCActor
@@ -25,7 +26,7 @@ export class SolidVCActor
         this.proxy = proxy;
         this.keyName = keyName
         this._controllerContainer = this.webId.replace('profile/card#me', 'dids/')
-        this._controllerId = path.join(this.controllerContainer, 'controller')
+        this._controllerId = joinUrlPaths(this.controllerContainer, 'controller')
         this.uploadConfigurations = [
             {
                 description: `Uploads controller document to Solid Pod`,

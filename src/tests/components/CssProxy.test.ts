@@ -10,6 +10,7 @@ import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {AccessModes} from "@inrupt/solid-client";
 import * as path from "path";
+import {joinUrlPaths} from "../../utils/url";
 
 
 describe(`'Test CSSProxy for one test actor'`, (): void => {
@@ -75,7 +76,7 @@ describe(`'Test CSSProxy for one test actor'`, (): void => {
                 {read: true} as AccessModes
             )
 
-            const response = await fetch(path.join(containerUrl, slug))
+            const response = await fetch(joinUrlPaths(containerUrl, slug))
             const {status, statusText, headers} = response
             expect(status).toBe(200)
             expect(headers.get('content-type')).toBe(ct)
