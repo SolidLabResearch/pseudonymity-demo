@@ -6,16 +6,22 @@ import {
     buildThing,
     deleteContainer,
     deleteFile,
-    getContainedResourceUrlAll, getResourceInfo,
-    getSolidDataset, getThing, overwriteFile, saveSolidDatasetAt, setThing, ThingPersisted, universalAccess, UrlString
+    getContainedResourceUrlAll,
+    getResourceInfo,
+    getSolidDataset,
+    getThing,
+    overwriteFile,
+    saveSolidDatasetAt,
+    setThing,
+    ThingPersisted,
+    universalAccess,
+    UrlString
 } from "@inrupt/solid-client";
 import {logger} from "../../logger";
-import path from "path";
 import {fetch} from "@inrupt/universal-fetch";
 import {Util} from "n3";
-import prefixes = Util.prefixes;
 import {obtainAccessToken} from "../../utils/css";
-import {ISolidPod, ISolidProxy, UploadConfiguration} from "./interfaces";
+import {ISolidPod, ISolidProxy} from "./interfaces";
 
 export class CssProxy implements ISolidProxy {
     clientCredentials: ClientCredentials;

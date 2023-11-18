@@ -3,15 +3,13 @@ import {KeyPairActor} from "./KeyPairActor";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
 import {GenericVCActor} from "./GenericVCActor";
-import {ICredentialActor, ISolidActor, ISolidProxy, UploadConfiguration} from "./interfaces";
+import {ICredentialActor, ISolidActor, UploadConfiguration} from "./interfaces";
 import {CssProxy} from "./CssProxy";
-import {string} from "rdflib/lib/utils-js";
 import {AccessModes} from "@inrupt/solid-client";
 import {IDidDocument} from "./did-interfaces";
 import {exportPublicG2, toDidKeyDocument} from "../../utils/keypair";
 import {logger} from "../../logger";
 import path from "path";
-import assert from "node:assert";
 
 
 export abstract class AbstractBls12381G2VCActor

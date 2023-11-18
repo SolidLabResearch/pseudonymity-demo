@@ -1,5 +1,3 @@
-import {JsonLdDocument} from "jsonld";
-
 /**
  * https://www.w3.org/TR/did-core/#verification-method-properties
  */
