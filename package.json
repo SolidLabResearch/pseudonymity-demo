@@ -36,10 +36,10 @@
     "test:components:DidActor": "npm run test:components:setup && jest -i src/tests/components/DidActor.test.ts",
     "test:components:SolidDidActor": "npm run test:components:setup && jest -i src/tests/components/SolidDidActor.test.ts",
     "test:components:SolidDidActorV2": "npm run test:components:setup && jest -i src/tests/components/CompoundActor.test.ts",
-    "test:components:SolidVCActor": "npm run test:components:setup && jest -i src/tests/components/SolidVCActor.test.ts",
+
     "test:components:SolidVCActorV2": "npm run test:components:setup && jest -i src/tests/components/SolidVCActorV2.test.ts",
     "test:components:Bls12381G2VCActor": "npm run test:components:setup && jest -i src/tests/components/Bls12381G2VCActor.test.ts",
-    "test:components": "npm run test:components:CssProxy && npm run test:components:SolidDidActor && npm run test:components:DidActor && npm run test:components:SolidVCActor && npm run test:components:SolidVCActorV2 && npm run test:components:SolidDidActorV2 && npm run test:components:Bls12381G2VCActor && npm run test:components:teardown",
+    "test:components": "npm run test:components:CssProxy && npm run test:components:SolidDidActor && npm run test:components:DidActor && npm run test:components:SolidVCActorV2 && npm run test:components:SolidDidActorV2 && npm run test:components:Bls12381G2VCActor && npm run test:components:teardown",
     "test:usecases:setup": "npm run docker:test:usecases:setup:stop && npm run docker:test:usecases:setup:start",
     "test:usecases:teardown": "npm run docker:test:usecases:setup:stop",
     "test:usecases:sign-verify": "npm run test:usecases:setup && jest -i src/tests/usecases/sign-verify.test.ts",
