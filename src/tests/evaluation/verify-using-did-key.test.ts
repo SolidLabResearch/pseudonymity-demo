@@ -1,18 +1,14 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
-import {CssProxy} from "../../components/solid-actor/CssProxy";
-import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {ITestRecord} from "../interfaces";
-import {writeJsonFile} from "../../utils/io";
 import {DidVCActor} from "../../components/solid-actor/DidVCActor";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
 import {IVerificationMethod} from "../../components/solid-actor/did-interfaces";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {getContextMap} from "../config/contextmap";
-
 
 
 describe('Evaluation - Phase 1 - Using did:key', (): void => {
