@@ -54,6 +54,7 @@ export class SolidVCActor
     /**
      * Refs
      * https://www.w3.org/TR/did-core/#did-document-properties
+     * https://www.w3.org/TR/vc-data-integrity/#controller-documents
      */
     get controllerDocument(): IDidDocument {
         return {
