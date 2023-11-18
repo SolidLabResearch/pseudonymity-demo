@@ -9,11 +9,11 @@ import {ITestRecord} from "../interfaces";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
 import {getContextMap} from "../config/contextmap";
-import {SolidVCActorV2} from "../../components/solid-actor/DidVCActor";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import path from "path";
+import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 
-describe('SolidVCActorV2', (): void => {
+describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
 
     let records: Array<ITestRecord> = cssTestConfigRecords.filter(r => r.testConfig.name === SELECTED_TEST_ACTOR)
@@ -39,7 +39,7 @@ describe('SolidVCActorV2', (): void => {
 
     });
 
-    async function createInitializedActor(r: ITestRecord): Promise<SolidVCActorV2> {
+    async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
         const { webId } = r.userConfig;
         const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
         // Determine URL for DIDs container, based on the pod url
@@ -56,7 +56,7 @@ describe('SolidVCActorV2', (): void => {
         })
 
 
-        const a = new SolidVCActorV2(key, keyName, documentLoader, proxy)
+        const a = new SolidVCActor(key, keyName, documentLoader, proxy)
         await a.initialize()
         return a
     }

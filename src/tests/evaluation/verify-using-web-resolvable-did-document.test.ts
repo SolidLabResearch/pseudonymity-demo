@@ -4,22 +4,22 @@ import {obtainClientCredentials, register} from "../../utils/css";
 import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {ITestRecord} from "../interfaces";
-import {SolidVCActorV2} from "../../components/solid-actor/DidVCActor";
 import path from "path";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {getContextMap} from "../config/contextmap";
+import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 
 
 describe('Evaluation - Phase 1 - Using Web Resolvable DID Document', (): void => {
 
     let records: Array<ITestRecord> = cssTestConfigRecords
-    let alice: SolidVCActorV2
-    let recruiter: SolidVCActorV2
-    let government: SolidVCActorV2
-    let university: SolidVCActorV2
+    let alice: SolidVCActor
+    let recruiter: SolidVCActor
+    let government: SolidVCActor
+    let university: SolidVCActor
 
 
-    async function createInitializedActor(r: ITestRecord): Promise<SolidVCActorV2> {
+    async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
         const { webId } = r.userConfig;
         const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
         // Determine URL for DIDs container, based on the pod url
@@ -37,7 +37,7 @@ describe('Evaluation - Phase 1 - Using Web Resolvable DID Document', (): void =>
 
         const documentLoader = createCustomDocumentLoader(getContextMap())
 
-        const a = new SolidVCActorV2(key, keyName, documentLoader, proxy)
+        const a = new SolidVCActor(key, keyName, documentLoader, proxy)
         await a.initialize()
         return a
     }
@@ -55,10 +55,10 @@ describe('Evaluation - Phase 1 - Using Web Resolvable DID Document', (): void =>
             r.actor = await createInitializedActor(r)
         }
 
-        alice = records.find(r => r.testConfig.name === 'alice')!.actor! as SolidVCActorV2
-        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor! as SolidVCActorV2
-        government = records.find(r => r.testConfig.name === 'government')!.actor! as SolidVCActorV2
-        university = records.find(r => r.testConfig.name === 'university')!.actor! as SolidVCActorV2
+        alice = records.find(r => r.testConfig.name === 'alice')!.actor! as SolidVCActor
+        recruiter = records.find(r => r.testConfig.name === 'recruiter')!.actor! as SolidVCActor
+        government = records.find(r => r.testConfig.name === 'government')!.actor! as SolidVCActor
+        university = records.find(r => r.testConfig.name === 'university')!.actor! as SolidVCActor
 
     });
 

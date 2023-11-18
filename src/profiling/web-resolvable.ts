@@ -4,11 +4,11 @@ import {CssProxy} from "../components/solid-actor/CssProxy";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../utils/css";
 import {runEvaluation} from "./evaluator";
-import {SolidVCActorV2} from "../components/solid-actor/DidVCActor";
 import path from "path";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
+import {SolidVCActor} from "../components/solid-actor/SolidVCActor";
 
-export async function createInitializedActor(): Promise<SolidVCActorV2> {
+export async function createInitializedActor(): Promise<SolidVCActor> {
     const r = cssTestConfigRecords.find(r => r.testConfig.name === 'alice')! as ITestRecord
     // Build record
     // Register users & pods, and get each actor's controls object
@@ -31,7 +31,7 @@ export async function createInitializedActor(): Promise<SolidVCActorV2> {
         controller: controllerId
     })
 
-    const a = new SolidVCActorV2(key, keyName, documentLoader, proxy)
+    const a = new SolidVCActor(key, keyName, documentLoader, proxy)
     await a.initialize()
     return a;
 }
