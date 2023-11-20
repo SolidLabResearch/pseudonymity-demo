@@ -1,4 +1,4 @@
-function Vocab(ns: string) {
+export function Vocab(ns: string) {
     return (p: string) => {
         return ns.endsWith('#') || ns.endsWith('/') ?
             ns.concat(p) : ns.concat('#', p)
