@@ -55,18 +55,25 @@ export {
 }
 
 export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader {
+    const cache = new Map<string, any>()
     return async (url: any) => {
         const context = ctx.get(url);
-        //
         if (context !== undefined) {
-
             return {
                 contextUrl: null,
                 documentUrl: url,
                 document: context
             }
 
-        } else if(url.startsWith('did:')){ // DID Resolving
+        } else if (cache.has(url)){
+
+            return {
+                contextUrl: null,
+                documentUrl: url,
+                document: cache.get(url)
+            }
+        }
+        else if(url.startsWith('did:')){ // DID Resolving
             const [scheme, method, identifier] = url.split(':')
             let didResolver: IDocumentLoader
             switch (method) {
@@ -89,7 +96,9 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader 
                 default:
                     throw new NotYetImplementedError(`DID Method: ${method} is not yet implemented!`)
             }
-            return await didResolver!(url)
+            const resolverResponse = await didResolver!(url)
+            cache.set(resolverResponse.documentUrl!, resolverResponse.document)
+            return resolverResponse
         }
         else { // Resolve using fetch
             const response = await fetch(url, {headers: { Accept: 'application/ld+json' }})
@@ -117,6 +126,8 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader 
                 throw new Error(
                     `Error: could not resolve & parse URL: ${response.url}`
                 )
+
+            cache.set(url, document)
             return {
                 contextUrl: null,
                 documentUrl: url,
