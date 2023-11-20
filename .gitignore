@@ -9,3 +9,4 @@ scratch
 /coverage
 .run/
 .ipynb_checkpoints
+sandbox.js
