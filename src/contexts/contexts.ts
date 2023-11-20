@@ -92,7 +92,7 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader 
             return await didResolver!(url)
         }
         else { // Resolve using fetch
-            const response = await fetch(url)
+            const response = await fetch(url, {headers: { Accept: 'application/ld+json' }})
             let document = undefined
             switch (response.headers.get('content-type')) {
                 case 'application/json':
