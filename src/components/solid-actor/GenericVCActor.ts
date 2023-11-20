@@ -27,8 +27,9 @@ export abstract class GenericVCActor<S,V,D> {
 
     get credentialContext(): string[] {
         return [
-            'https://www.w3.org/2018/credentials/v1',
-            "https://w3id.org/security/bbs/v1",
+            // 'https://www.w3.org/2018/credentials/v1',
+            // "https://w3id.org/security/bbs/v1",
+            'https://www.w3.org/ns/credentials/v2'
         ]
     }
 
@@ -85,8 +86,8 @@ export abstract class GenericVCActor<S,V,D> {
     ): VerifiablePresentation {
         return {
             '@context': [
-                "https://www.w3.org/2018/credentials/v1",
-                'https://w3id.org/security/bbs/v1'
+                ...this.credentialContext,
+                // 'https://w3id.org/security/bbs/v1'
             ],
             type: ['VerifiablePresentation'],
             holder,
