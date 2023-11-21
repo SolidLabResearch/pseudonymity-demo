@@ -27,7 +27,7 @@ export function getContextMap() {
     return ctx
 }
 
-describe('Bls12381G2VCActor extends AbstractVCActor', (): void => {
+describe('DidVCActor extends AbstractVCActor', (): void => {
 
     let documentLoader: IDocumentLoader
 

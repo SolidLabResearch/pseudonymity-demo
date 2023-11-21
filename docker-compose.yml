@@ -1,3 +1,4 @@
+
 services:
   css_alice:
     profiles:
@@ -12,10 +13,10 @@ services:
       - ${CSS_PORT_ALICE}:${CSS_PORT_ALICE}
     healthcheck:
       test: "[ -e healthy.flag ] || if wget --no-check-certificate http://localhost:${CSS_PORT_ALICE} --spider; then touch healthy.flag; else false; fi"
-      interval: 5s
-      timeout: 10s
-      retries: 65
-      start_period: 30s
+      interval: 1s
+      timeout: 1s
+      retries: 10
+      start_period: 1s
 
   css_recruiter:
     profiles:
@@ -29,10 +30,10 @@ services:
       - ${CSS_PORT_RECRUITER}:${CSS_PORT_RECRUITER}
     healthcheck:
       test: "[ -e healthy.flag ] || if wget --no-check-certificate http://localhost:${CSS_PORT_RECRUITER} --spider; then touch healthy.flag; else false; fi"
-      interval: 5s
-      timeout: 10s
-      retries: 65
-      start_period: 30s
+      interval: 1s
+      timeout: 1s
+      retries: 10
+      start_period: 3s
 
   css_university:
     profiles:
@@ -46,10 +47,10 @@ services:
       - ${CSS_PORT_UNIVERSITY}:${CSS_PORT_UNIVERSITY}
     healthcheck:
       test: "[ -e healthy.flag ] || if wget --no-check-certificate http://localhost:${CSS_PORT_UNIVERSITY} --spider; then touch healthy.flag; else false; fi"
-      interval: 5s
-      timeout: 10s
-      retries: 65
-      start_period: 30s
+      interval: 1s
+      timeout: 1s
+      retries: 10
+      start_period: 3s
 
   css_government:
     profiles:
@@ -63,8 +64,8 @@ services:
       - ${CSS_PORT_GOVERNMENT}:${CSS_PORT_GOVERNMENT}
     healthcheck:
       test: "[ -e healthy.flag ] || if wget --no-check-certificate http://localhost:${CSS_PORT_GOVERNMENT} --spider; then touch healthy.flag; else false; fi"
-      interval: 5s
-      timeout: 10s
-      retries: 65
-      start_period: 30s
+      interval: 1s
+      timeout: 1s
+      retries: 10
+      start_period: 3s
 
