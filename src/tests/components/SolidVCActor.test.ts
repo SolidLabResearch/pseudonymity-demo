@@ -14,6 +14,7 @@ import path from "path";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {isValidUrl, joinUrlPaths} from "../../utils/url";
 import {compact} from "jsonld";
+import {klona} from "klona";
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
@@ -45,8 +46,9 @@ describe('SolidVCActor', (): void => {
         const { webId } = r.userConfig;
         const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
         // Determine URL for DIDs container, based on the pod url
-        const didsContainer = joinUrlPaths(proxy.podUrl!, 'dids') + '/';
-        const controllerId = joinUrlPaths(didsContainer, 'controller')
+        const didsContainer = webId.replace('#me','')
+        const controllerId = webId
+
         // Generate BLS12381 G2 Key using a seed
         const seed = Uint8Array.from(Buffer.from('testseed'))
         const keyName = "key"
@@ -89,6 +91,15 @@ describe('SolidVCActor', (): void => {
             expect(vc.proof['https://w3id.org/security#verificationMethod'])
                 .toHaveProperty('id',actor.key!.id)
 
+            const vc2 = klona(vc)
+            vc2.proof = {
+                verificationMethod: vc.proof['https://w3id.org/security#verificationMethod'],
+                proofPurpose: vc.proof['https://w3id.org/security#proofPurpose'],
+                proofValue: vc.proof['https://w3id.org/security#proofValue'],
+                created: vc.proof['http://purl.org/dc/terms/created'],
+                type: 'BbsBlsSignature2020'
+            }
+            const verificationResultVC2 = await actor.verifyCredential(vc2)
             // Verify
             const verificationResult = await actor.verifyCredential(vc)
             if(verificationResult.verified !== true)

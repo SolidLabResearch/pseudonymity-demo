@@ -22,9 +22,7 @@ export class MockCssProxy implements ISolidProxy {
         const { port,origin,protocol,pathname } = new URL(webId)
 
         this.origin = origin;
-        this.server = this.app.listen(port, () => {
-            console.log(`MockCssServer is running on port ${port}`);
-        });
+        this.server = this.app.listen(port,)
         this.app.all('/**',(req,res,next)=>{
             const {url, baseUrl , originalUrl} = req
             if(!this.routes.includes(url)) {
@@ -37,11 +35,6 @@ export class MockCssProxy implements ISolidProxy {
     }
 
     addFileToContainer(urlContainer: string, data: Buffer, mimeType: string, slug: string, publicAccess?: AccessModes): Promise<any> {
-        console.log({addFileToContainer: {
-            urlContainer,
-                slug,
-                mimeType
-            }})
         const relativeUrlContainer = (new URL(urlContainer)).pathname
         const route = new URL(path.join(relativeUrlContainer, slug), this.origin).pathname
 
