@@ -1,7 +1,7 @@
 import jsonld from "jsonld";
 import N3 from "n3";
 
-export async function jld2rdf(jld: object): Promise<object> {
+export async function jsonld2nquads(jld: object): Promise<object> {
     let rdf = await jsonld.toRDF(jld, {format: 'application/n-quads'});
     return rdf
 }

@@ -4,24 +4,17 @@ import {namespaces} from "./namespace";
 import {IDidDocument, IVerificationMethod} from "../components/solid-actor/did-interfaces";
 
 
-
 export function exportPublicG2(k: Bls12381G2KeyPair) {
 
     const {id, publicKey, publicKeyJwk, type, controller} = k
 
     return {
         '@context': [
-            "https://w3id.org/security/v1",
-            namespaces.sec,
-            "https://w3id.org/security/suites/jws-2020/v1",
-            'https://w3id.org/security/bbs/v1'
+            namespaces.sec_v2
         ],
         id: id!,
         type,
-        // publicKey,
-        publicKeyJwk,
-        // Bls12381G2KeyPair.publicKey returns the base58 encoded public key
-        publicKeyBase58: publicKey,
+        publicKeyBase58: publicKey, // Bls12381G2KeyPair.publicKey returns the base58 encoded public key
         controller: controller!
     } as IKeyPairPublicExport
 }

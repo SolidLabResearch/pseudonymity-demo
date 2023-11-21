@@ -1,10 +1,8 @@
-import {IActor, ICredentialActor, VerifiableCredential, VerificationResult} from "../components/solid-actor/interfaces";
+import {ICredentialActor, VerifiableCredential, VerificationResult} from "../components/solid-actor/interfaces";
 import fs, {writeFileSync} from 'fs'
 // @ts-ignore
 import credentialsContext from 'credentials-context';
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
-import {createInitializedActor as createDidKeyActor} from "./did-key";
-import {createInitializedActor as createWebResolvingActor} from "./web-resolvable"
 import path from "path";
 import {dirProfilingReports} from "./config";
 

@@ -4,12 +4,16 @@ import {obtainClientCredentials, register} from "../../utils/css";
 import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
 import {getContextMap} from "../config/contextmap";
+import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
+import path from "path";
+import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {isValidUrl, joinUrlPaths} from "../../utils/url";
+import {compact} from "jsonld";
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
@@ -38,11 +42,23 @@ describe('SolidVCActor', (): void => {
     });
 
     async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
-        const a = new SolidVCActor(
-            new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!),
-            r.userConfig.webId,
-            documentLoader
-        )
+        const { webId } = r.userConfig;
+        const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
+        // Determine URL for DIDs container, based on the pod url
+        const didsContainer = joinUrlPaths(proxy.podUrl!, 'dids') + '/';
+        const controllerId = joinUrlPaths(didsContainer, 'controller')
+        // Generate BLS12381 G2 Key using a seed
+        const seed = Uint8Array.from(Buffer.from('testseed'))
+        const keyName = "key"
+        const keyId = `${controllerId}#${keyName}`;
+        const key = await Bls12381G2KeyPair.generate({
+            id: keyId,
+            seed,
+            controller: controllerId
+        })
+
+
+        const a = new SolidVCActor(key, keyName, documentLoader, proxy)
         await a.initialize()
         return a
     }
@@ -51,11 +67,11 @@ describe('SolidVCActor', (): void => {
     for (let i = 0; i < records.length; i++) {
         const r = records[i]
 
-        it(`[${r.testConfig.name}] should be able to initialize a SolidVCActor`, async () => {
+        it(`[${r.testConfig.name}] should be able to initialize a SolidVCActorV2`, async () => {
             const actor = await createInitializedActor(r)
             expect(actor.isInitialized())
             // Sanity check
-            expect(actor.g2).toBeDefined()
+            expect(actor.key).toBeDefined()
         })
 
         it(`[${r.testConfig.name}] can create, sign, and verify a VC`, async () => {
@@ -65,9 +81,13 @@ describe('SolidVCActor', (): void => {
 
             // Sign
             const vc: VCDIVerifiableCredential = await actor.signCredential(c)
+
             expect(vc.proof).toBeDefined()
-            // vc.proof 's verificationMethod must point to the actor's g2 key id
-            expect(vc.proof.verificationMethod).toEqual(actor.g2!.id)
+
+            expect(vc.proof.hasOwnProperty('https://w3id.org/security#verificationMethod')).toBeTruthy()
+
+            expect(vc.proof['https://w3id.org/security#verificationMethod'])
+                .toHaveProperty('id',actor.key!.id)
 
             // Verify
             const verificationResult = await actor.verifyCredential(vc)

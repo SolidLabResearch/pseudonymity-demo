@@ -6,14 +6,20 @@ import {
     buildThing,
     deleteContainer,
     deleteFile,
-    getContainedResourceUrlAll, getResourceInfo,
-    getSolidDataset, getThing, overwriteFile, saveSolidDatasetAt, setThing, ThingPersisted, universalAccess, UrlString
+    getContainedResourceUrlAll,
+    getResourceInfo,
+    getSolidDataset,
+    getThing,
+    overwriteFile,
+    saveSolidDatasetAt,
+    setThing,
+    ThingPersisted,
+    universalAccess,
+    UrlString
 } from "@inrupt/solid-client";
 import {logger} from "../../logger";
-import path from "path";
 import {fetch} from "@inrupt/universal-fetch";
 import {Util} from "n3";
-import prefixes = Util.prefixes;
 import {obtainAccessToken} from "../../utils/css";
 import {ISolidPod, ISolidProxy} from "./interfaces";
 
@@ -43,6 +49,7 @@ export class CssProxy implements ISolidProxy {
         // return this.controls.pod!
     }
 
+    // TODO: delete
     static async parseResponse(response: Response) {
         if (!response.ok)
             throw new Error(`Response has status code: ${response.status} (${response.statusText}).\nURL: ${response.url}`)
@@ -77,8 +84,7 @@ export class CssProxy implements ISolidProxy {
         return status !== 404
     }
 
-
-
+    // TODO: delete
     async parsedFetch(input: URL | RequestInfo, init?: RequestInit | undefined): Promise<any> {
         return await CssProxy.parseResponse(await this.fetch!(input, init))
     }
@@ -89,8 +95,7 @@ export class CssProxy implements ISolidProxy {
         const {accessToken, dpopKey} = all
         // The DPoP key needs to be the same key as the one used in the previous step.
         // The Access token is the one generated in the previous step.
-        const authFetch = await buildAuthenticatedFetch(fetch, accessToken, {dpopKey});
-        this.fetch = authFetch;
+        this.fetch = await buildAuthenticatedFetch(fetch, accessToken, {dpopKey});
     }
 
     isInitialized(): boolean {
@@ -153,7 +158,7 @@ export class CssProxy implements ISolidProxy {
     }
 
     /**
-     * TODO: refactor to CssProxy
+     * Add file to a Solid Pod Container.
      * @param urlContainer
      * @param data
      * @param mimeType
@@ -186,6 +191,7 @@ export class CssProxy implements ISolidProxy {
     }
 
     /**
+     * TODO: add tests
      * Deletes container (and its constituent resources), if it exists.
      * @param containerUrl
      */
@@ -217,6 +223,10 @@ export class CssProxy implements ISolidProxy {
         )
     }
 
+    /**
+     * TODO: add tests
+     * @param profileUpdate
+     */
     async updateProfile(profileUpdate: ThingPersisted) {
         const meUpdate = setThing(
             await this.getCard(),
@@ -229,6 +239,8 @@ export class CssProxy implements ISolidProxy {
             {fetch: this.fetch!}
         )
     }
+
+
 
 
 }

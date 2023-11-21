@@ -2,9 +2,13 @@ import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
 import {CssProxy} from "../../components/solid-actor/CssProxy";
-import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {ITestRecord} from "../interfaces";
+import path from "path";
+import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
+import {getContextMap} from "../config/contextmap";
+import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {joinUrlPaths} from "../../utils/url";
 
 
 describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
@@ -16,13 +20,32 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
     let university: SolidVCActor
 
 
-    async function createInitializedSolidVCActor(r: ITestRecord): Promise<SolidVCActor> {
-        const documentLoader = createCustomDocumentLoader(ctx)
-        const actor = new SolidVCActor(
-            new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
-            , r.userConfig.webId, documentLoader)
-        await actor.initialize()
-        return actor;
+    async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
+        const { webId } = r.userConfig;
+        const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
+        // Determine URL for DIDs container, based on the pod url
+        const didsContainer = joinUrlPaths(proxy.podUrl!, 'dids') + '/';
+        const controllerId = joinUrlPaths(didsContainer, 'controller')
+        // Generate BLS12381 G2 Key using a seed
+        const seed = Uint8Array.from(Buffer.from('testseed'))
+        const keyName = "key"
+        const keyId = `${controllerId}#${keyName}`;
+        const key = await Bls12381G2KeyPair.generate({
+            id: keyId,
+            seed,
+            controller: controllerId
+        })
+
+
+
+        const a = new SolidVCActor(
+            key,
+            keyName,
+            createCustomDocumentLoader(getContextMap()),
+            proxy
+        )
+        await a.initialize()
+        return a
     }
 
     beforeAll(async (): Promise<void> => {
@@ -36,7 +59,7 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
             // Obtain client credentials
             r.clientCredentials = await obtainClientCredentials(r.userConfig, r.controls!)
             // Attach initialized SolidVCActor
-            r.actor = await createInitializedSolidVCActor(r)
+            r.actor = await createInitializedActor(r)
         }
 
         alice = records.find(r => r.testConfig.name === 'alice')!.actor! as SolidVCActor
