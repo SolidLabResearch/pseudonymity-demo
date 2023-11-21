@@ -93,7 +93,7 @@ export class SolidVCActor
 
         const secv0 = Vocab('https://w3id.org/security#')
         const secv2 = vocabs.sec
-        const sec = secv0
+        const sec = secv0 // TODO: CLEAN UP
         const [vm] = this.controllerDocument.verificationMethod as IVerificationMethod[]
         const vmThing = this.proxy.getThingBuilder('key')
             .addIri(sec('controller'), this.webId)
