@@ -1,22 +1,19 @@
-import {describe, it, expect} from '@jest/globals';
-import {DidActor} from "../../components/solid-actor/DidActor";
-
+import {describe, expect, it} from '@jest/globals';
+import {DidActorFactory} from "../ActorFactory";
 
 describe(`DidActor`, (): void => {
 
+
+    const actorFactory = new DidActorFactory()
+
     it('Should initialize correctly', async () => {
-        const controller = 'urn:test:controller'
-        const keyName = "key-g2"
-        const actor = new DidActor('test-seed', controller,keyName);
-        await actor.initialize()
+        const actor = await actorFactory.createInitializedActor()
         expect(actor.isInitialized()).toBeTruthy()
     })
 
     it('Has a correct controller document', async () => {
-        const controller = 'urn:test:controller'
-        const keyName = "key-g2"
-        const actor = new DidActor('test-seed', controller,keyName);
-        await actor.initialize()
+        const actor = await actorFactory.createInitializedActor()
+        const {controller, keyName} = actor;
         const expectedKeyId = `${controller}#${keyName}`
         expect(actor.controllerDocument).toHaveProperty('id', controller)
         expect(actor.controllerDocument).toHaveProperty('verificationMethod[0].id', expectedKeyId)

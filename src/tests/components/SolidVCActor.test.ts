@@ -1,17 +1,14 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
-import {CssProxy} from "../../components/solid-actor/CssProxy";
 import {IDocumentLoader} from "../../contexts/interfaces";
-import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
-import {getContextMap} from "../config/contextmap";
-import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import n3 from 'n3'
+import {SolidVCActorFactory} from "../ActorFactory";
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
@@ -19,10 +16,11 @@ describe('SolidVCActor', (): void => {
     let records: Array<ITestRecord> = cssTestConfigRecords.filter(r => r.testConfig.name === SELECTED_TEST_ACTOR)
 
     let documentLoader: IDocumentLoader
+    const actorFactory = new SolidVCActorFactory()
 
     beforeAll(async (): Promise<void> => {
 
-        documentLoader = createCustomDocumentLoader(getContextMap())
+
 
         // Create & start each actor's app (server)
         for await (const r of records) {
@@ -39,28 +37,9 @@ describe('SolidVCActor', (): void => {
 
     });
 
+
     async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
-        const { webId } = r.userConfig;
-        const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
-        // Determine URL for DIDs container, based on the pod url
-        const didsContainer = webId.replace('#me','')
-        const controllerId = didsContainer
-
-        // Generate BLS12381 G2 Key using a seed
-        const seed = Uint8Array.from(Buffer.from('testseed'))
-        const keyName = "key"
-        const keyId = `${controllerId}#${keyName}`;
-        const key = await Bls12381G2KeyPair.generate({
-            id: keyId,
-            seed,
-            controller: controllerId
-        })
-
-
-        const a = new SolidVCActor(key, keyName, documentLoader, proxy)
-
-        await a.initialize()
-        return a
+        return await actorFactory.createInitializedActor(r)
     }
 
 
@@ -68,7 +47,7 @@ describe('SolidVCActor', (): void => {
         const r = records[i]
 
         let actor: SolidVCActor
-        it(`[${r.testConfig.name}] should be able to initialize a SolidVCActorV2`, async () => {
+        it(`[${r.testConfig.name}] should be able to initialize a SolidVCActor`, async () => {
             actor = await createInitializedActor(r)
             expect(actor.isInitialized())
             // Sanity check
