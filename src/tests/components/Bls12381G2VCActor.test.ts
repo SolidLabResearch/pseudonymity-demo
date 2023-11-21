@@ -8,6 +8,7 @@ import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
 import {IVerificationMethod} from "../../components/solid-actor/did-interfaces";
 import {DidVCActor} from "../../components/solid-actor/DidVCActor";
+import {DidVCActorFactory} from "../ActorFactory";
 
 /**
  * Build context map
@@ -39,24 +40,9 @@ describe('Bls12381G2VCActor extends AbstractVCActor', (): void => {
     });
 
 
+    const actorFactory = new DidVCActorFactory()
     async function createInitializedActor(): Promise<DidVCActor> {
-        // Generate BLS12381 G2 Key using a seed
-        const seed = Uint8Array.from(Buffer.from('testseed'))
-        let key = await Bls12381G2KeyPair.generate({ seed })
-        // Create its corresponding did:key DID Document
-        const didKeyDocument = toDidKeyDocument(key)
-        const {id, verificationMethod} = didKeyDocument
-        const vm = (verificationMethod as IVerificationMethod[])[0]
-        // Re-instantiate BLS12381 G2, but with set with the did:key identifiers
-        key = new Bls12381G2KeyPair({
-            id: vm.id,
-            controller: id,
-            privateKeyBase58: key.privateKey,
-            publicKeyBase58: key.publicKey
-        })
-        const actor = new DidVCActor(key,documentLoader);
-        await actor.initialize()
-        return actor
+        return await actorFactory.createInitializedActor()
     }
 
     it('Actor (identified by its did:key identifier) can create, sign, and verify a VC', async () => {

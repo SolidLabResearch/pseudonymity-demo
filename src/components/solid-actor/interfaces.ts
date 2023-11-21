@@ -1,4 +1,4 @@
-import {AccessModes} from "@inrupt/solid-client";
+import {AccessModes, SolidDataset, ThingBuilder} from "@inrupt/solid-client";
 import {ClientCredentials} from "../../interfaces";
 import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
@@ -62,6 +62,20 @@ export interface ISolidProxy extends ISolidActor {
     controls?: any
     storage?: ISolidPod
     fetch?: typeof fetch
+    get cardUrl(): string
+    get podUrl(): string
+    addFileToContainer(
+        urlContainer: string,
+        data: Buffer,
+        mimeType: string,
+        slug: string,
+        publicAccess?: AccessModes
+    ): Promise<any>
+    getThingBuilder(name: string): ThingBuilder<any>
+    getProfileBuilder(): Promise<ThingBuilder<any>>
+    getCard(): Promise<SolidDataset>
+
+    updateCard(cardUpdate: SolidDataset): Promise<void>
 }
 
 

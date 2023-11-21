@@ -9,6 +9,7 @@ import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {getContextMap} from "../config/contextmap";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {joinUrlPaths} from "../../utils/url";
+import {IDocumentLoader} from "../../contexts/interfaces";
 
 
 describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
@@ -19,13 +20,17 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
     let government: SolidVCActor
     let university: SolidVCActor
 
+    let documentLoader = createCustomDocumentLoader(getContextMap())
+
+
 
     async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
         const { webId } = r.userConfig;
         const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
         // Determine URL for DIDs container, based on the pod url
-        const didsContainer = joinUrlPaths(proxy.podUrl!, 'dids') + '/';
-        const controllerId = joinUrlPaths(didsContainer, 'controller')
+        const didsContainer = webId.replace('#me','')
+        const controllerId = didsContainer
+
         // Generate BLS12381 G2 Key using a seed
         const seed = Uint8Array.from(Buffer.from('testseed'))
         const keyName = "key"
@@ -37,13 +42,8 @@ describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {
         })
 
 
+        const a = new SolidVCActor(key, keyName, documentLoader, proxy)
 
-        const a = new SolidVCActor(
-            key,
-            keyName,
-            createCustomDocumentLoader(getContextMap()),
-            proxy
-        )
         await a.initialize()
         return a
     }
