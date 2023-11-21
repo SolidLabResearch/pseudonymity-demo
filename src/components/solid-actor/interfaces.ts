@@ -62,6 +62,15 @@ export interface ISolidProxy extends ISolidActor {
     controls?: any
     storage?: ISolidPod
     fetch?: typeof fetch
+    get cardUrl(): string
+    get podUrl(): string
+    addFileToContainer(
+        urlContainer: string,
+        data: Buffer,
+        mimeType: string,
+        slug: string,
+        publicAccess?: AccessModes
+    ): Promise<any>
 }
 
 

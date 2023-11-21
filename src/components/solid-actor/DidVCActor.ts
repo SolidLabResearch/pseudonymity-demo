@@ -28,6 +28,7 @@ export abstract class AbstractBls12381G2VCActor
     abstract get controllerDocument(): IDidDocument
 
     get controllerDocumentContext(): string[] {
+        // TODO: replace with namespaces.did
         return ['https://www.w3.org/ns/did/v1']
     }
     get controllerId(): string {
