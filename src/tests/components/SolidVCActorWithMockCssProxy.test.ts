@@ -30,7 +30,7 @@ describe('SolidVCActor', (): void => {
     });
 
     afterAll(async (): Promise<void> => {
-        (actor.proxy as MockCssProxy).close()
+        await (actor.proxy as MockCssProxy).close()
     });
 
     async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
@@ -109,7 +109,6 @@ describe('SolidVCActor', (): void => {
             // expect(vc.proof['https://w3id.org/security#verificationMethod'])
             //     .toHaveProperty('id',actor.key!.id)
 
-            console.log(vc)
             // Verify
             const verificationResult = await actor.verifyCredential(vc)
             /**

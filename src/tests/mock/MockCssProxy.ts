@@ -30,8 +30,6 @@ export class MockCssProxy implements ISolidProxy {
             if(!this.routes.includes(url)) {
                 console.log({url, baseUrl , originalUrl, registeredRoutes: this.routes})
                 throw new Error(`❌⚠️Requesting unregistered route: ${url}`)
-            }else {
-                console.log(`ℹ️Received request at: ${url}`)
             }
 
             next()
@@ -46,11 +44,9 @@ export class MockCssProxy implements ISolidProxy {
             }})
         const relativeUrlContainer = (new URL(urlContainer)).pathname
         const route = new URL(path.join(relativeUrlContainer, slug), this.origin).pathname
-        console.log('☞creating mock route at: ', route)
+
         this.routes.push(route)
         this.app.get(route, (req, res)=>{
-            // console.log(`received request at: ${route}`)
-            // console.log(`going to respond with ${mimeType} and data: ${data}`)
             res.writeHead(200, {'content-type':mimeType});
             res.write(data.toString())
             res.end()
@@ -110,7 +106,14 @@ export class MockCssProxy implements ISolidProxy {
         return this.webId.replace('profile/card#me', '')
     }
     close() {
-        this.server.close()
+        return new Promise((resolve, reject)=>{
+            this.server.close((error)=>{
+                if(error!!)
+                    reject(error)
+                resolve({})
+            })
+        })
+
     }
 
 }
