@@ -13,13 +13,14 @@ import {
     overwriteFile,
     saveSolidDatasetAt,
     setThing,
+    SolidDataset,
+    ThingBuilder,
     ThingPersisted,
     universalAccess,
     UrlString
 } from "@inrupt/solid-client";
 import {logger} from "../../logger";
 import {fetch} from "@inrupt/universal-fetch";
-import {Util} from "n3";
 import {obtainAccessToken} from "../../utils/css";
 import {ISolidPod, ISolidProxy} from "./interfaces";
 
@@ -211,6 +212,16 @@ export class CssProxy implements ISolidProxy {
         }
     }
 
+
+    async updateCard(cardUpdate: SolidDataset) {
+
+        await saveSolidDatasetAt(
+            this.cardUrl,
+            cardUpdate,
+            {fetch: this.fetch!}
+        )
+    }
+
     async getCard() {
         return await getSolidDataset(this.cardUrl, {fetch: this.fetch!})
     }
@@ -221,6 +232,10 @@ export class CssProxy implements ISolidProxy {
         return buildThing(
             getThing(card, this.webId)!
         )
+    }
+
+    getThingBuilder(name: string): ThingBuilder<any> {
+        return buildThing({name})
     }
 
     /**

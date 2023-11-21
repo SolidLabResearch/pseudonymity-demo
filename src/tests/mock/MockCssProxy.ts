@@ -1,10 +1,10 @@
 import {ISolidProxy} from "../../components/solid-actor/interfaces";
-import {fetch} from "@inrupt/universal-fetch";
 
-import {AccessModes} from "@inrupt/solid-client";
+import {AccessModes, SolidDataset, ThingBuilder} from "@inrupt/solid-client";
 import express from 'express';
 import path from "path";
 import {IncomingMessage, Server, ServerResponse} from "http";
+import fetch from "cross-fetch";
 
 export class MockCssProxy implements ISolidProxy {
     fetch?: typeof fetch;
@@ -108,5 +108,23 @@ export class MockCssProxy implements ISolidProxy {
         })
 
     }
+
+    getCard(): Promise<SolidDataset> {
+        return Promise.reject('Not Implemented In MockCssProxy');
+    }
+
+    getProfileBuilder(): Promise<ThingBuilder<any>> {
+        return Promise.reject('Not Implemented In MockCssProxy');
+    }
+
+    getThingBuilder(name: string): ThingBuilder<any> {
+        throw new Error('Not Implemented in MockCssProxy')
+    }
+
+    updateCard(cardUpdate: SolidDataset): Promise<void> {
+        return Promise.reject('Not Implemented In MockCssProxy');
+    }
+
+
 
 }

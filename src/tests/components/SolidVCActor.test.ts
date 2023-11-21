@@ -10,11 +10,8 @@ import {ITestRecord} from "../interfaces";
 import credentialsContext from 'credentials-context';
 import {getContextMap} from "../config/contextmap";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import path from "path";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
-import {isValidUrl, joinUrlPaths} from "../../utils/url";
-import {compact} from "jsonld";
-import {klona} from "klona";
+import n3 from 'n3'
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
@@ -47,7 +44,7 @@ describe('SolidVCActor', (): void => {
         const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
         // Determine URL for DIDs container, based on the pod url
         const didsContainer = webId.replace('#me','')
-        const controllerId = webId
+        const controllerId = didsContainer
 
         // Generate BLS12381 G2 Key using a seed
         const seed = Uint8Array.from(Buffer.from('testseed'))
@@ -61,6 +58,7 @@ describe('SolidVCActor', (): void => {
 
 
         const a = new SolidVCActor(key, keyName, documentLoader, proxy)
+
         await a.initialize()
         return a
     }
@@ -69,15 +67,65 @@ describe('SolidVCActor', (): void => {
     for (let i = 0; i < records.length; i++) {
         const r = records[i]
 
+        let actor: SolidVCActor
         it(`[${r.testConfig.name}] should be able to initialize a SolidVCActorV2`, async () => {
-            const actor = await createInitializedActor(r)
+            actor = await createInitializedActor(r)
             expect(actor.isInitialized())
             // Sanity check
             expect(actor.key).toBeDefined()
         })
 
+        it(`[${r.testConfig.name}] SolidVCActor should add controller semantics to WebID Document`, async () => {
+            // const actor = await createInitializedActor(r) // TODO: delete
+            expect(actor.isInitialized())
+            // Controller Doc Checks
+
+            // The controller doc is available as a json-ld representation
+            const {status, statusText, headers} = await fetch(actor.key.controller!, {headers: {accept: 'application/ld+json'}})
+            expect(status).toBe(200)
+            expect(headers.get('content-type')).toContain('application/ld+json')
+
+            // SolidVCActor has updated the WebID Profile Document to contain verificationMethod & assertionMethod
+            const urlControllerDoc = actor.controllerId
+            const store = new n3.Store()
+            new n3.Parser({format: 'application/n-quads'})
+                .parse(
+                    await (
+                        await fetch(urlControllerDoc, {headers: {accept: 'application/n-quads'}})
+                    ).text()
+                )
+                .forEach(q=>store.addQuad(q))
+
+
+
+            const vmQuads = store.getQuads(
+                actor.webId,
+                'https://w3id.org/security#verificationMethod',
+                actor.key!.id!,
+                null
+            )
+
+            const controllerQuads = store.getQuads(
+                actor.key!.id!,
+                'https://w3id.org/security#controller',
+                actor.controllerId,
+                null
+            )
+
+            const assertionMethodQuads = store.getQuads(
+                actor.webId,
+                'https://w3id.org/security#assertionMethod',
+                actor.key!.id!,
+                null
+            )
+
+            expect(vmQuads).toHaveLength(1)
+            expect(controllerQuads).toHaveLength(1)
+            expect(assertionMethodQuads).toHaveLength(1)
+        })
+
         it(`[${r.testConfig.name}] can create, sign, and verify a VC`, async () => {
-            const actor = await createInitializedActor(r)
+            // const actor = await createInitializedActor(r) // TODO: delete
             // Create
             const c = actor.createCredential({'id': 'urn:test'});
 
@@ -85,21 +133,8 @@ describe('SolidVCActor', (): void => {
             const vc: VCDIVerifiableCredential = await actor.signCredential(c)
 
             expect(vc.proof).toBeDefined()
+            expect(vc.proof.verificationMethod).toBeDefined()
 
-            expect(vc.proof.hasOwnProperty('https://w3id.org/security#verificationMethod')).toBeTruthy()
-
-            expect(vc.proof['https://w3id.org/security#verificationMethod'])
-                .toHaveProperty('id',actor.key!.id)
-
-            const vc2 = klona(vc)
-            vc2.proof = {
-                verificationMethod: vc.proof['https://w3id.org/security#verificationMethod'],
-                proofPurpose: vc.proof['https://w3id.org/security#proofPurpose'],
-                proofValue: vc.proof['https://w3id.org/security#proofValue'],
-                created: vc.proof['http://purl.org/dc/terms/created'],
-                type: 'BbsBlsSignature2020'
-            }
-            const verificationResultVC2 = await actor.verifyCredential(vc2)
             // Verify
             const verificationResult = await actor.verifyCredential(vc)
             if(verificationResult.verified !== true)
@@ -108,7 +143,7 @@ describe('SolidVCActor', (): void => {
         })
 
         it(`[${r.testConfig.name}] can create, sign, and verify a VP`, async () => {
-            const actor = await createInitializedActor(r)
+            // const actor = await createInitializedActor(r) // TODO: delete
             // Create VC
             const vc = await actor.signCredential(
                 actor.createCredential({
@@ -129,7 +164,7 @@ describe('SolidVCActor', (): void => {
         })
 
         it(`[${r.testConfig.name}] can derive a VC`, async () => {
-            const actor = await createInitializedActor(r)
+            // const actor = await createInitializedActor(r) // TODO: delete
             const c = actor.createCredential(
                 {id: 'urn:test:id000',
                     'ex:identifier': '123456789ab',

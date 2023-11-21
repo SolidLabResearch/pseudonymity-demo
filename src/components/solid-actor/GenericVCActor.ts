@@ -26,10 +26,18 @@ export abstract class GenericVCActor<S,V,D> {
     }
 
     get credentialContext(): string[] {
+
+        const option01 = [
+            'https://www.w3.org/2018/credentials/v1',
+            "https://w3id.org/security/bbs/v1",
+        ]
+
+        const option02 = [
+
+            'https://www.w3.org/ns/credentials/v2' // 21/11/2023 - jsigs unable to match proofs
+        ]
         return [
-            // 'https://www.w3.org/2018/credentials/v1',
-            // "https://w3id.org/security/bbs/v1",
-            'https://www.w3.org/ns/credentials/v2'
+            ...option01
         ]
     }
 
