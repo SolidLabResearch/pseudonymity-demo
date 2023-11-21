@@ -12,7 +12,7 @@ export function exportPublicG2(k: Bls12381G2KeyPair) {
     return {
         '@context': [
             "https://w3id.org/security/v1",
-            namespaces.sec,
+            namespaces.sec_v2,
             "https://w3id.org/security/suites/jws-2020/v1",
             'https://w3id.org/security/bbs/v1'
         ],

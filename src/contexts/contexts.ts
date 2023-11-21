@@ -22,7 +22,7 @@ ctx.set('https://w3id.org/security/bbs/v1', readJsonFile('./src/contexts/vc-di-b
 ctx.set('https://w3id.org/security/suites/jws-2020/v1', readJsonFile('./src/contexts/suiteContext.json'))
 
 // Security contexts
-ctx.set(namespaces.sec, readJsonFile('./src/contexts/security.jsonld'))
+ctx.set(namespaces.sec_v2, readJsonFile('./src/contexts/security.jsonld'))
 ctx.set('https://w3id.org/security/v1', readJsonFile('./src/contexts/security-v1.jsonld'))
 ctx.set('https://w3id.org/security/v2', readJsonFile('./src/contexts/security-v2.jsonld'))
 // Add VC01 specific context

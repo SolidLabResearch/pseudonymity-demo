@@ -18,3 +18,4 @@ export function getContextMap() {
     ctx.set('https://w3id.org/security/suites/jws-2020/v1', readJsonFile('src/contexts/suiteContext.json'))
     return ctx
 }
+

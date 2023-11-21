@@ -13,6 +13,7 @@ import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import path from "path";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {isValidUrl, joinUrlPaths} from "../../utils/url";
+import {compact} from "jsonld";
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
@@ -80,10 +81,13 @@ describe('SolidVCActor', (): void => {
 
             // Sign
             const vc: VCDIVerifiableCredential = await actor.signCredential(c)
+
             expect(vc.proof).toBeDefined()
-            // vc.proof 's verificationMethod must point to the actor's g2 key id
-            // FIX: when using credentials/v2, the proof object does not contain "verificationMethod", but "https://w3id.org/security#verificationMethod"
-            // expect(vc.proof.verificationMethod).toEqual(actor.key!.id) // TODO
+
+            expect(vc.proof.hasOwnProperty('https://w3id.org/security#verificationMethod')).toBeTruthy()
+
+            expect(vc.proof['https://w3id.org/security#verificationMethod'])
+                .toHaveProperty('id',actor.key!.id)
 
             // Verify
             const verificationResult = await actor.verifyCredential(vc)
