@@ -37,8 +37,8 @@
     "test:components:SolidDidActorV2": "npm run test:components:setup && jest -i src/tests/components/CompoundActor.test.ts",
 
     "test:components:SolidVCActor": "npm run test:components:setup && jest -i src/tests/components/SolidVCActor.test.ts",
-    "test:components:Bls12381G2VCActor": "npm run test:components:setup && jest -i src/tests/components/Bls12381G2VCActor.test.ts",
-    "test:components": "npm run test:components:CssProxy && npm run test:components:DidActor && npm run test:components:SolidVCActor && npm run test:components:SolidDidActorV2 && npm run test:components:Bls12381G2VCActor && npm run test:components:teardown",
+    "test:components:DidVCActor": "npm run test:components:setup && jest -i src/tests/components/DidVCActor.test.ts",
+    "test:components": "npm run test:components:CssProxy && npm run test:components:DidActor && npm run test:components:SolidVCActor && npm run test:components:SolidDidActorV2 && npm run test:components:DidVCActor && npm run test:components:teardown",
     "test:usecases:setup": "npm run docker:test:usecases:setup:stop && npm run docker:test:usecases:setup:start",
     "test:usecases:teardown": "npm run docker:test:usecases:setup:stop",
     "test:usecases:sign-verify": "npm run test:usecases:setup && jest -i src/tests/usecases/sign-verify.test.ts",
@@ -49,7 +49,8 @@
     "test:evaluation:did-key": "npm run test:evaluation:setup && jest -i src/tests/evaluation/verify-using-did-key.test.ts",
     "test:evaluation": "npm run test:evaluation:did-key && npm run test:evaluation:web-resolvable && npm run test:evaluation:teardown",
     "profile:did-key": "npx ts-node src/profiling/did-key.ts",
-    "profile:web-resolvable": "npx ts-node src/profiling/web-resolvable.ts"
+    "profile:web-resolvable": "npx ts-node src/profiling/web-resolvable.ts",
+    "profile": "npm run test:components:setup && npm run profile:web-resolvable && npm run profile:did-key"
   },
   "author": "GDM",
   "license": "MIT",
