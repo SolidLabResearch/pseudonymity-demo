@@ -50,7 +50,8 @@
     "test:evaluation": "npm run test:evaluation:did-key && npm run test:evaluation:web-resolvable && npm run test:evaluation:teardown",
     "profile:did-key": "npx ts-node src/profiling/did-key.ts",
     "profile:web-resolvable": "npx ts-node src/profiling/web-resolvable.ts",
-    "profile": "npm run test:components:setup && npm run profile:web-resolvable && npm run profile:did-key"
+    "profile": "npm run test:components:setup && npm run profile:web-resolvable && npm run profile:did-key",
+    "profile:multi-actor": "npm run test:usecases:setup && npx ts-node src/profiling/multi-actor.ts"
   },
   "author": "GDM",
   "license": "MIT",
