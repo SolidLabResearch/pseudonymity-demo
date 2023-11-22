@@ -1,7 +1,6 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
-import {IDocumentLoader} from "../../contexts/interfaces";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
 // @ts-ignore
@@ -14,14 +13,9 @@ describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
 
     let records: Array<ITestRecord> = cssTestConfigRecords.filter(r => r.testConfig.name === SELECTED_TEST_ACTOR)
-
-    let documentLoader: IDocumentLoader
     const actorFactory = new SolidVCActorFactory()
 
     beforeAll(async (): Promise<void> => {
-
-
-
         // Create & start each actor's app (server)
         for await (const r of records) {
             // Register users & pods, and get each actor's controls object
