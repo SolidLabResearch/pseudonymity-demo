@@ -1,33 +1,10 @@
 import {DidVCActor} from "../components/solid-actor/DidVCActor";
-import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import {toDidKeyDocument} from "../utils/keypair";
-import {IVerificationMethod} from "../components/solid-actor/did-interfaces";
-import {createCustomDocumentLoader} from "../contexts/contexts";
-
-import {getContextMap, runEvaluation} from "./evaluator";
-import {writeFileSync} from "fs";
-import path from "path";
-import {dirProfilingReports} from "./config";
+import {runEvaluation} from "./evaluator";
+import {DidVCActorFactory} from "../tests/ActorFactory";
 
 export async function createInitializedActor(): Promise<DidVCActor> {
-    // Generate BLS12381 G2 Key using a seed
-    const seed = Uint8Array.from(Buffer.from('testseed'))
-    let key = await Bls12381G2KeyPair.generate({ seed })
-    // Create its corresponding did:key DID Document
-    const didKeyDocument = toDidKeyDocument(key)
-    const {id, verificationMethod} = didKeyDocument
-    const vm = (verificationMethod as IVerificationMethod[])[0]
-    // Re-instantiate BLS12381 G2, but with set with the did:key identifiers
-    key = new Bls12381G2KeyPair({
-        id: vm.id,
-        controller: id,
-        privateKeyBase58: key.privateKey,
-        publicKeyBase58: key.publicKey
-    })
-    const documentLoader = createCustomDocumentLoader(getContextMap())
-    const actor = new DidVCActor(key,documentLoader);
-    await actor.initialize()
-    return actor
+    const actorFactor =new DidVCActorFactory()
+    return await actorFactor.createInitializedActor()
 }
 
 createInitializedActor()

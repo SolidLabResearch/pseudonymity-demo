@@ -1,5 +1,4 @@
 import {ITestRecord} from "./interfaces";
-import {IActor} from "../components/solid-actor/interfaces";
 import {SolidVCActor} from "../components/solid-actor/SolidVCActor";
 import {CssProxy} from "../components/solid-actor/CssProxy";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
@@ -18,10 +17,12 @@ export abstract class AbstractActorFactory<A> {
 }
 
 export class DidActorFactory extends AbstractActorFactory<DidActor> {
-    async createInitializedActor(): Promise<DidActor> {
-        const controller = 'urn:test:controller'
+    async createInitializedActor(r?: ITestRecord): Promise<DidActor> {
+        const name = r! ? r!.testConfig.name : 'testactor'
+        const seed = r! ? r!.testConfig.name! : 'testseed'
+        const controller = `urn:${name}:controller`
         const keyName = "key-g2"
-        const actor = new DidActor('test-seed', controller,keyName);
+        const actor = new DidActor(seed, controller,keyName);
         await actor.initialize()
         return actor
     }
@@ -59,7 +60,7 @@ export class SolidVCActorFactory extends AbstractActorFactory<SolidVCActor> {
         const controllerId = didsContainer
 
         // Generate BLS12381 G2 Key using a seed
-        const seed = Uint8Array.from(Buffer.from('testseed'))
+        const seed = Uint8Array.from(Buffer.from(webId))
         const keyName = "key"
         const keyId = `${controllerId}#${keyName}`;
         const key = await Bls12381G2KeyPair.generate({
