@@ -1,0 +1,8 @@
+,cohend_DidVCActor_SolidVCActor,effect_class
+createCredential,1.1019522905165697,LARGE
+createVerifiableCredential,-1.6411489176881806,VERY_LARGE
+createJSONLDFrame,0.06376290786100622,VERY_SMALL
+deriveCredential,3.1358343072713395,HUGE
+createPresentationWithDerivedVC,0.6651598853886139,MEDIUM
+signPresentation,-0.27225336192244065,SMALL
+verifyPresentation,-6.884128242814808,HUGE
