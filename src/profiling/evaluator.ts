@@ -5,6 +5,8 @@ import credentialsContext from 'credentials-context';
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import path from "path";
 import {dirProfilingReports} from "./config";
+import {IActorReport, IStepRecord} from "./interfaces";
+
 
 function readJsonFile(path:string) {
     return JSON.parse(fs.readFileSync(path, 'utf8'));
@@ -22,20 +24,6 @@ export function getContextMap() {
 }
 
 
-export interface ITimeTrackRecord {
-    start: number
-    end: number
-    delta: number
-}
-export interface IStepRecord extends ITimeTrackRecord {
-    name: string
-    index?: number
-}
-
-export interface IActorReport extends ITimeTrackRecord {
-    actor: ICredentialActor
-    records: IStepRecord[]
-}
 async function trackStep(f: () => Promise<void>) {
     const {name} = f
     const start = Date.now()
