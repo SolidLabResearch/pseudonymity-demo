@@ -1,6 +1,7 @@
 import {readJsonFile} from "../../utils/io";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
+import {customVocab} from "../../contexts/customVocab";
 
 /**
  * Build context map
@@ -16,6 +17,9 @@ export function getContextMap() {
     ctx.set('https://w3id.org/security/bbs/v1', readJsonFile('src/contexts/vc-di-bbs-v1.json'))
 
     ctx.set('https://w3id.org/security/suites/jws-2020/v1', readJsonFile('src/contexts/suiteContext.json'))
+
+    // Custom vocab
+    ctx.set(customVocab.url, customVocab.context)
     return ctx
 }
 
