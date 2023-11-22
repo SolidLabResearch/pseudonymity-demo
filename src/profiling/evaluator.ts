@@ -6,6 +6,7 @@ import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import path from "path";
 import {dirProfilingReports} from "./config";
 import {IActorReport, IStepRecord} from "./interfaces";
+import {trackStep} from "./track";
 
 
 function readJsonFile(path:string) {
@@ -23,15 +24,6 @@ export function getContextMap() {
     return ctx
 }
 
-
-async function trackStep(f: () => Promise<void>) {
-    const {name} = f
-    const start = Date.now()
-    await f()
-    const end = Date.now()
-    const delta = end - start
-    return { name, start, end, delta } as IStepRecord
-}
 
 async function evaluate(actor: ICredentialActor) {
     const startEvaluation = Date.now()
