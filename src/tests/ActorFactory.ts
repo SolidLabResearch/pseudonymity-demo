@@ -30,7 +30,7 @@ export class DidActorFactory extends AbstractActorFactory<DidActor> {
 
 }
 export class DidVCActorFactory extends AbstractActorFactory<DidVCActor> {
-    async createInitializedActor(): Promise<DidVCActor> {
+    async createInitializedActor(r?: ITestRecord): Promise<DidVCActor> {
         // Generate BLS12381 G2 Key using a seed
         const seed = Uint8Array.from(Buffer.from('testseed'))
         let key = await Bls12381G2KeyPair.generate({ seed })
