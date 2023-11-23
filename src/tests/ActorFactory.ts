@@ -8,6 +8,7 @@ import {DidActor} from "../components/solid-actor/DidActor";
 import {DidVCActor} from "../components/solid-actor/DidVCActor";
 import {toDidKeyDocument} from "../utils/keypair";
 import {IVerificationMethod} from "../components/solid-actor/did-interfaces";
+import {obtainClientCredentials, register} from "../utils/css";
 
 export abstract class AbstractActorFactory<A> {
     documentLoader = createCustomDocumentLoader(getContextMap())
@@ -52,7 +53,24 @@ export class DidVCActorFactory extends AbstractActorFactory<DidVCActor> {
 }
 
 export class SolidVCActorFactory extends AbstractActorFactory<SolidVCActor> {
+    private register: boolean
+
+    constructor(register: boolean = false) {
+        super();
+        this.register = register;
+    }
+
+    async registerActor (r: ITestRecord) {
+        // Register users & pods, and get each actor's controls object
+        r.controls = await register(r.userConfig)
+        // Obtain client credentials
+        r.clientCredentials = await obtainClientCredentials(r.userConfig, r.controls!)
+        return r
+    }
+
     async createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
+        if(this.register)
+            r = await this.registerActor(r)
         const { webId } = r.userConfig;
         const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
         // Determine URL for DIDs container, based on the pod url
