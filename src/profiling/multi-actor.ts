@@ -3,9 +3,8 @@ import {customVocab} from "../contexts/customVocab";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import assert from "node:assert";
-import {SolidVCActorFactory} from "../tests/ActorFactory";
+import {DidVCActorFactory, SolidVCActorFactory} from "../tests/ActorFactory";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
-import {obtainClientCredentials, register} from "../utils/css";
 import {ITestRecord} from "../tests/interfaces";
 
 import {IActorStep, IActorStepRecord, IMultiActorReport} from "./interfaces";
@@ -115,8 +114,8 @@ let vp02: VerifiablePresentation
 let vr02: VerificationResult
 
 
-export async function initializeActors() {
-    const actorFactory = new SolidVCActorFactory(true)
+export async function initializeActors(actorFactory: DidVCActorFactory|SolidVCActorFactory) {
+
     const actorTags = ['alice', 'university', 'government', 'recruiter']
     const actorConfigRecords = Object.fromEntries(
         actorTags.map((actorTag: string) => [
@@ -125,7 +124,7 @@ export async function initializeActors() {
                 .find(r => r.testConfig.name === actorTag)
         ])
     )
-    
+
     const initializedActors = Object.fromEntries(
         await Promise.all(
             Object.entries(actorConfigRecords).map(
@@ -155,7 +154,7 @@ export namespace ActorSteps {
         vcDiploma = await actor.signCredential(cDiploma)
     }
 
-export async function createIdentityCredential(actor: ICredentialActor) {
+    export async function createIdentityCredential(actor: ICredentialActor) {
         cIdentity = actor.createCredential(credentialResources.identity.unsigned.credentialSubject)
         cIdentity['@context'] = credentialResources.identity.unsigned['@context']
     }
@@ -178,6 +177,7 @@ export async function createIdentityCredential(actor: ICredentialActor) {
 
     export async function verifyPresentation01(actor: ICredentialActor) {
         vr01 = await actor.verifyPresentation(vp01, challenge)
+        assert(vr01.verified === true) // Sanity check
     }
 
     export async function deriveIdentityCredential(actor: ICredentialActor) {
@@ -194,6 +194,7 @@ export async function createIdentityCredential(actor: ICredentialActor) {
 
     export async function verifyPresentation02(actor: ICredentialActor){
         vr02 = await actor.verifyPresentation(vp02, challenge)
+        assert(vr02.verified === true) // Sanity check
     }
 
 }
@@ -239,17 +240,21 @@ export namespace MultiActorEvaluator {
     }
 }
 
-initializeActors()
-    .then(MultiActorEvaluator.createActorSteps)
-    .then(MultiActorEvaluator.evaluate)
-    .then((multiActorReport: IMultiActorReport) => {
-        // multiActorReport.records[0].
-        console.log(multiActorReport)
-        const filenameReport = [
-            'multiactor-report',
-            multiActorReport.start
-        ].join('-') + '.json'
-        const fpathReport =path.join(dirProfilingReports, filenameReport)
-        writeFileSync(fpathReport, JSON.stringify(multiActorReport))
-        }
-    )
+export async function runMultiActorEvaluation(actorFactory: SolidVCActorFactory|DidVCActorFactory) {
+    initializeActors(actorFactory)
+        .then(MultiActorEvaluator.createActorSteps)
+        .then(MultiActorEvaluator.evaluate)
+        .then((multiActorReport: IMultiActorReport) => {
+                // multiActorReport.records[0].
+                console.log(multiActorReport)
+                const filenameReport = [
+                    'multiactor-report',
+                    multiActorReport.start
+                ].join('-') + '.json'
+                const fpathReport =path.join(dirProfilingReports, filenameReport)
+                writeFileSync(fpathReport, JSON.stringify(multiActorReport))
+            }
+        )
+
+}
+
