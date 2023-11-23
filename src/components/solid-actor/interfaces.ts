@@ -47,7 +47,13 @@ export interface ISolidPod {
 
 }
 
-export interface IActor {
+export interface IActorMetadata {
+    className?: string
+    tag?: string
+    role?: string
+}
+
+export interface IActor extends IActorMetadata {
     initialize(): Promise<void>
 
     isInitialized(): boolean
@@ -108,6 +114,7 @@ export interface IDeriver {
 }
 
 export interface ICredentialActor extends
+    IActorMetadata,
     ICredentialCreator,
     ISigner,
     IVerifier,
