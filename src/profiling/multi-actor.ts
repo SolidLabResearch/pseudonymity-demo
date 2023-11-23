@@ -116,7 +116,7 @@ let vr02: VerificationResult
 
 
 export async function initializeActors() {
-    const actorFactory = new SolidVCActorFactory()
+    const actorFactory = new SolidVCActorFactory(true)
     const actorTags = ['alice', 'university', 'government', 'recruiter']
     const actorConfigRecords = Object.fromEntries(
         actorTags.map((actorTag: string) => [
@@ -125,20 +125,13 @@ export async function initializeActors() {
                 .find(r => r.testConfig.name === actorTag)
         ])
     )
-    const registerActor = async (r: ITestRecord)=> {
-        // Register users & pods, and get each actor's controls object
-        r.controls = await register(r.userConfig)
-        // Obtain client credentials
-        r.clientCredentials = await obtainClientCredentials(r.userConfig, r.controls!)
-        return r
-    }
-
+    
     const initializedActors = Object.fromEntries(
         await Promise.all(
             Object.entries(actorConfigRecords).map(
                 async ([actorTag, acr]) => {
                     assert(acr!!)
-                    acr = await registerActor(acr!)
+                    // acr = await registerActor(acr!)
                     let actor: ICredentialActor = await actorFactory.createInitializedActor(acr!)
                     actor.tag = actorTag
                     actor.className = (actor as any).constructor.name
