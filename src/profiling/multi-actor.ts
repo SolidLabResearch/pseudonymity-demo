@@ -3,7 +3,7 @@ import {customVocab} from "../contexts/customVocab";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import assert from "node:assert";
-import {DidVCActorFactory, SolidVCActorFactory} from "../tests/ActorFactory";
+import {IActorFactory} from "../tests/ActorFactory";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {ITestRecord} from "../tests/interfaces";
 
@@ -12,6 +12,7 @@ import {trackActorStep} from "./track";
 import path from "path";
 import {dirProfilingReports} from "./config";
 import {writeFileSync} from "fs";
+import {writeJsonFile} from "../utils/io";
 
 
 const credentialResources = {
@@ -114,7 +115,7 @@ let vp02: VerifiablePresentation
 let vr02: VerificationResult
 
 
-export async function initializeActors(actorFactory: DidVCActorFactory|SolidVCActorFactory) {
+export async function initializeActors(actorFactory: IActorFactory<any>) {
 
     const actorTags = ['alice', 'university', 'government', 'recruiter']
     const actorConfigRecords = Object.fromEntries(
@@ -240,19 +241,27 @@ export namespace MultiActorEvaluator {
     }
 }
 
-export async function runMultiActorEvaluation(actorFactory: SolidVCActorFactory|DidVCActorFactory) {
-    initializeActors(actorFactory)
+export async function runMultiActorEvaluation(actorFactory: IActorFactory<ICredentialActor>) {
+    await initializeActors(actorFactory)
         .then(MultiActorEvaluator.createActorSteps)
         .then(MultiActorEvaluator.evaluate)
         .then((multiActorReport: IMultiActorReport) => {
-                // multiActorReport.records[0].
-                console.log(multiActorReport)
-                const filenameReport = [
-                    'multiactor-report',
-                    multiActorReport.start
-                ].join('-') + '.json'
-                const fpathReport =path.join(dirProfilingReports, filenameReport)
-                writeFileSync(fpathReport, JSON.stringify(multiActorReport))
+
+            // multiActorReport.records[0].
+            console.log(multiActorReport)
+            const filenameReport = [
+                'multiactor-report',
+                multiActorReport.start
+            ].join('-') + '.json'
+            const fpathReport =path.join(dirProfilingReports, filenameReport)
+            writeFileSync(fpathReport, JSON.stringify(multiActorReport))
+
+            // We can also export the documentloader cache options (as they will greatly influence the results)
+            const fpathDocumentLoaderCacheOptions = path.join(
+                dirProfilingReports, `${multiActorReport.start}documentLoaderCacheOptions.json`
+            )
+            writeJsonFile(fpathDocumentLoaderCacheOptions, actorFactory.documentLoaderCacheOptions)
+
             }
         )
 

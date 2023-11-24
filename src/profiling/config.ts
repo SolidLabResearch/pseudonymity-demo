@@ -1,4 +1,5 @@
 import path from "path";
+import {DocumentLoaderCacheOptions} from "../contexts/contexts";
 
 const dirReports = path.resolve(__dirname, '../../reports/')
 export const dirProfilingReports = path.join(dirReports, 'profiling')
@@ -9,3 +10,10 @@ export enum ProfileMode {
 
 }
 export const profileMode : ProfileMode = ProfileMode.multiActor
+
+export const nIterations = 500
+
+export const documentLoaderCacheOptions = {
+    DID: {cacheResolvedDIDDocs: true},
+    HTTP: {cacheWebResourcesResolvedFromLocalHostInstances: false, cacheWebResourcesResolvedFromTheWeb: true}
+} as DocumentLoaderCacheOptions

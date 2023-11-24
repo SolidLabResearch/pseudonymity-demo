@@ -54,7 +54,16 @@ export {
     ctx
 }
 
-export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader {
+export interface DocumentLoaderCacheOptions  {
+    DID: {
+        cacheResolvedDIDDocs: boolean
+    }
+    HTTP: {
+        cacheWebResourcesResolvedFromLocalHostInstances: boolean
+        cacheWebResourcesResolvedFromTheWeb: boolean
+    }
+}
+export function createCustomDocumentLoader(ctx: Map<any, any>, cacheOptions?: DocumentLoaderCacheOptions): IDocumentLoader {
     const cache = new Map<string, any>()
     return async (url: any) => {
         const context = ctx.get(url);
@@ -97,7 +106,8 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader 
                     throw new NotYetImplementedError(`DID Method: ${method} is not yet implemented!`)
             }
             const resolverResponse = await didResolver!(url)
-            cache.set(resolverResponse.documentUrl!, resolverResponse.document)
+            if(cacheOptions!! && cacheOptions?.DID!.cacheResolvedDIDDocs)
+                cache.set(resolverResponse.documentUrl!, resolverResponse.document)
             return resolverResponse
         }
         else { // Resolve using fetch
@@ -127,7 +137,14 @@ export function createCustomDocumentLoader(ctx: Map<any, any>): IDocumentLoader 
                     `Error: could not resolve & parse URL: ${response.url}`
                 )
 
-            cache.set(url, document)
+            if(
+                (cacheOptions?.HTTP.cacheWebResourcesResolvedFromLocalHostInstances
+                && url.startsWith('http://localhost'))
+                ||(cacheOptions?.HTTP.cacheWebResourcesResolvedFromTheWeb
+                    && url.startsWith('http://'))
+            )
+                cache.set(url, document)
+
             return {
                 contextUrl: null,
                 documentUrl: url,

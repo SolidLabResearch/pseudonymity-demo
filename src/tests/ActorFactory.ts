@@ -2,19 +2,39 @@ import {ITestRecord} from "./interfaces";
 import {SolidVCActor} from "../components/solid-actor/SolidVCActor";
 import {CssProxy} from "../components/solid-actor/CssProxy";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import {createCustomDocumentLoader} from "../contexts/contexts";
+import {createCustomDocumentLoader, DocumentLoaderCacheOptions} from "../contexts/contexts";
 import {getContextMap} from "./config/contextmap";
 import {DidActor} from "../components/solid-actor/DidActor";
 import {DidVCActor} from "../components/solid-actor/DidVCActor";
 import {toDidKeyDocument} from "../utils/keypair";
 import {IVerificationMethod} from "../components/solid-actor/did-interfaces";
 import {obtainClientCredentials, register} from "../utils/css";
+import {IDocumentLoader} from "../contexts/interfaces";
 
-export abstract class AbstractActorFactory<A> {
-    documentLoader = createCustomDocumentLoader(getContextMap())
+export interface IActorFactory<A> {
+    documentLoader: IDocumentLoader
+    documentLoaderCacheOptions: DocumentLoaderCacheOptions
+    createInitializedActor(r: ITestRecord): Promise<A>
+    cache: {
+        [key: string]: A
+    }
+}
 
 
-    abstract createInitializedActor(r?: ITestRecord): Promise<A>
+export abstract class AbstractActorFactory<A> implements IActorFactory<A> {
+    cache: { [p: string]: A };
+    documentLoaderCacheOptions: DocumentLoaderCacheOptions
+
+    documentLoader: IDocumentLoader
+    constructor(documentLoaderCacheOptions?: DocumentLoaderCacheOptions) {
+
+        this.documentLoader = createCustomDocumentLoader(getContextMap(),documentLoaderCacheOptions)
+        this.documentLoaderCacheOptions = documentLoaderCacheOptions!
+        this.cache = {}
+    }
+
+
+    abstract createInitializedActor(r: ITestRecord): Promise<A>
 }
 
 export class DidActorFactory extends AbstractActorFactory<DidActor> {
@@ -30,9 +50,20 @@ export class DidActorFactory extends AbstractActorFactory<DidActor> {
 
 }
 export class DidVCActorFactory extends AbstractActorFactory<DidVCActor> {
-    async createInitializedActor(r?: ITestRecord): Promise<DidVCActor> {
+
+
+    constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
+        super(documentLoaderCacheOptions);
+    }
+
+    async createInitializedActor(r: ITestRecord): Promise<DidVCActor> {
+
+        if(Object.keys(this.cache).includes(r.userConfig.email)) {
+            console.log('returning from CACHE!')
+            return this.cache[r.userConfig.email]
+        }
         // Generate BLS12381 G2 Key using a seed
-        const seed = Uint8Array.from(Buffer.from('testseed'))
+        const seed = Uint8Array.from(Buffer.from(r.userConfig.password))
         let key = await Bls12381G2KeyPair.generate({ seed })
         // Create its corresponding did:key DID Document
         const didKeyDocument = toDidKeyDocument(key)
@@ -47,17 +78,18 @@ export class DidVCActorFactory extends AbstractActorFactory<DidVCActor> {
         })
         const actor = new DidVCActor(key,this.documentLoader);
         await actor.initialize()
+        this.cache[r.userConfig.email] = actor
+        console.log(`DidVCActor cache size: ${Object.keys(this.cache).length}`)
         return actor
     }
 
 }
 
 export class SolidVCActorFactory extends AbstractActorFactory<SolidVCActor> {
-    private register: boolean
 
-    constructor(register: boolean = false) {
-        super();
-        this.register = register;
+
+    constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
+        super(documentLoaderCacheOptions);
     }
 
     async registerActor (r: ITestRecord) {
@@ -69,9 +101,14 @@ export class SolidVCActorFactory extends AbstractActorFactory<SolidVCActor> {
     }
 
     async createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
-        if(this.register)
-            r = await this.registerActor(r)
         const { webId } = r.userConfig;
+        if(Object.keys(this.cache).includes(r.userConfig.webId)) {
+            console.log('returning from CACHE!')
+            return this.cache[webId]
+        }
+
+        r = await this.registerActor(r)
+
         const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
         // Determine URL for DIDs container, based on the pod url
         const didsContainer = webId.replace('#me','')
@@ -91,6 +128,8 @@ export class SolidVCActorFactory extends AbstractActorFactory<SolidVCActor> {
         const a = new SolidVCActor(key, keyName, this.documentLoader, proxy)
 
         await a.initialize()
+        this.cache[a.webId]= a
+
         return a
     }
 
