@@ -22,7 +22,8 @@ export async function trackActorStep(
         name,
         tag,
         role,
-        className
+        className,
+        documentLoaderCacheOptions: actor.documentLoaderCacheOptions
     }
 }
 

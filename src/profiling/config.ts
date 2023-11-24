@@ -11,9 +11,50 @@ export enum ProfileMode {
 }
 export const profileMode : ProfileMode = ProfileMode.multiActor
 
-export const nIterations = 500
+export const nIterations = 3
 
 export const documentLoaderCacheOptions = {
     DID: {cacheResolvedDIDDocs: true},
     HTTP: {cacheWebResourcesResolvedFromLocalHostInstances: false, cacheWebResourcesResolvedFromTheWeb: true}
 } as DocumentLoaderCacheOptions
+
+export const defaultDCLOConfigIndex = 3
+
+export const documentLoaderCacheOptionConfigurations = [
+    {
+        DID: {
+            cacheResolvedDIDDocs: false
+        },
+        HTTP: {
+            cacheWebResourcesResolvedFromLocalHostInstances: false,
+            cacheWebResourcesResolvedFromTheWeb: false
+        }
+    },
+    {
+        DID: {
+            cacheResolvedDIDDocs: true
+        },
+        HTTP: {
+            cacheWebResourcesResolvedFromLocalHostInstances: false,
+            cacheWebResourcesResolvedFromTheWeb: false
+        }
+    },
+    {
+        DID: {
+            cacheResolvedDIDDocs: true
+        },
+        HTTP: {
+            cacheWebResourcesResolvedFromLocalHostInstances: false,
+            cacheWebResourcesResolvedFromTheWeb: true
+        }
+    },
+    {
+        DID: {
+            cacheResolvedDIDDocs: true
+        },
+        HTTP: {
+            cacheWebResourcesResolvedFromLocalHostInstances: true,
+            cacheWebResourcesResolvedFromTheWeb: true
+        }
+    }
+]

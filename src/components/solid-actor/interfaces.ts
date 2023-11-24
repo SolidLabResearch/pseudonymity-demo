@@ -3,6 +3,7 @@ import {ClientCredentials} from "../../interfaces";
 import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import {JsonLdDocument} from "jsonld";
+import {DocumentLoaderCacheOptions} from "../../contexts/contexts";
 
 export type VerificationResult = any // Joachim is sad now :(
 /**
@@ -51,6 +52,7 @@ export interface IActorMetadata {
     className?: string
     tag?: string
     role?: string
+    documentLoaderCacheOptions?: DocumentLoaderCacheOptions
 }
 
 export interface IActor extends IActorMetadata {

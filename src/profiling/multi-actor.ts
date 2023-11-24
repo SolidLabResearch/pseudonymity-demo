@@ -10,10 +10,8 @@ import {ITestRecord} from "../tests/interfaces";
 import {IActorStep, IActorStepRecord, IMultiActorReport} from "./interfaces";
 import {trackActorStep} from "./track";
 import path from "path";
-import {dirProfilingReports} from "./config";
 import {writeFileSync} from "fs";
-import {writeJsonFile} from "../utils/io";
-
+import {mkdirp} from "fs-extra";
 
 const credentialResources = {
     'identity': {
@@ -235,35 +233,52 @@ export namespace MultiActorEvaluator {
             start: startEvaluation,
             end: endEvaluation,
             delta: endEvaluation - startEvaluation,
-            records: stepRecords
+            records: stepRecords,
 
         } as IMultiActorReport
     }
 }
 
-export async function runMultiActorEvaluation(actorFactory: IActorFactory<ICredentialActor>) {
-    await initializeActors(actorFactory)
+/**
+ * Run multi actor evaluation on provided actor factories.
+ * Export results to given parent dir.
+ * /parentDir
+ *      documentLoaderCacheOptions.json
+ *      actorFactory-X/
+ *          multiactor-report-1.json
+ *          multiactor-report-2.json
+ *          ...
+ *      actorFactory-Y/
+ *         multiactor-report-1.json
+ *         multiactor-report-2.json
+ *         ...
+ * @param actorFactories
+ * @param parentDir
+ */
+export async function runMultiActorEvaluation(actorFactories: IActorFactory<ICredentialActor>[], parentDir: string) {
+
+
+    for await (const actorFactory of actorFactories) {
+        console.log(`Profiling (${(actorFactory as any).constructor.name})`)
+        await initializeActors(actorFactory)
         .then(MultiActorEvaluator.createActorSteps)
         .then(MultiActorEvaluator.evaluate)
-        .then((multiActorReport: IMultiActorReport) => {
-
-            // multiActorReport.records[0].
-            console.log(multiActorReport)
+        .then(async (multiActorReport: IMultiActorReport) => {
             const filenameReport = [
                 'multiactor-report',
                 multiActorReport.start
             ].join('-') + '.json'
-            const fpathReport =path.join(dirProfilingReports, filenameReport)
-            writeFileSync(fpathReport, JSON.stringify(multiActorReport))
 
-            // We can also export the documentloader cache options (as they will greatly influence the results)
-            const fpathDocumentLoaderCacheOptions = path.join(
-                dirProfilingReports, `${multiActorReport.start}documentLoaderCacheOptions.json`
-            )
-            writeJsonFile(fpathDocumentLoaderCacheOptions, actorFactory.documentLoaderCacheOptions)
-
+            await mkdirp(parentDir)
+            const fpathReport =path.join(parentDir, filenameReport)
+            const multiActorReportUpdate = {
+                ...multiActorReport,
+                documentLoaderCacheOptions: actorFactory.documentLoaderCacheOptions
             }
-        )
+            writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate))
+
+        })
+    }
 
 }
 
