@@ -8,12 +8,13 @@ import credentialsContext from 'credentials-context';
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import n3 from 'n3'
 import {SolidVCActorFactory} from "../ActorFactory";
+import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
 
     let records: Array<ITestRecord> = cssTestConfigRecords.filter(r => r.testConfig.name === SELECTED_TEST_ACTOR)
-    const actorFactory = new SolidVCActorFactory(true)
+    const actorFactory = new SolidVCActorFactory(defaultDocumentLoaderCacheOptions)
 
     async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
         return await actorFactory.createInitializedActor(r)

@@ -9,6 +9,9 @@ import {toDidKeyDocument} from "../../utils/keypair";
 import {IVerificationMethod} from "../../components/solid-actor/did-interfaces";
 import {DidVCActor} from "../../components/solid-actor/DidVCActor";
 import {DidVCActorFactory} from "../ActorFactory";
+import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
+import {ITestRecord} from "../interfaces";
+import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 
 /**
  * Build context map
@@ -28,7 +31,9 @@ export function getContextMap() {
 }
 
 describe('DidVCActor extends AbstractVCActor', (): void => {
+    const SELECTED_TEST_ACTOR = 'alice'
 
+    let record = cssTestConfigRecords.find(r => r.testConfig.name === SELECTED_TEST_ACTOR)!
     let documentLoader: IDocumentLoader
 
     beforeAll(async (): Promise<void> => {
@@ -40,9 +45,9 @@ describe('DidVCActor extends AbstractVCActor', (): void => {
     });
 
 
-    const actorFactory = new DidVCActorFactory()
+    const actorFactory = new DidVCActorFactory(defaultDocumentLoaderCacheOptions)
     async function createInitializedActor(): Promise<DidVCActor> {
-        return await actorFactory.createInitializedActor()
+        return await actorFactory.createInitializedActor(record)
     }
 
     it('Actor (identified by its did:key identifier) can create, sign, and verify a VC', async () => {
