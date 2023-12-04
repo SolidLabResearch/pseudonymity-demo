@@ -6,7 +6,7 @@ import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {ITestRecord} from "../interfaces";
 import path from "path";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import {getContextMap} from "../config/contextmap";
+import {defaultDocumentLoaderCacheOptions, getContextMap} from "../config/contextmap";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {joinUrlPaths} from "../../utils/url";
 import {SolidVCActorFactory} from "../ActorFactory";
@@ -20,18 +20,12 @@ describe('Evaluation - Phase 1 - Using Web Resolvable DID Document', (): void =>
     let government: SolidVCActor
     let university: SolidVCActor
 
-    const actorFactory = new SolidVCActorFactory()
+    const actorFactory = new SolidVCActorFactory(defaultDocumentLoaderCacheOptions)
 
     beforeAll(async (): Promise<void> => {
 
         // Create & start each actor's app (server)
         for await (const r of records) {
-            // Register users & pods, and get each actor's controls object
-            const controls = await register(r.userConfig)
-            expect(controls).toBeTruthy()
-            r.controls = controls
-            // Obtain client credentials
-            r.clientCredentials = await obtainClientCredentials(r.userConfig, r.controls!)
             // Attach initialized SolidVCActor
             r.actor = await actorFactory.createInitializedActor(r)
         }

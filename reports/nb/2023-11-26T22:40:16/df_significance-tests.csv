@@ -1,0 +1,13 @@
+,tvalue,pvalue,df,_alternative,_standard_error,_estimate,REJECT_H0,Conclusion
+createDiplomaCredential,30.673772874799145,1.6985654844623856e-181,3220.0,0.0,0.0420833523570003,1.2908551920087705,True,"Significant difference (p<0.05) in ""delta_log1p"" between DidVCActor and SolidVCActor"
+signDiplomaCredential,-0.6789690537422425,0.4972062673526949,3220.0,0.0,0.0026971560448030315,-0.0018312854875350837,False,"No significant difference in ""delta_log1p"" between DidVCActor and SolidVCActor"
+createIdentityCredential,19.87731258883192,5.016194474998231e-83,3220.0,0.0,0.0073162570136602245,0.1454275276407582,True,"Significant difference (p<0.05) in ""delta_log1p"" between DidVCActor and SolidVCActor"
+signIdentityCredential,0.45052100378760523,0.652365144697498,3220.0,0.0,0.0028195520315352014,0.0012702674114786205,False,"No significant difference in ""delta_log1p"" between DidVCActor and SolidVCActor"
+deriveDiplomaCredential,54.92852180262622,0.0,3220.0,0.0,0.0016793551404231416,0.09224449544508495,True,"Significant difference (p<0.05) in ""delta_log1p"" between DidVCActor and SolidVCActor"
+createPresentation01,17.905332387402932,2.0054350660160143e-68,3220.0,0.0,0.007497252317960805,0.1342407947453153,True,"Significant difference (p<0.05) in ""delta_log1p"" between DidVCActor and SolidVCActor"
+signPresentation01,0.18459506357019334,0.8535582827523729,3220.0,0.0,0.0029135497312239357,0.0005378268978502021,False,"No significant difference in ""delta_log1p"" between DidVCActor and SolidVCActor"
+verifyPresentation01,143.77114778925642,0.0,3220.0,0.0,0.005880231730231311,0.8454076651221607,True,"Significant difference (p<0.05) in ""delta_log1p"" between DidVCActor and SolidVCActor"
+deriveIdentityCredential,45.771197846925936,0.0,3220.0,0.0,0.0016922160721995275,0.07745475664039247,True,"Significant difference (p<0.05) in ""delta_log1p"" between DidVCActor and SolidVCActor"
+createPresentation02,19.290480593013594,1.4850628647125765e-78,3220.0,0.0,0.007494215036720329,0.14456700972572417,True,"Significant difference (p<0.05) in ""delta_log1p"" between DidVCActor and SolidVCActor"
+signPresentation02,0.5476341207221384,0.583981111838028,3220.0,0.0,0.0028551352125636854,0.0015635694616751294,False,"No significant difference in ""delta_log1p"" between DidVCActor and SolidVCActor"
+verifyPresentation02,152.6608020168419,0.0,3220.0,0.0,0.00543094971074946,0.8290931385561482,True,"Significant difference (p<0.05) in ""delta_log1p"" between DidVCActor and SolidVCActor"

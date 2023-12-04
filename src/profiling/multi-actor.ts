@@ -3,10 +3,16 @@ import {customVocab} from "../contexts/customVocab";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import assert from "node:assert";
-import {SolidVCActorFactory} from "../tests/ActorFactory";
-import {ActorTestConfiguration, cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
-import {obtainClientCredentials, register} from "../utils/css";
+import {IActorFactory} from "../tests/ActorFactory";
+import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {ITestRecord} from "../tests/interfaces";
+
+import {IActorStep, IActorStepRecord, IMultiActorReport} from "./interfaces";
+import {trackActorStep} from "./track";
+import path from "path";
+import {writeFileSync} from "fs";
+import {mkdirp} from "fs-extra";
+
 const credentialResources = {
     'identity': {
         unsigned: {
@@ -78,113 +84,201 @@ const credentialResources = {
         }
     }
 }
-namespace UsecaseProfiling {
-    // Issuers
-    let university: ICredentialActor
-    let government: ICredentialActor
-    // Holder
-    let holder: ICredentialActor
-    // Verifier
-    let recruiter: ICredentialActor
 
-    // Credentials
-    let cIdentity: VCDIVerifiableCredential
-    let vcIdentity: VCDIVerifiableCredential
-    let dvcIdentity: VCDIVerifiableCredential
+// Issuers
+let university: ICredentialActor
+let government: ICredentialActor
+// Holder
+let holder: ICredentialActor
+// Verifier
+let recruiter: ICredentialActor
 
-    let cDiploma: VCDIVerifiableCredential
-    let vcDiploma: VCDIVerifiableCredential
-    let dvcDiploma: VCDIVerifiableCredential
+// Credentials
+let cIdentity: VCDIVerifiableCredential
+let vcIdentity: VCDIVerifiableCredential
+let dvcIdentity: VCDIVerifiableCredential
 
-    let p01: VerifiablePresentation
-    let vp01: VerifiablePresentation
-    let vr01: VerificationResult
+let cDiploma: VCDIVerifiableCredential
+let vcDiploma: VCDIVerifiableCredential
+let dvcDiploma: VCDIVerifiableCredential
 
-    let p02: VerifiablePresentation
-    let vp02: VerifiablePresentation
-    let vr02: VerificationResult
+const challenge = 'ch4ll3ng3'
 
-    export async function initializeActors() {
-        const actorFactory = new SolidVCActorFactory()
-        const actorTags = ['alice', 'university', 'government', 'recruiter']
-        const actorConfigRecords = Object.fromEntries(
-            actorTags.map((actorTag: string) => [
-                actorTag,
-                (cssTestConfigRecords as Array<ITestRecord>)
-                    .find(r => r.testConfig.name === actorTag)
-            ])
-        )
-        const registerActor = async (r: ITestRecord)=> {
-            // Register users & pods, and get each actor's controls object
-            r.controls = await register(r.userConfig)
-            // Obtain client credentials
-            r.clientCredentials = await obtainClientCredentials(r.userConfig, r.controls!)
-            return r
-        }
+let p01: VerifiablePresentation
+let vp01: VerifiablePresentation
+let vr01: VerificationResult
 
-        const initializedActors = Object.fromEntries(
-            await Promise.all(
-                Object.entries(actorConfigRecords).map(
-                    async ([actorTag, acr]) => {
-                        assert(acr!!)
-                        acr = await registerActor(acr!)
-                        return [actorTag,await actorFactory.createInitializedActor(acr!)]
-                    }
-                )
+let p02: VerifiablePresentation
+let vp02: VerifiablePresentation
+let vr02: VerificationResult
+
+
+export async function initializeActors(actorFactory: IActorFactory<any>) {
+
+    const actorTags = ['alice', 'university', 'government', 'recruiter']
+    const actorConfigRecords = Object.fromEntries(
+        actorTags.map((actorTag: string) => [
+            actorTag,
+            (cssTestConfigRecords as Array<ITestRecord>)
+                .find(r => r.testConfig.name === actorTag)
+        ])
+    )
+
+    const initializedActors = Object.fromEntries(
+        await Promise.all(
+            Object.entries(actorConfigRecords).map(
+                async ([actorTag, acr]) => {
+                    assert(acr!!)
+                    // acr = await registerActor(acr!)
+                    let actor: ICredentialActor = await actorFactory.createInitializedActor(acr!)
+                    actor.tag = actorTag
+                    actor.className = (actor as any).constructor.name
+                    return [actorTag, actor]
+                }
             )
-        ) as {[p: string]: ICredentialActor}
+        )
+    ) as {[p: string]: ICredentialActor}
 
-        holder = initializedActors['alice']
-        university = initializedActors['university']
-        government = initializedActors['government']
-        recruiter = initializedActors['recruiter']
-
+    holder = initializedActors['alice']
+    university = initializedActors['university']
+    government = initializedActors['government']
+    recruiter = initializedActors['recruiter']
+}
+export namespace ActorSteps {
+    export async function createDiplomaCredential(actor: ICredentialActor)  {
+        cDiploma = actor.createCredential(credentialResources.diploma.unsigned.credentialSubject)
+        cDiploma['@context'] = credentialResources.diploma.unsigned['@context']
+    }
+    export async function signDiplomaCredential(actor: ICredentialActor) {
+        vcDiploma = await actor.signCredential(cDiploma)
     }
 
-    export async function phase1(){
-        const challenge = 'ch4ll3ng3'
-
-        // Government creates identity credential
-        cIdentity = government.createCredential(credentialResources.identity.unsigned.credentialSubject)
+    export async function createIdentityCredential(actor: ICredentialActor) {
+        cIdentity = actor.createCredential(credentialResources.identity.unsigned.credentialSubject)
         cIdentity['@context'] = credentialResources.identity.unsigned['@context']
-        vcIdentity = await government.signCredential(cIdentity)
+    }
 
-        // University creates diploma credential
-        cDiploma = university.createCredential(credentialResources.diploma.unsigned.credentialSubject)
-        cDiploma['@context'] = credentialResources.diploma.unsigned['@context']
-        vcDiploma = await university.signCredential(cDiploma)
+    export async function signIdentityCredential(actor: ICredentialActor) {
+        vcIdentity = await actor.signCredential(cIdentity)
+    }
 
-        /** Recruiter sends holder the required attributes for the diploma verification phase **/
+    export async function deriveDiplomaCredential(actor: ICredentialActor) {
+        dvcDiploma = await actor.deriveCredential(vcIdentity, credentialResources.diploma.derivationFrame)
+    }
 
-        // Holder derives diploma credential
-        dvcDiploma = await holder.deriveCredential(vcDiploma, credentialResources.diploma.derivationFrame)
+    export async function createPresentation01(actor: ICredentialActor) {
+        p01 = actor.createPresentation([dvcDiploma], actor.identifier)
+    }
 
-        // Holder creates VP01 with derived diploma credential
-        p01 = holder.createPresentation([dvcDiploma], holder.identifier)
-        vp01 = await holder.signPresentation(p01,challenge)
+    export async function signPresentation01(actor: ICredentialActor){
+        vp01 = await actor.signPresentation(p01,challenge)
+    }
 
-        // Recruiter verifies VP01
-        vr01 = await recruiter.verifyPresentation(vp01, challenge)
-        // Sanity check: VP01verificationResult is valid
-        assert(vr01.verified === true)
-        console.log(vr01)
+    export async function verifyPresentation01(actor: ICredentialActor) {
+        vr01 = await actor.verifyPresentation(vp01, challenge)
+        assert(vr01.verified === true) // Sanity check
+    }
 
-        /** Recruiter sends holder the required attributes for the identity verification phase **/
-        /** Holder sends VP01 to recruiter **/
+    export async function deriveIdentityCredential(actor: ICredentialActor) {
+        dvcIdentity = await actor.deriveCredential(vcIdentity, credentialResources.identity.derivationFrame)
+    }
 
-        // Holder derives identity credential
-        dvcIdentity = await holder.deriveCredential(vcIdentity, credentialResources.identity.derivationFrame)
+    export async function createPresentation02(actor: ICredentialActor){
+        p02 = actor.createPresentation([dvcIdentity], actor.identifier)
+    }
 
-        // Holder creates VP02 with derived identity credential
-        p02 = holder.createPresentation([dvcIdentity], holder.identifier)
-        vp02 = await holder.signPresentation(p02, challenge)
+    export async function signPresentation02(actor: ICredentialActor){
+        vp02 = await actor.signPresentation(p02, challenge)
+    }
 
-        // Recruiter verifies VP02
-        vr02 = await recruiter.verifyPresentation(vp02, challenge)
-        // Sanity check: VP02verificationResult is valid
-        assert(vr02.verified === true)
+    export async function verifyPresentation02(actor: ICredentialActor){
+        vr02 = await actor.verifyPresentation(vp02, challenge)
+        assert(vr02.verified === true) // Sanity check
+    }
 
+}
+
+export namespace MultiActorEvaluator {
+    export const createActorSteps = () : IActorStep[] => {
+        return [
+            {actor: university, f: ActorSteps.createDiplomaCredential},
+            {actor: university, f: ActorSteps.signDiplomaCredential},
+            {actor: government, f: ActorSteps.createIdentityCredential},
+            {actor: government, f: ActorSteps.signIdentityCredential},
+
+            {actor: holder, f: ActorSteps.deriveDiplomaCredential},
+            {actor: holder, f: ActorSteps.createPresentation01},
+            {actor: holder, f: ActorSteps.signPresentation01},
+
+            {actor: recruiter, f: ActorSteps.verifyPresentation01},
+
+            {actor: holder, f: ActorSteps.deriveIdentityCredential},
+            {actor: holder, f: ActorSteps.createPresentation02},
+            {actor: holder, f: ActorSteps.signPresentation02},
+
+            {actor: recruiter, f: ActorSteps.verifyPresentation02},
+        ]
+    }
+    export async function evaluate(actorSteps: Array<IActorStep>): Promise<IMultiActorReport> {
+        const startEvaluation = Date.now()
+        const stepRecords  = new Array<IActorStepRecord>()
+        let stepIndex = 0;
+        for await (const s of actorSteps) {
+            const actorStepRecord = await trackActorStep(s)
+            stepRecords.push({  index: stepIndex, ...actorStepRecord,})
+            stepIndex++;
+        }
+        const endEvaluation = Date.now()
+        return {
+            start: startEvaluation,
+            end: endEvaluation,
+            delta: endEvaluation - startEvaluation,
+            records: stepRecords,
+
+        } as IMultiActorReport
     }
 }
-UsecaseProfiling.initializeActors()
-    .then(UsecaseProfiling.phase1)
+
+/**
+ * Run multi actor evaluation on provided actor factories.
+ * Export results to given parent dir.
+ * /parentDir
+ *      documentLoaderCacheOptions.json
+ *      actorFactory-X/
+ *          multiactor-report-1.json
+ *          multiactor-report-2.json
+ *          ...
+ *      actorFactory-Y/
+ *         multiactor-report-1.json
+ *         multiactor-report-2.json
+ *         ...
+ * @param actorFactories
+ * @param parentDir
+ */
+export async function runMultiActorEvaluation(actorFactories: IActorFactory<ICredentialActor>[], parentDir: string) {
+
+
+    for await (const actorFactory of actorFactories) {
+        console.log(`Profiling (${(actorFactory as any).constructor.name})`)
+        await initializeActors(actorFactory)
+        .then(MultiActorEvaluator.createActorSteps)
+        .then(MultiActorEvaluator.evaluate)
+        .then(async (multiActorReport: IMultiActorReport) => {
+            const filenameReport = [
+                'multiactor-report',
+                multiActorReport.start
+            ].join('-') + '.json'
+
+            await mkdirp(parentDir)
+            const fpathReport =path.join(parentDir, filenameReport)
+            const multiActorReportUpdate = {
+                ...multiActorReport,
+                documentLoaderCacheOptions: actorFactory.documentLoaderCacheOptions
+            }
+            writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate))
+
+        })
+    }
+
+}
+

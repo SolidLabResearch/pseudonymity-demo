@@ -8,29 +8,13 @@ import credentialsContext from 'credentials-context';
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import n3 from 'n3'
 import {SolidVCActorFactory} from "../ActorFactory";
+import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
 
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
 
     let records: Array<ITestRecord> = cssTestConfigRecords.filter(r => r.testConfig.name === SELECTED_TEST_ACTOR)
-    const actorFactory = new SolidVCActorFactory()
-
-    beforeAll(async (): Promise<void> => {
-        // Create & start each actor's app (server)
-        for await (const r of records) {
-            // Register users & pods, and get each actor's controls object
-            const controls = await register(r.userConfig)
-            expect(controls).toBeTruthy()
-            r.controls = controls
-            // Obtain client credentials
-            r.clientCredentials = await obtainClientCredentials(r.userConfig, r.controls!)
-        }
-    });
-
-    afterAll(async (): Promise<void> => {
-
-    });
-
+    const actorFactory = new SolidVCActorFactory(defaultDocumentLoaderCacheOptions)
 
     async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
         return await actorFactory.createInitializedActor(r)

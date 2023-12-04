@@ -1,0 +1,13 @@
+,cohend_DidVCActor_SolidVCActor__delta_log1p,effect_class,explanation
+createDiplomaCredential,1.0807728471248015,LARGE,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 1.0807728471248015 (which can be classified as LARGE)."
+signDiplomaCredential,-0.023923086355168335,VERY_SMALL,"The mean of DidVCActor is smaller than the mean of SolidVCActor, with effect size: -0.023923086355168335 (which can be classified as VERY_SMALL)."
+createIdentityCredential,0.7003657426658256,MEDIUM,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 0.7003657426658256 (which can be classified as MEDIUM)."
+signIdentityCredential,0.01587384994798249,VERY_SMALL,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 0.01587384994798249 (which can be classified as VERY_SMALL)."
+deriveDiplomaCredential,1.9353750560549572,VERY_LARGE,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 1.9353750560549572 (which can be classified as VERY_LARGE)."
+createPresentation01,0.6308841479017578,MEDIUM,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 0.6308841479017578 (which can be classified as MEDIUM)."
+signPresentation01,0.006504101508290548,NIHIL,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 0.006504101508290548 (which can be classified as NIHIL)."
+verifyPresentation01,5.065694180002759,HUGE,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 5.065694180002759 (which can be classified as HUGE)."
+deriveIdentityCredential,1.6127219828890706,VERY_LARGE,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 1.6127219828890706 (which can be classified as VERY_LARGE)."
+createPresentation02,0.6796890528600683,MEDIUM,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 0.6796890528600683 (which can be classified as MEDIUM)."
+signPresentation02,0.019295575091182345,VERY_SMALL,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 0.019295575091182345 (which can be classified as VERY_SMALL)."
+verifyPresentation02,5.378916063359537,HUGE,"The mean of DidVCActor is greater than the mean of SolidVCActor, with effect size: 5.378916063359537 (which can be classified as HUGE)."

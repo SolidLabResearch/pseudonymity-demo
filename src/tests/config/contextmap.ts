@@ -23,3 +23,12 @@ export function getContextMap() {
     return ctx
 }
 
+export const defaultDocumentLoaderCacheOptions = {
+    DID: {
+        cacheResolvedDIDDocs: false
+    },
+    HTTP: {
+        cacheWebResourcesResolvedFromLocalHostInstances: false,
+        cacheWebResourcesResolvedFromTheWeb: false
+    }
+}
