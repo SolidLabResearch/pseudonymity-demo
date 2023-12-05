@@ -1,14 +1,16 @@
-import {IActor} from "./interfaces";
+import {IActor, ICredentialActor} from "./interfaces";
 
-export class CompoundActor<A1 extends IActor, A2 extends IActor> implements IActor {
+export class CompoundActor<A1 extends ICredentialActor, A2 extends ICredentialActor> implements IActor {
     protected a1: A1
     protected a2: A2
-    private actors: IActor[]
+    private actors: ICredentialActor[]
+    private _activeActorIndex: number = 0
 
     constructor(a1: A1, a2: A2) {
         this.a1 = a1;
         this.a2 = a2;
         this.actors = [a1, a2]
+        this.activeActorIndex = 0 // default to first actor
     }
 
     async initialize(): Promise<void> {
@@ -22,4 +24,16 @@ export class CompoundActor<A1 extends IActor, A2 extends IActor> implements IAct
             .map(a => a.isInitialized())
             .every(b => b)
     }
+
+    get activeActor() {
+        return this.actors[this.activeActorIndex]
+    }
+    set activeActorIndex(value: number) {
+        this._activeActorIndex = value;
+    }
+
+    get activeActorIndex(): number {
+        return this._activeActorIndex;
+    }
 }
+

@@ -18,6 +18,24 @@ services:
       retries: 100
       start_period: 1s
 
+  css_pseudo:
+    profiles:
+      - all
+      - components
+      - usecases
+    image: solidproject/community-server:7
+    environment:
+      - CSS_PORT=${CSS_PORT_PSEUDO}
+      - CSS_SHOW_STACK_TRACE=${CSS_SHOW_STACK_TRACE}
+    ports:
+      - ${CSS_PORT_PSEUDO}:${CSS_PORT_PSEUDO}
+    healthcheck:
+      test: "[ -e healthy.flag ] || if wget --no-check-certificate http://localhost:${CSS_PORT_PSEUDO} --spider; then touch healthy.flag; else false; fi"
+      interval: 1s
+      timeout: 1s
+      retries: 100
+      start_period: 3s
+
   css_recruiter:
     profiles:
       - all
