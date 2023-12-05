@@ -116,6 +116,7 @@ export interface IDeriver {
 }
 
 export interface ICredentialActor extends
+    IActor,
     IActorMetadata,
     ICredentialCreator,
     ISigner,
