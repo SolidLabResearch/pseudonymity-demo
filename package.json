@@ -54,6 +54,8 @@
     "profile:web-resolvable": "npx ts-node src/profiling/web-resolvable.ts",
     "profile_old": "npm run test:usecases:setup && npm run profile:web-resolvable && npm run profile:did-key",
     "profile": "npm run test:usecases:setup && npx ts-node src/profiling/profile.ts",
+    "profile:single": "npm run profile -- --dcloConfig=0 --n=1",
+    "profile:3rd-party": "npm run test:usecases:setup && ts-node src/profiling/third-party-pseudonymizer.ts",
     "sandbox": "npx ts-node sandbox.ts",
     "sandbox:watch": "nodemon -w sandbox.ts --exec npm run sandbox"
   },

@@ -7,11 +7,15 @@ import {IActorFactory} from "../tests/ActorFactory";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {ITestRecord} from "../tests/interfaces";
 
-import {IActorStep, IActorStepRecord, IMultiActorReport} from "./interfaces";
+import {IActorStep, IActorStepRecord, IMultiActorReport, IUseCaseActorsSetup} from "./interfaces";
 import {trackActorStep} from "./track";
 import path from "path";
 import {writeFileSync} from "fs";
 import {mkdirp} from "fs-extra";
+import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
+import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
+import {writeJsonFile} from "../utils/io";
+import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
 
 const credentialResources = {
     'identity': {
@@ -206,15 +210,40 @@ export namespace MultiActorEvaluator {
             {actor: government, f: ActorSteps.createIdentityCredential},
             {actor: government, f: ActorSteps.signIdentityCredential},
 
-            {actor: holder, f: ActorSteps.deriveDiplomaCredential},
-            {actor: holder, f: ActorSteps.createPresentation01},
-            {actor: holder, f: ActorSteps.signPresentation01},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.deriveDiplomaCredential},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.createPresentation01},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.signPresentation01},
 
             {actor: recruiter, f: ActorSteps.verifyPresentation01},
 
-            {actor: holder, f: ActorSteps.deriveIdentityCredential},
-            {actor: holder, f: ActorSteps.createPresentation02},
-            {actor: holder, f: ActorSteps.signPresentation02},
+            {actor: holder, mode: 'public', f: ActorSteps.deriveIdentityCredential},
+            {actor: holder, mode: 'public', f: ActorSteps.createPresentation02},
+            {actor: holder, mode: 'public', f: ActorSteps.signPresentation02},
+
+            {actor: recruiter, f: ActorSteps.verifyPresentation02},
+        ]
+    }
+    export const createActorStepsV2 = (actors: IUseCaseActorsSetup) : IActorStep[] => {
+        const {
+            alice: holder, university,
+            recruiter,
+            government
+        } = actors;
+        return [
+            {actor: university, f: ActorSteps.createDiplomaCredential},
+            {actor: university, f: ActorSteps.signDiplomaCredential},
+            {actor: government, f: ActorSteps.createIdentityCredential},
+            {actor: government, f: ActorSteps.signIdentityCredential},
+
+            {actor: holder, mode: 'pseudo', f: ActorSteps.deriveDiplomaCredential},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.createPresentation01},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.signPresentation01},
+
+            {actor: recruiter, f: ActorSteps.verifyPresentation01},
+
+            {actor: holder, mode: 'public', f: ActorSteps.deriveIdentityCredential},
+            {actor: holder, mode: 'public', f: ActorSteps.createPresentation02},
+            {actor: holder, mode: 'public', f: ActorSteps.signPresentation02},
 
             {actor: recruiter, f: ActorSteps.verifyPresentation02},
         ]
@@ -224,6 +253,10 @@ export namespace MultiActorEvaluator {
         const stepRecords  = new Array<IActorStepRecord>()
         let stepIndex = 0;
         for await (const s of actorSteps) {
+
+            if(s.mode!! && s.actor instanceof CompoundCredentialActor)
+                (s.actor as CompoundCredentialActor<any, any>).setActorMode(s.mode!)
+
             const actorStepRecord = await trackActorStep(s)
             stepRecords.push({  index: stepIndex, ...actorStepRecord,})
             stepIndex++;
@@ -280,5 +313,34 @@ export async function runMultiActorEvaluation(actorFactories: IActorFactory<ICre
         })
     }
 
+}
+
+/**
+ * TODO: cleanup, improve.
+ * @param usecaseActors
+ * @param parentDir
+ */
+export async function runMultiActorEvaluationV2(usecaseActors: IUseCaseActorsSetup, parentDir: string) {
+
+
+    const actorSteps = MultiActorEvaluator.createActorStepsV2(usecaseActors)
+    const multiActorReport = await MultiActorEvaluator.evaluate(
+        actorSteps
+    )
+
+    const filenameReport = [
+        'multiactor-report',
+        multiActorReport.start
+    ].join('-') + '.json'
+
+    await mkdirp(parentDir)
+
+    const fpathReport =path.join(parentDir, filenameReport)
+    const multiActorReportUpdate = {
+        ...multiActorReport,
+        // Note: assuming all actors have same dlco as alice. Needs improvement? Yes. Time? No.
+        documentLoaderCacheOptions: usecaseActors.documentLoaderCacheOptions
+    }
+    writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate))
 }
 

@@ -51,3 +51,11 @@ export interface ICredentialActorStepFunction extends Function {
     (actor: ICredentialActor): Promise<any>
 
 }
+
+export interface IUseCaseActorsSetup {
+    documentLoaderCacheOptions: DocumentLoaderCacheOptions
+    alice: ICompoundCredentialActor & IActorMetadata
+    recruiter: ICredentialActor
+    university: ICredentialActor
+    government: ICredentialActor
+}
