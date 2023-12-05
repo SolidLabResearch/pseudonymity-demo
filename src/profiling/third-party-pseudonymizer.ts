@@ -1,12 +1,12 @@
 import {ICompoundCredentialActor, IUseCaseActorsSetup} from "./interfaces";
 import {ICredentialActor} from "../components/solid-actor/interfaces";
-import {SolidVCActorFactory, WebIdOnDidKeyActorFactory} from "../tests/ActorFactory";
+import {SolidVCActorFactory, WebIdOnWebIdActorFactory} from "../tests/ActorFactory";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {DocumentLoaderCacheOptions} from "../contexts/contexts";
 
 
 export async function initializeUseCaseActorsForThirdPartyServiceSolution(dlco: DocumentLoaderCacheOptions): Promise<IUseCaseActorsSetup> {
-    let alice: ICompoundCredentialActor = await new WebIdOnDidKeyActorFactory(dlco).createInitializedActor(
+    let alice: ICompoundCredentialActor = await new WebIdOnWebIdActorFactory(dlco).createInitializedActor(
         cssTestConfigRecords.find(r => r.testConfig.name === 'alice')!,
         cssTestConfigRecords.find(r => r.testConfig.name === 'pseudo')!
     )

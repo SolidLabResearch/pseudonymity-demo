@@ -16,6 +16,7 @@ import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
 import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
 import {writeJsonFile} from "../utils/io";
 import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
+import {getHostReport} from "../utils/profiling";
 
 const credentialResources = {
     'identity': {
@@ -324,6 +325,7 @@ export async function runMultiActorEvaluationV2(usecaseActors: IUseCaseActorsSet
 
 
     const actorSteps = MultiActorEvaluator.createActorStepsV2(usecaseActors)
+    const hostReport = getHostReport()
     const multiActorReport = await MultiActorEvaluator.evaluate(
         actorSteps
     )
@@ -339,7 +341,9 @@ export async function runMultiActorEvaluationV2(usecaseActors: IUseCaseActorsSet
     const multiActorReportUpdate = {
         ...multiActorReport,
         // Note: assuming all actors have same dlco as alice. Needs improvement? Yes. Time? No.
-        documentLoaderCacheOptions: usecaseActors.documentLoaderCacheOptions
+        documentLoaderCacheOptions: usecaseActors.documentLoaderCacheOptions,
+        hostReport
+
     }
     writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate))
 }
