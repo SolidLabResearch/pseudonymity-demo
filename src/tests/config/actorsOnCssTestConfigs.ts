@@ -38,6 +38,7 @@ const config = joinFilePath(__dirname, '../config/default.json')
 
 export const cssTestConfigRecords = [
     {name: 'alice', port: 3000, config,},
+    {name: 'pseudo', port: 3001, config,},
     {name: 'recruiter', port: 3002, config,},
     {name: 'university', port: 3003, config,},
     {name: 'government', port: 3004, config,},
