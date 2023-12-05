@@ -21,6 +21,7 @@ services:
   css_pseudo:
     profiles:
       - all
+      - components
       - usecases
     image: solidproject/community-server:7
     environment:
