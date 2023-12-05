@@ -10,6 +10,10 @@ import {toDidKeyDocument} from "../utils/keypair";
 import {IVerificationMethod} from "../components/solid-actor/did-interfaces";
 import {obtainClientCredentials, register} from "../utils/css";
 import {IDocumentLoader} from "../contexts/interfaces";
+import {CompoundActor} from "../components/solid-actor/CompoundActor";
+import {documentLoaderCacheOptions} from "../profiling/config";
+import {WebIdOnDidKeyActor} from "../components/solid-actor/WebIdOnDidKeyActor";
+import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
 
 export interface IActorFactory<A> {
     documentLoader: IDocumentLoader
@@ -131,6 +135,44 @@ export class SolidVCActorFactory extends AbstractActorFactory<SolidVCActor> {
         this.cache[a.webId]= a
 
         return a
+    }
+
+}
+
+export class WebIdOnDidKeyActorFactory {
+    solidVCActorFactory: SolidVCActorFactory
+    didVCActorFactory: DidVCActorFactory
+
+    constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
+        this.solidVCActorFactory = new SolidVCActorFactory(documentLoaderCacheOptions)
+        this.didVCActorFactory = new DidVCActorFactory(documentLoaderCacheOptions)
+
+    }
+
+
+    async createInitializedActor(solidVcActorRecord: ITestRecord, didVcActorRecord: ITestRecord): Promise<WebIdOnDidKeyActor> {
+        const a1 = await this.solidVCActorFactory.createInitializedActor(solidVcActorRecord)
+        const a2 = await this.didVCActorFactory.createInitializedActor(didVcActorRecord)
+        return new WebIdOnDidKeyActor(a1,a2)
+    }
+
+}
+
+export class WebIdOnWebIdActorFactory {
+    sf1: SolidVCActorFactory
+    sf2: SolidVCActorFactory
+
+    constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
+        this.sf1 = new SolidVCActorFactory(documentLoaderCacheOptions)
+        this.sf2 = new SolidVCActorFactory(documentLoaderCacheOptions)
+
+    }
+
+
+    async createInitializedActor(rs1: ITestRecord, rs2: ITestRecord): Promise<WebIdOnWebIdActor> {
+        const s1 = await this.sf1.createInitializedActor(rs1)
+        const s2 = await this.sf2.createInitializedActor(rs2)
+        return new WebIdOnWebIdActor(s1,s2)
     }
 
 }
