@@ -29,9 +29,22 @@ export interface IMultiActorReport extends ITimeTrackRecord {
     documentLoaderCacheOptions?: DocumentLoaderCacheOptions
 }
 
+export interface ICompoundCredentialActor extends ICredentialActor { // TODO: refactor to interfaces.ts
+    enablePublicActor(): void
+
+    enablePseudonymousActor(): void
+
+    setActorMode(mode: 'pseudo' | 'public'): void
+
+    get publicActor(): ICredentialActor
+
+    get pseudonymousActor(): ICredentialActor
+}
+
 export interface IActorStep {
-    actor: ICredentialActor
-    f: ICredentialActorStepFunction
+    actor: ICredentialActor|ICompoundCredentialActor
+    f: ICredentialActorStepFunction,
+    mode?: 'pseudo'|'public'
 }
 
 export interface ICredentialActorStepFunction extends Function {
