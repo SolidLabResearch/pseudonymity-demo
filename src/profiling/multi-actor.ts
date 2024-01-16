@@ -153,52 +153,64 @@ export namespace ActorSteps {
     export async function createDiplomaCredential(actor: ICredentialActor)  {
         cDiploma = actor.createCredential(credentialResources.diploma.unsigned.credentialSubject)
         cDiploma['@context'] = credentialResources.diploma.unsigned['@context']
+        return cDiploma
     }
     export async function signDiplomaCredential(actor: ICredentialActor) {
         vcDiploma = await actor.signCredential(cDiploma)
+        return vcDiploma
     }
 
     export async function createIdentityCredential(actor: ICredentialActor) {
         cIdentity = actor.createCredential(credentialResources.identity.unsigned.credentialSubject)
         cIdentity['@context'] = credentialResources.identity.unsigned['@context']
+        return cIdentity
     }
 
     export async function signIdentityCredential(actor: ICredentialActor) {
         vcIdentity = await actor.signCredential(cIdentity)
+        return vcIdentity
     }
 
     export async function deriveDiplomaCredential(actor: ICredentialActor) {
         dvcDiploma = await actor.deriveCredential(vcIdentity, credentialResources.diploma.derivationFrame)
+        return dvcDiploma
     }
 
     export async function createPresentation01(actor: ICredentialActor) {
         p01 = actor.createPresentation([dvcDiploma], actor.identifier)
+        return p01
     }
 
     export async function signPresentation01(actor: ICredentialActor){
         vp01 = await actor.signPresentation(p01,challenge)
+        return vp01
     }
 
     export async function verifyPresentation01(actor: ICredentialActor) {
         vr01 = await actor.verifyPresentation(vp01, challenge)
         assert(vr01.verified === true) // Sanity check
+        return vr01
     }
 
     export async function deriveIdentityCredential(actor: ICredentialActor) {
         dvcIdentity = await actor.deriveCredential(vcIdentity, credentialResources.identity.derivationFrame)
+        return dvcIdentity
     }
 
     export async function createPresentation02(actor: ICredentialActor){
         p02 = actor.createPresentation([dvcIdentity], actor.identifier)
+        return p02
     }
 
     export async function signPresentation02(actor: ICredentialActor){
         vp02 = await actor.signPresentation(p02, challenge)
+        return vp02
     }
 
     export async function verifyPresentation02(actor: ICredentialActor){
         vr02 = await actor.verifyPresentation(vp02, challenge)
         assert(vr02.verified === true) // Sanity check
+        return vr02
     }
 
 }
@@ -309,7 +321,7 @@ export async function runMultiActorEvaluation(actorFactories: IActorFactory<ICre
                 ...multiActorReport,
                 documentLoaderCacheOptions: actorFactory.documentLoaderCacheOptions
             }
-            writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate))
+            writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate, null, 2))
 
         })
     }

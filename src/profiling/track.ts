@@ -4,10 +4,10 @@ import {IActorMetadata} from "../components/solid-actor/interfaces";
 export async function trackStep(f: Function) {
     const {name} = f
     const start = Date.now()
-    await f()
+    const output = await f()
     const end = Date.now()
     const delta = end - start
-    return {name, start, end, delta} as IStepRecord
+    return {name, start, end, delta, output} as IStepRecord
 }
 
 export async function trackActorStep(

@@ -4,6 +4,7 @@ import {DocumentLoaderCacheOptions} from "../contexts/contexts";
 export interface IStepRecord extends ITimeTrackRecord {
     name: string
     index?: number
+    output?: any
 }
 
 export interface IActorStepRecord
