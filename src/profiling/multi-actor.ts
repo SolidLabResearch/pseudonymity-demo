@@ -60,17 +60,19 @@ const credentialResources = {
                 'https://www.w3.org/2018/credentials/v1',
                 "https://w3id.org/security/bbs/v1",
                 "https://w3id.org/citizenship/v1",
-                customVocab.url,
+                // customVocab.url,
             ],
             id: 'urn:vc:02',
-            type: ['VerifiableCredential', 'UniversityDegreeCredential'],
+            type: ['VerifiableCredential',
+                // 'UniversityDegreeCredential'
+            ],
             issuer: undefined,
             issuanceDate: '2021-06-19T18:53:11Z',
             credentialSubject: {
                 id: 'urn:test:id000',
                 'identifier': '123456789ab',
-                degree: 'Msc. Physics',
-                grade: '789/1000'
+                'ex:degreeTitle': 'Msc. Physics',
+                'ex:grade': '789/1000'
             }
         },
         derivationFrame: {
@@ -78,13 +80,15 @@ const credentialResources = {
                 "https://www.w3.org/2018/credentials/v1",
                 "https://w3id.org/security/bbs/v1",
                 "https://w3id.org/citizenship/v1",
-                customVocab.url,
+                // customVocab.url,
             ],
-            type: ['VerifiableCredential', 'UniversityDegreeCredential'],
+            type: ['VerifiableCredential',
+                // 'UniversityDegreeCredential'
+            ],
             "credentialSubject": {
                 "@explicit": true,
                 // 'identifier': {},
-                degree: {}
+                'ex:degreeTitle': {}
             }
         }
     }
@@ -172,7 +176,8 @@ export namespace ActorSteps {
     }
 
     export async function deriveDiplomaCredential(actor: ICredentialActor) {
-        dvcDiploma = await actor.deriveCredential(vcIdentity, credentialResources.diploma.derivationFrame)
+        dvcDiploma = await actor.deriveCredential(vcDiploma, credentialResources.diploma.derivationFrame)
+
         return dvcDiploma
     }
 
@@ -194,6 +199,8 @@ export namespace ActorSteps {
 
     export async function deriveIdentityCredential(actor: ICredentialActor) {
         dvcIdentity = await actor.deriveCredential(vcIdentity, credentialResources.identity.derivationFrame)
+
+
         return dvcIdentity
     }
 
