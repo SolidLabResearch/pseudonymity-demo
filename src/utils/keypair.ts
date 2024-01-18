@@ -42,3 +42,27 @@ export function toDidKeyDocument(
         keyAgreement: []
     } as IDidDocument
 }
+
+export function toDidKeyDocumentDirect(
+    fingerprint: string,
+    publicKey: string
+): IDidDocument {
+    const id = `did:key:${fingerprint}`
+    const vm = {
+        id: `${id}#${fingerprint}`,
+        controller: id,
+        publicKeyBase58: publicKey,
+        type: 'Bls12381G2Key2020'
+        // TODO: publicKeyMultibase?
+    } as IVerificationMethod
+    return {
+        ['@context']: namespaces.did,
+        id,
+        verificationMethod: [ vm ],
+        authentication: [ vm.id ],
+        assertionMethod: [ vm.id ],
+        capabilityDelegation: [ vm.id ],
+        capabilityInvocation: [ vm.id ],
+        keyAgreement: []
+    } as IDidDocument
+}

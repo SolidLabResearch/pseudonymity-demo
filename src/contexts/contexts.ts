@@ -9,7 +9,7 @@ import {ttl2jld} from "../utils/parsing";
 import {readJsonFile} from "../utils/io";
 import {namespaces} from "../utils/namespace";
 import {NotYetImplementedError} from "../components/solid-actor/errors";
-import {toDidKeyDocument} from "../utils/keypair";
+import {toDidKeyDocument, toDidKeyDocumentDirect} from "../utils/keypair";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 
 const ctx = new Map();
@@ -91,8 +91,10 @@ export function createCustomDocumentLoader(ctx: Map<any, any>, cacheOptions?: Do
                         // https://w3c-ccg.github.io/did-method-key/#bls-12381
                         didResolver = (url) => {
                             const [controller] = identifier.split('#')
+
                             const key = Bls12381G2KeyPair.fromFingerprint({fingerprint: controller})
-                            const didDocument = toDidKeyDocument(key)
+                            // const didDocument = toDidKeyDocument(key)
+                            const didDocument = toDidKeyDocumentDirect(key.fingerprint(), key.publicKey)
                             const response = {
                                 contextUrl: null,
                                 documentUrl: url,
