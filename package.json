@@ -54,8 +54,12 @@
     "profile:web-resolvable": "npx ts-node src/profiling/web-resolvable.ts",
     "profile_old": "npm run test:usecases:setup && npm run profile:web-resolvable && npm run profile:did-key",
     "profile": "npm run test:usecases:setup && npx ts-node src/profiling/profile.ts",
+    "profile:single": "npm run profile -- --dcloConfig=0 --n=1 --solution=\"did-key\"",
+    "profile:3rd-party": "npm run test:usecases:setup && ts-node src/profiling/third-party-pseudonymizer.ts",
     "sandbox": "npx ts-node sandbox.ts",
-    "sandbox:watch": "nodemon -w sandbox.ts --exec npm run sandbox"
+    "sandbox:watch": "nodemon -w sandbox.ts --exec npm run sandbox",
+    "sandbox:profile": "node -r ts-node/register --prof sandbox.ts",
+    "sandbox:profile:verify-presentations": "npx ts-node src/profiling/verify-presentations.ts"
   },
   "author": "GDM",
   "license": "MIT",
@@ -101,6 +105,6 @@
     "rfc4648": "^1.5.3"
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20.0"
   }
 }

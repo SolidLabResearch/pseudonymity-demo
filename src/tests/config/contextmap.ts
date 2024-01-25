@@ -18,6 +18,9 @@ export function getContextMap() {
 
     ctx.set('https://w3id.org/security/suites/jws-2020/v1', readJsonFile('src/contexts/suiteContext.json'))
 
+    // DID/V1
+    ctx.set('https://www.w3.org/ns/did/v1', readJsonFile('src/contexts/did-v1.jsonld'))
+
     // Custom vocab
     ctx.set(customVocab.url, customVocab.context)
     return ctx

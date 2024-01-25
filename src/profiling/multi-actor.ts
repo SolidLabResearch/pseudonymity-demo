@@ -7,11 +7,16 @@ import {IActorFactory} from "../tests/ActorFactory";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {ITestRecord} from "../tests/interfaces";
 
-import {IActorStep, IActorStepRecord, IMultiActorReport} from "./interfaces";
+import {IActorStep, IActorStepRecord, IMultiActorReport, IUseCaseActorsSetup} from "./interfaces";
 import {trackActorStep} from "./track";
 import path from "path";
 import {writeFileSync} from "fs";
 import {mkdirp} from "fs-extra";
+import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
+import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
+import {writeJsonFile} from "../utils/io";
+import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
+import {getHostReport} from "../utils/profiling";
 
 const credentialResources = {
     'identity': {
@@ -55,17 +60,19 @@ const credentialResources = {
                 'https://www.w3.org/2018/credentials/v1',
                 "https://w3id.org/security/bbs/v1",
                 "https://w3id.org/citizenship/v1",
-                customVocab.url,
+                // customVocab.url,
             ],
             id: 'urn:vc:02',
-            type: ['VerifiableCredential', 'UniversityDegreeCredential'],
+            type: ['VerifiableCredential',
+                // 'UniversityDegreeCredential'
+            ],
             issuer: undefined,
             issuanceDate: '2021-06-19T18:53:11Z',
             credentialSubject: {
                 id: 'urn:test:id000',
                 'identifier': '123456789ab',
-                degree: 'Msc. Physics',
-                grade: '789/1000'
+                'ex:degreeTitle': 'Msc. Physics',
+                'ex:grade': '789/1000'
             }
         },
         derivationFrame: {
@@ -73,13 +80,15 @@ const credentialResources = {
                 "https://www.w3.org/2018/credentials/v1",
                 "https://w3id.org/security/bbs/v1",
                 "https://w3id.org/citizenship/v1",
-                customVocab.url,
+                // customVocab.url,
             ],
-            type: ['VerifiableCredential', 'UniversityDegreeCredential'],
+            type: ['VerifiableCredential',
+                // 'UniversityDegreeCredential'
+            ],
             "credentialSubject": {
                 "@explicit": true,
                 // 'identifier': {},
-                degree: {}
+                'ex:degreeTitle': {}
             }
         }
     }
@@ -148,52 +157,67 @@ export namespace ActorSteps {
     export async function createDiplomaCredential(actor: ICredentialActor)  {
         cDiploma = actor.createCredential(credentialResources.diploma.unsigned.credentialSubject)
         cDiploma['@context'] = credentialResources.diploma.unsigned['@context']
+        return cDiploma
     }
     export async function signDiplomaCredential(actor: ICredentialActor) {
         vcDiploma = await actor.signCredential(cDiploma)
+        return vcDiploma
     }
 
     export async function createIdentityCredential(actor: ICredentialActor) {
         cIdentity = actor.createCredential(credentialResources.identity.unsigned.credentialSubject)
         cIdentity['@context'] = credentialResources.identity.unsigned['@context']
+        return cIdentity
     }
 
     export async function signIdentityCredential(actor: ICredentialActor) {
         vcIdentity = await actor.signCredential(cIdentity)
+        return vcIdentity
     }
 
     export async function deriveDiplomaCredential(actor: ICredentialActor) {
-        dvcDiploma = await actor.deriveCredential(vcIdentity, credentialResources.diploma.derivationFrame)
+        dvcDiploma = await actor.deriveCredential(vcDiploma, credentialResources.diploma.derivationFrame)
+
+        return dvcDiploma
     }
 
     export async function createPresentation01(actor: ICredentialActor) {
         p01 = actor.createPresentation([dvcDiploma], actor.identifier)
+        return p01
     }
 
     export async function signPresentation01(actor: ICredentialActor){
         vp01 = await actor.signPresentation(p01,challenge)
+        return vp01
     }
 
     export async function verifyPresentation01(actor: ICredentialActor) {
         vr01 = await actor.verifyPresentation(vp01, challenge)
         assert(vr01.verified === true) // Sanity check
+        return vr01
     }
 
     export async function deriveIdentityCredential(actor: ICredentialActor) {
         dvcIdentity = await actor.deriveCredential(vcIdentity, credentialResources.identity.derivationFrame)
+
+
+        return dvcIdentity
     }
 
     export async function createPresentation02(actor: ICredentialActor){
         p02 = actor.createPresentation([dvcIdentity], actor.identifier)
+        return p02
     }
 
     export async function signPresentation02(actor: ICredentialActor){
         vp02 = await actor.signPresentation(p02, challenge)
+        return vp02
     }
 
     export async function verifyPresentation02(actor: ICredentialActor){
         vr02 = await actor.verifyPresentation(vp02, challenge)
         assert(vr02.verified === true) // Sanity check
+        return vr02
     }
 
 }
@@ -206,15 +230,40 @@ export namespace MultiActorEvaluator {
             {actor: government, f: ActorSteps.createIdentityCredential},
             {actor: government, f: ActorSteps.signIdentityCredential},
 
-            {actor: holder, f: ActorSteps.deriveDiplomaCredential},
-            {actor: holder, f: ActorSteps.createPresentation01},
-            {actor: holder, f: ActorSteps.signPresentation01},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.deriveDiplomaCredential},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.createPresentation01},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.signPresentation01},
 
             {actor: recruiter, f: ActorSteps.verifyPresentation01},
 
-            {actor: holder, f: ActorSteps.deriveIdentityCredential},
-            {actor: holder, f: ActorSteps.createPresentation02},
-            {actor: holder, f: ActorSteps.signPresentation02},
+            {actor: holder, mode: 'public', f: ActorSteps.deriveIdentityCredential},
+            {actor: holder, mode: 'public', f: ActorSteps.createPresentation02},
+            {actor: holder, mode: 'public', f: ActorSteps.signPresentation02},
+
+            {actor: recruiter, f: ActorSteps.verifyPresentation02},
+        ]
+    }
+    export const createActorStepsV2 = (actors: IUseCaseActorsSetup) : IActorStep[] => {
+        const {
+            alice: holder, university,
+            recruiter,
+            government
+        } = actors;
+        return [
+            {actor: university, f: ActorSteps.createDiplomaCredential},
+            {actor: university, f: ActorSteps.signDiplomaCredential},
+            {actor: government, f: ActorSteps.createIdentityCredential},
+            {actor: government, f: ActorSteps.signIdentityCredential},
+
+            {actor: holder, mode: 'pseudo', f: ActorSteps.deriveDiplomaCredential},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.createPresentation01},
+            {actor: holder, mode: 'pseudo', f: ActorSteps.signPresentation01},
+
+            {actor: recruiter, f: ActorSteps.verifyPresentation01},
+
+            {actor: holder, mode: 'public', f: ActorSteps.deriveIdentityCredential},
+            {actor: holder, mode: 'public', f: ActorSteps.createPresentation02},
+            {actor: holder, mode: 'public', f: ActorSteps.signPresentation02},
 
             {actor: recruiter, f: ActorSteps.verifyPresentation02},
         ]
@@ -224,6 +273,10 @@ export namespace MultiActorEvaluator {
         const stepRecords  = new Array<IActorStepRecord>()
         let stepIndex = 0;
         for await (const s of actorSteps) {
+
+            if(s.mode!! && s.actor instanceof CompoundCredentialActor)
+                (s.actor as CompoundCredentialActor<any, any>).setActorMode(s.mode!)
+
             const actorStepRecord = await trackActorStep(s)
             stepRecords.push({  index: stepIndex, ...actorStepRecord,})
             stepIndex++;
@@ -275,10 +328,42 @@ export async function runMultiActorEvaluation(actorFactories: IActorFactory<ICre
                 ...multiActorReport,
                 documentLoaderCacheOptions: actorFactory.documentLoaderCacheOptions
             }
-            writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate))
+            writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate, null, 2))
 
         })
     }
 
+}
+
+/**
+ * TODO: cleanup, improve.
+ * @param usecaseActors
+ * @param parentDir
+ */
+export async function runMultiActorEvaluationV2(usecaseActors: IUseCaseActorsSetup, parentDir: string) {
+
+
+    const actorSteps = MultiActorEvaluator.createActorStepsV2(usecaseActors)
+    const hostReport = getHostReport()
+    const multiActorReport = await MultiActorEvaluator.evaluate(
+        actorSteps
+    )
+
+    const filenameReport = [
+        'multiactor-report',
+        multiActorReport.start
+    ].join('-') + '.json'
+
+    await mkdirp(parentDir)
+
+    const fpathReport =path.join(parentDir, filenameReport)
+    const multiActorReportUpdate = {
+        ...multiActorReport,
+        // Note: assuming all actors have same dlco as alice. Needs improvement? Yes. Time? No.
+        documentLoaderCacheOptions: usecaseActors.documentLoaderCacheOptions,
+        hostReport
+
+    }
+    writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate))
 }
 

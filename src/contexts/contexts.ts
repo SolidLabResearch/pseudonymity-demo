@@ -9,7 +9,7 @@ import {ttl2jld} from "../utils/parsing";
 import {readJsonFile} from "../utils/io";
 import {namespaces} from "../utils/namespace";
 import {NotYetImplementedError} from "../components/solid-actor/errors";
-import {toDidKeyDocument} from "../utils/keypair";
+import {toDidKeyDocument, toDidKeyDocumentDirect} from "../utils/keypair";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 
 const ctx = new Map();
@@ -66,8 +66,10 @@ export interface DocumentLoaderCacheOptions  {
 export function createCustomDocumentLoader(ctx: Map<any, any>, cacheOptions?: DocumentLoaderCacheOptions): IDocumentLoader {
     const cache = new Map<string, any>()
     return async (url: any) => {
+        performance.mark(`${url}`, {detail: 'start'})
         const context = ctx.get(url);
         if (context !== undefined) {
+            performance.mark(`${url}`, {detail: 'end'})
             return {
                 contextUrl: null,
                 documentUrl: url,
@@ -75,7 +77,7 @@ export function createCustomDocumentLoader(ctx: Map<any, any>, cacheOptions?: Do
             }
 
         } else if (cache.has(url)){
-
+            performance.mark(`${url}`, {detail: 'end'})
             return {
                 contextUrl: null,
                 documentUrl: url,
@@ -87,12 +89,15 @@ export function createCustomDocumentLoader(ctx: Map<any, any>, cacheOptions?: Do
             let didResolver: IDocumentLoader
             switch (method) {
                 case 'key':
+
                     if(identifier.startsWith('zUC7')) {
                         // https://w3c-ccg.github.io/did-method-key/#bls-12381
                         didResolver = (url) => {
                             const [controller] = identifier.split('#')
+
                             const key = Bls12381G2KeyPair.fromFingerprint({fingerprint: controller})
-                            const didDocument = toDidKeyDocument(key)
+                            // const didDocument = toDidKeyDocument(key)
+                            const didDocument = toDidKeyDocumentDirect(key.fingerprint(), key.publicKey)
                             const response = {
                                 contextUrl: null,
                                 documentUrl: url,
@@ -105,12 +110,15 @@ export function createCustomDocumentLoader(ctx: Map<any, any>, cacheOptions?: Do
                 default:
                     throw new NotYetImplementedError(`DID Method: ${method} is not yet implemented!`)
             }
+
             const resolverResponse = await didResolver!(url)
             if(cacheOptions!! && cacheOptions?.DID!.cacheResolvedDIDDocs)
                 cache.set(resolverResponse.documentUrl!, resolverResponse.document)
+            performance.mark(`${url}`, {detail: 'end'})
             return resolverResponse
         }
         else { // Resolve using fetch
+
             const response = await fetch(url, {headers: { Accept: 'application/ld+json' }})
             let document = undefined
             switch (response.headers.get('content-type')) {
@@ -122,7 +130,6 @@ export function createCustomDocumentLoader(ctx: Map<any, any>, cacheOptions?: Do
                 case 'text/turtle':
                     const payload = await response.text();
                     document = await ttl2jld(payload)
-
                     break;
                 default:
                     throw new Error(
@@ -145,6 +152,8 @@ export function createCustomDocumentLoader(ctx: Map<any, any>, cacheOptions?: Do
             )
                 cache.set(url, document)
 
+
+            performance.mark(`${url}`, {detail: 'end'})
             return {
                 contextUrl: null,
                 documentUrl: url,

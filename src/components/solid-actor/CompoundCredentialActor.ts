@@ -7,7 +7,9 @@ import {ICompoundCredentialActor} from "../../profiling/interfaces";
 
 export class CompoundCredentialActor<A1 extends ICredentialActor, A2 extends ICredentialActor>
     extends CompoundActor<A1, A2>
-    implements ICompoundCredentialActor {
+    implements ICompoundCredentialActor
+
+{
 
     constructor(publicActor: A1, pseudonymousActor: A2) {
         super(publicActor, pseudonymousActor);

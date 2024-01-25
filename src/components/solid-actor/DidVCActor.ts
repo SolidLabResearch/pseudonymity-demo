@@ -4,12 +4,14 @@ import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
 
 
 export class DidVCActor extends AbstractBls12381G2VCActor {
+
     get identifier(): string {
-        return `did:key:${this.key!.fingerprint()}`
+
+        return `did:key:${this.fingerprint!}`
     }
 
     get controllerDocument(): IDidDocument {
-        return toDidKeyDocument(this.key!)
+        return this._controllerDocument!
     }
 
 }

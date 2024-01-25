@@ -4,6 +4,7 @@ import {DocumentLoaderCacheOptions} from "../contexts/contexts";
 export interface IStepRecord extends ITimeTrackRecord {
     name: string
     index?: number
+    output?: any
 }
 
 export interface IActorStepRecord
@@ -50,4 +51,12 @@ export interface IActorStep {
 export interface ICredentialActorStepFunction extends Function {
     (actor: ICredentialActor): Promise<any>
 
+}
+
+export interface IUseCaseActorsSetup {
+    documentLoaderCacheOptions: DocumentLoaderCacheOptions
+    alice: ICompoundCredentialActor & IActorMetadata
+    recruiter: ICredentialActor
+    university: ICredentialActor
+    government: ICredentialActor
 }

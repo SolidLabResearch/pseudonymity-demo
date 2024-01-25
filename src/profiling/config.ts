@@ -6,12 +6,13 @@ export const dirProfilingReports = path.join(dirReports, 'profiling')
 
 export enum ProfileMode {
     singleActor,
-    multiActor
+    multiActor,
+    multiActorV2
 
 }
-export const profileMode : ProfileMode = ProfileMode.multiActor
+export const profileMode : ProfileMode = ProfileMode.multiActorV2
 
-export const nIterations = 3
+export const nIterations = 1
 
 export const documentLoaderCacheOptions = {
     DID: {cacheResolvedDIDDocs: true},

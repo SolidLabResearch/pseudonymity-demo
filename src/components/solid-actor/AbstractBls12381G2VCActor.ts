@@ -5,6 +5,7 @@ import {KeyPairActor} from "./KeyPairActor";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import {IDidDocument} from "./did-interfaces";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
+import {toDidKeyDocumentDirect} from "../../utils/keypair";
 
 export abstract class AbstractBls12381G2VCActor
     extends GenericVCActor<BbsBlsSignature2020, BbsBlsSignature2020, BbsBlsSignatureProof2020>
@@ -13,11 +14,15 @@ export abstract class AbstractBls12381G2VCActor
     verifySuite?: BbsBlsSignature2020 | undefined;
     deriveSuite?: BbsBlsSignatureProof2020 | undefined;
     key: Bls12381G2KeyPair;
+    fingerprint?: string
+    _controllerDocument?: IDidDocument
 
 
     constructor(key: Bls12381G2KeyPair, documentLoader: IDocumentLoader) {
         super(documentLoader);
         this.key = key;
+        this.fingerprint = this.key.fingerprint()
+        this._controllerDocument = toDidKeyDocumentDirect(this.fingerprint, this.key.publicKey)
 
     }
 

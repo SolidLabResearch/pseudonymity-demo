@@ -11,9 +11,10 @@ import {IVerificationMethod} from "../components/solid-actor/did-interfaces";
 import {obtainClientCredentials, register} from "../utils/css";
 import {IDocumentLoader} from "../contexts/interfaces";
 import {CompoundActor} from "../components/solid-actor/CompoundActor";
-import {documentLoaderCacheOptions} from "../profiling/config";
 import {WebIdOnDidKeyActor} from "../components/solid-actor/WebIdOnDidKeyActor";
 import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
+import {ICredentialActor} from "../components/solid-actor/interfaces";
+import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
 
 export interface IActorFactory<A> {
     documentLoader: IDocumentLoader
@@ -139,26 +140,67 @@ export class SolidVCActorFactory extends AbstractActorFactory<SolidVCActor> {
 
 }
 
-export class WebIdOnDidKeyActorFactory {
-    solidVCActorFactory: SolidVCActorFactory
-    didVCActorFactory: DidVCActorFactory
+export class AbstractCompoundCredentialActorFactory<
+    A1 extends ICredentialActor,
+    A2 extends ICredentialActor
+>
 
-    constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
-        this.solidVCActorFactory = new SolidVCActorFactory(documentLoaderCacheOptions)
-        this.didVCActorFactory = new DidVCActorFactory(documentLoaderCacheOptions)
+{
+    documentLoaderCacheOptions: DocumentLoaderCacheOptions
+    cache: { [p: string]: CompoundCredentialActor<A1, A2> };
+    f1: IActorFactory<A1>
+    f2: IActorFactory<A2>
 
+    constructor(f1: IActorFactory<A1>, f2: IActorFactory<A2>, documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
+        this.documentLoaderCacheOptions = documentLoaderCacheOptions
+        this.cache = {}
+        this.f1 = f1;
+        this.f2 = f2;
     }
 
-
-    async createInitializedActor(solidVcActorRecord: ITestRecord, didVcActorRecord: ITestRecord): Promise<WebIdOnDidKeyActor> {
-        const a1 = await this.solidVCActorFactory.createInitializedActor(solidVcActorRecord)
-        const a2 = await this.didVCActorFactory.createInitializedActor(didVcActorRecord)
-        return new WebIdOnDidKeyActor(a1,a2)
+    async createInitializedActor(r1: ITestRecord, r2: ITestRecord): Promise<CompoundCredentialActor<A1, A2>> {
+        const { webId } = r1.userConfig;
+        if(Object.keys(this.cache).includes(webId)) {
+            console.log('returning from CACHE!')
+            return this.cache[webId]
+        }
+        const a1 = await this.f1.createInitializedActor(r1)
+        const a2 = await this.f2.createInitializedActor(r2)
+        const cca = new CompoundCredentialActor<A1,A2>(a1, a2)
+        this.cache[webId] = cca
+        return cca
     }
 
 }
+export class WebIdOnDidKeyActorFactory extends AbstractCompoundCredentialActorFactory<SolidVCActor, DidVCActor>{
+    constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
+        super(
+            new SolidVCActorFactory(documentLoaderCacheOptions),
+            new DidVCActorFactory(documentLoaderCacheOptions),
+            documentLoaderCacheOptions
+        );
+    }
+    async createInitializedActor(r1: ITestRecord, r2: ITestRecord): Promise<WebIdOnDidKeyActor> {
+        return (await super.createInitializedActor(r1, r2)) as WebIdOnDidKeyActor
+    }
+}
 
-export class WebIdOnWebIdActorFactory {
+
+
+export class WebIdOnWebIdActorFactory
+    extends AbstractCompoundCredentialActorFactory<SolidVCActor,DidVCActor> {
+    constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
+        super(
+            new SolidVCActorFactory(documentLoaderCacheOptions),
+            new SolidVCActorFactory(documentLoaderCacheOptions),
+            documentLoaderCacheOptions
+        );
+    }
+    async createInitializedActor(r1: ITestRecord, r2: ITestRecord): Promise<WebIdOnWebIdActor> {
+        return (await super.createInitializedActor(r1, r2)) as WebIdOnWebIdActor
+    }
+}
+export class WebIdOnWebIdActorFactoryOld {
     sf1: SolidVCActorFactory
     sf2: SolidVCActorFactory
 
