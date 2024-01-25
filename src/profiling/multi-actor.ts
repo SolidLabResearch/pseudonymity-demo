@@ -18,7 +18,7 @@ import {writeJsonFile} from "../utils/io";
 import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
 import {getHostReport} from "../utils/profiling";
 
-const credentialResources = {
+export const credentialResources = {
     'identity': {
         unsigned: {
             '@context': [
