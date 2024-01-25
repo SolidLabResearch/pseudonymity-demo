@@ -114,7 +114,7 @@ export class SolidVCActorFactory extends AbstractActorFactory<SolidVCActor> {
 
         r = await this.registerActor(r)
 
-        const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
+        const proxy = new CssProxy(r.clientCredentials!, webId)
         // Determine URL for DIDs container, based on the pod url
         const didsContainer = webId.replace('#me','')
         const controllerId = didsContainer
