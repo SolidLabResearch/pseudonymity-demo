@@ -22,6 +22,60 @@ export async function extractOidcIssuerValue(webIdProfileDocument: string): Prom
     })
 }
 
+/**
+ *
+ * @param urlAccount: <url css instance>/.account/
+ * @param email
+ * @param password
+ */
+export async function obtainClientCredentialsV2(
+    urlAccount: string,
+    webId: string,
+    email: string,
+    password: string): Promise<ClientCredentials> {
+
+    // Fetch account controls (unauthenticated)
+    let accountResponse = await (await fetch(urlAccount)).json()
+
+    // Log in using email/password
+    const {authorization} = await (
+        await fetch(accountResponse.controls.password.login, {
+            method: 'POST',
+            headers: {'content-type': 'application/json'},
+            body: JSON.stringify({ email,password })
+        })
+    ).json()
+
+    accountResponse = await fetch(urlAccount, { headers: {authorization: formatCssTokenHeader(authorization)}})
+
+    // Extract authenticated controls
+    const { controls: authenticatedControls } = await accountResponse.json()
+
+    // Request client credentials
+    const ccResponse = await fetch(
+        authenticatedControls.account.clientCredentials,
+        {
+            method: 'POST',
+            headers: {
+                authorization: formatCssTokenHeader(authorization),
+                'content-type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: `${email}-${Date.now()}-token`,
+                webId: webId
+            })
+        }
+    )
+
+    return await ccResponse.json();
+}
+
+
+/**
+ * TODO: replace with obtainClientCredentialsV2
+ * @param user
+ * @param controls
+ */
 export async function obtainClientCredentials(user: CssUserConfig, controls: CssControlsApiResponse): Promise<ClientCredentials> {
     /**
      * Login and get authorization token
