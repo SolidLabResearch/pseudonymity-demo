@@ -26,18 +26,18 @@ import {ISolidPod, ISolidProxy} from "./interfaces";
 
 export class CssProxy implements ISolidProxy {
     clientCredentials: ClientCredentials;
-    controls?: any
+    // controls?: any // TODO: safe delete
     storage?: ISolidPod;
     fetch?: typeof fetch
     webId: string;
 
-    constructor(clientCredentials: ClientCredentials, webId: string, controls?: any) {
+    constructor(clientCredentials: ClientCredentials, webId: string) {
         if (!clientCredentials!!)
             throw new Error('Client Credentials are required!')
 
         this.clientCredentials = clientCredentials!;
         this.webId = webId!;
-        this.controls = controls!;
+        // this.controls = controls!;// TODO: safe delete
     }
 
     get cardUrl() {
