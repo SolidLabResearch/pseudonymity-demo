@@ -59,7 +59,8 @@
     "sandbox": "npx ts-node sandbox.ts",
     "sandbox:watch": "nodemon -w sandbox.ts --exec npm run sandbox",
     "sandbox:profile": "node -r ts-node/register --prof sandbox.ts",
-    "sandbox:profile:verify-presentations": "npx ts-node src/profiling/verify-presentations.ts"
+    "sandbox:profile:verify-presentations": "npx ts-node src/profiling/verify-presentations.ts",
+    "od:sandbox": "npx ts-node onto-deside/index.ts"
   },
   "author": "GDM",
   "license": "MIT",
