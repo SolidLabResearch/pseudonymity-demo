@@ -1,4 +1,3 @@
-import {toDidKeyDocument} from "../../utils/keypair";
 import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
 import {IDidDocument} from "../interfaces";
 

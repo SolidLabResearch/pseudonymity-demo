@@ -9,20 +9,20 @@ import {IDocumentLoader} from "../../interfaces";
 export abstract class AbstractBls12381G2VCActor
     extends GenericVCActor<BbsBlsSignature2020, BbsBlsSignature2020, BbsBlsSignatureProof2020>
     implements ICredentialActor, KeyPairActor<Bls12381G2KeyPair> {
-    signSuite?: BbsBlsSignature2020 | undefined;
-    verifySuite?: BbsBlsSignature2020 | undefined;
-    deriveSuite?: BbsBlsSignatureProof2020 | undefined;
     key: Bls12381G2KeyPair;
     fingerprint?: string
     _controllerDocument?: IDidDocument
 
-
     constructor(key: Bls12381G2KeyPair, documentLoader: IDocumentLoader) {
-        super(documentLoader);
+        super(documentLoader,
+            _hack_addEnsureContextFunction(new BbsBlsSignature2020({key })),
+            new BbsBlsSignature2020(),
+            new BbsBlsSignatureProof2020()
+        );
+
         this.key = key;
         this.fingerprint = this.key.fingerprint()
         this._controllerDocument = toDidKeyDocumentDirect(this.fingerprint, this.key.publicKey)
-
     }
 
     abstract get identifier(): string
@@ -38,10 +38,5 @@ export abstract class AbstractBls12381G2VCActor
         return this.identifier
     }
 
-    initializeSuites(): void {
-        this.signSuite = new BbsBlsSignature2020({key: this.key})
-        this.signSuite = _hack_addEnsureContextFunction(this.signSuite)
-        this.verifySuite = new BbsBlsSignature2020()
-        this.deriveSuite = new BbsBlsSignatureProof2020()
-    }
+
 }

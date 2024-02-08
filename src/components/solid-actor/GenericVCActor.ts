@@ -13,17 +13,25 @@ import {IDocumentLoader} from "../../interfaces";
 export type VerifiableCredential = VCDIVerifiableCredential
 
 export abstract class GenericVCActor<S,V,D> {
-    signSuite?: S
-    verifySuite?: V
-    deriveSuite?: D
+    signSuite: S
+    verifySuite: V
+    deriveSuite: D
     private documentLoader: IDocumentLoader
     abstract get controllerId(): string
-    abstract initializeSuites(): void
 
 
-    constructor(documentLoader: IDocumentLoader) {
+
+    constructor(documentLoader: IDocumentLoader,
+                signSuite: S,
+                verifySuite: V,
+                deriveSuite: D
+    ) {
         this.documentLoader = documentLoader;
+        this.signSuite = signSuite;
+        this.verifySuite = verifySuite;
+        this.deriveSuite = deriveSuite;
     }
+
 
     get credentialContext(): string[] {
 
@@ -44,7 +52,7 @@ export abstract class GenericVCActor<S,V,D> {
 
 
     async initialize() {
-        this.initializeSuites();
+        // this.initializeSuites(); // TODO: safe delete
     }
 
     isInitialized(): boolean{
