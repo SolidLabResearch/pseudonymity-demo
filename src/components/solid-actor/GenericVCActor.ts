@@ -13,9 +13,9 @@ import {IDocumentLoader} from "../../interfaces";
 export type VerifiableCredential = VCDIVerifiableCredential
 
 export abstract class GenericVCActor<S,V,D> {
-    abstract signSuite?: S
-    abstract verifySuite?: V
-    abstract deriveSuite?: D
+    signSuite?: S
+    verifySuite?: V
+    deriveSuite?: D
     private documentLoader: IDocumentLoader
     abstract get controllerId(): string
     abstract initializeSuites(): void
