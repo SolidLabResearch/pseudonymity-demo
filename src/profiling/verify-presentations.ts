@@ -6,15 +6,6 @@ import {performance} from "node:perf_hooks";
 import {writeJsonFile} from "../utils/io";
 import assert  from "node:assert";
 import {ICredentialActor} from "../components/interfaces";
-function getDocumentLoader(ctx: Map<any,any>) {
-
-
-    const dl = createCustomDocumentLoader(ctx)
-    return (url: string) => {
-        console.log({url})
-        return dl(url)
-    }
-}
 
 
 async function getActors(factory: AbstractActorFactory<any>): Promise<{[p:string]: ICredentialActor}> {
