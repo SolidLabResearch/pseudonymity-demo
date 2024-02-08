@@ -9,10 +9,10 @@ import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {defaultDocumentLoaderCacheOptions, getContextMap} from "../config/contextmap";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {joinUrlPaths} from "../../utils/url";
-import {IDocumentLoader} from "../../contexts/interfaces";
 import {WebIdOnWebIdActor} from "../../components/solid-actor/WebIdOnWebIdActor";
 import {WebIdOnWebIdActorFactory} from "../ActorFactory";
 import {writeJsonFile} from "../../utils/io";
+import {IDocumentLoader} from "../../interfaces";
 
 
 describe('Use case: Sign-Verify (alice: WebIdOnWebIdActor; others are SolidVCActors)', (): void => {

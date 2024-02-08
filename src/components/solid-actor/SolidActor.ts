@@ -1,8 +1,8 @@
 import {logger} from "../../logger";
-import {IDocumentLoader} from "../../contexts/interfaces";
 import {CssProxy} from "./CssProxy";
 import {NotInitializedError} from "../../errors";
 import {ISolidActor, UploadConfiguration} from "../interfaces";
+import {IDocumentLoader} from "../../interfaces";
 
 export class SolidActor implements ISolidActor {
     webId: string;

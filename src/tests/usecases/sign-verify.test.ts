@@ -9,7 +9,8 @@ import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {getContextMap} from "../config/contextmap";
 import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
 import {joinUrlPaths} from "../../utils/url";
-import {IDocumentLoader} from "../../contexts/interfaces";
+
+import {IDocumentLoader} from "../../interfaces";
 
 
 describe('Use case: Sign-Verify (implemented with SolidVCActors)', (): void => {

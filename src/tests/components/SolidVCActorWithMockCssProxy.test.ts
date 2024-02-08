@@ -2,7 +2,6 @@ import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
 import {CssProxy} from "../../components/solid-actor/CssProxy";
-import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
@@ -17,6 +16,7 @@ import {fetch} from 'cross-fetch'
 import {isValidUrl} from "../../utils/url";
 import {exportPublicG2} from "../../utils/keypair";
 import {namespaces} from "../../utils/namespace";
+import {IDocumentLoader} from "../../interfaces";
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
 

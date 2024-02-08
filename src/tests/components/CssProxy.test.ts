@@ -4,9 +4,8 @@ import fetch from 'cross-fetch';
 import {cssTestConfigRecords, ICssTestConfig} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
 
-import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../../interfaces";
+import {ClientCredentials, CssControlsApiResponse, CssUserConfig, IDocumentLoader} from "../../interfaces";
 import {CssProxy} from "../../components/solid-actor/CssProxy";
-import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {AccessModes} from "@inrupt/solid-client";
 import * as path from "path";

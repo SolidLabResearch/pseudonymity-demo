@@ -3,7 +3,6 @@ import * as didContext from "did-context";
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import {customVocab} from "./customVocab";
-import {DocumentLoaderResponse, IDocumentLoader} from "./interfaces";
 import {fetch} from "@inrupt/universal-fetch";
 import {ttl2jld} from "../utils/parsing";
 import {readJsonFile} from "../utils/io";
@@ -11,6 +10,7 @@ import {namespaces} from "../utils/namespace";
 import {NotYetImplementedError} from "../errors";
 import {toDidKeyDocument, toDidKeyDocumentDirect} from "../utils/keypair";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
+import {DocumentLoaderResponse, IDocumentLoader} from "../interfaces";
 
 const ctx = new Map();
 // DID context

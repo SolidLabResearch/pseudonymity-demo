@@ -1,5 +1,4 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
-import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {readJsonFile} from "../../utils/io";
 // @ts-ignore
@@ -12,6 +11,7 @@ import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
 import {ITestRecord} from "../interfaces";
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {IVerificationMethod} from "../../components/interfaces";
+import {IDocumentLoader} from "../../interfaces";
 
 /**
  * Build context map

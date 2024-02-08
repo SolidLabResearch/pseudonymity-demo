@@ -8,12 +8,12 @@ import {DidActor} from "../components/solid-actor/DidActor";
 import {DidVCActor} from "../components/solid-actor/DidVCActor";
 import {toDidKeyDocument} from "../utils/keypair";
 import {obtainClientCredentials, register} from "../utils/css";
-import {IDocumentLoader} from "../contexts/interfaces";
 import {CompoundActor} from "../components/solid-actor/CompoundActor";
 import {WebIdOnDidKeyActor} from "../components/solid-actor/WebIdOnDidKeyActor";
 import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
 import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
 import {ICredentialActor, IVerificationMethod} from "../components/interfaces";
+import {IDocumentLoader} from "../interfaces";
 
 export interface IActorFactory<A> {
     documentLoader: IDocumentLoader

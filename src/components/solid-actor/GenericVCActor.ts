@@ -1,4 +1,3 @@
-import {IDocumentLoader} from "../../contexts/interfaces";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import {deriveProof} from "@mattrglobal/jsonld-signatures-bbs";
 import {klona} from "klona";
@@ -9,6 +8,7 @@ import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/v
 import credentialsContext from "credentials-context";
 import {JsonLdDocument} from "jsonld";
 import {VerificationResult} from "../interfaces";
+import {IDocumentLoader} from "../../interfaces";
 
 export type VerifiableCredential = VCDIVerifiableCredential
 
@@ -27,6 +27,7 @@ export abstract class GenericVCActor<S,V,D> {
 
     get credentialContext(): string[] {
 
+        // TODO: clean up
         const option01 = [
             'https://www.w3.org/2018/credentials/v1',
             "https://w3id.org/security/bbs/v1",

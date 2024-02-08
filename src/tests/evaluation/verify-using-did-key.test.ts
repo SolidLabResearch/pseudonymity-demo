@@ -6,9 +6,9 @@ import {ITestRecord} from "../interfaces";
 import {DidVCActor} from "../../components/solid-actor/DidVCActor";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
-import {IDocumentLoader} from "../../contexts/interfaces";
 import {getContextMap} from "../config/contextmap";
 import {IVerificationMethod} from "../../components/interfaces";
+import {IDocumentLoader} from "../../interfaces";
 
 
 describe('Evaluation - Phase 1 - Using did:key', (): void => {
