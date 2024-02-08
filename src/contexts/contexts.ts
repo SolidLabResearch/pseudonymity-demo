@@ -8,7 +8,7 @@ import {fetch} from "@inrupt/universal-fetch";
 import {ttl2jld} from "../utils/parsing";
 import {readJsonFile} from "../utils/io";
 import {namespaces} from "../utils/namespace";
-import {NotYetImplementedError} from "../components/solid-actor/errors";
+import {NotYetImplementedError} from "../errors";
 import {toDidKeyDocument, toDidKeyDocumentDirect} from "../utils/keypair";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 

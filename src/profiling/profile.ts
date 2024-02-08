@@ -9,7 +9,7 @@ import {
 import {DidVCActorFactory, SolidVCActorFactory} from "../tests/ActorFactory";
 import path from "path";
 import {runMultiActorEvaluation, runMultiActorEvaluationV2} from "./multi-actor";
-import {NotYetImplementedError} from "../components/solid-actor/errors";
+import {NotYetImplementedError} from "../errors";
 import {initializeUseCaseActorsForThirdPartyServiceSolution} from "./third-party-pseudonymizer";
 import {initializeUseCaseActorsForDidKeySolution} from "./did-key-pseudonymizer";
 
