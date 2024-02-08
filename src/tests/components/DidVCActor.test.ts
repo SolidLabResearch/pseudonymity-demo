@@ -6,12 +6,12 @@ import {readJsonFile} from "../../utils/io";
 import credentialsContext from 'credentials-context';
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
-import {IVerificationMethod} from "../../components/solid-actor/did-interfaces";
 import {DidVCActor} from "../../components/solid-actor/DidVCActor";
 import {DidVCActorFactory} from "../ActorFactory";
 import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
 import {ITestRecord} from "../interfaces";
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
+import {IVerificationMethod} from "../../components/interfaces";
 
 /**
  * Build context map

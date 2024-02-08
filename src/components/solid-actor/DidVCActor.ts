@@ -1,6 +1,6 @@
-import {IDidDocument} from "./did-interfaces";
 import {toDidKeyDocument} from "../../utils/keypair";
 import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
+import {IDidDocument} from "../interfaces";
 
 
 export class DidVCActor extends AbstractBls12381G2VCActor {

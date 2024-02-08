@@ -7,14 +7,13 @@ import {getContextMap} from "./config/contextmap";
 import {DidActor} from "../components/solid-actor/DidActor";
 import {DidVCActor} from "../components/solid-actor/DidVCActor";
 import {toDidKeyDocument} from "../utils/keypair";
-import {IVerificationMethod} from "../components/solid-actor/did-interfaces";
 import {obtainClientCredentials, register} from "../utils/css";
 import {IDocumentLoader} from "../contexts/interfaces";
 import {CompoundActor} from "../components/solid-actor/CompoundActor";
 import {WebIdOnDidKeyActor} from "../components/solid-actor/WebIdOnDidKeyActor";
 import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
 import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
-import {ICredentialActor} from "../components/interfaces";
+import {ICredentialActor, IVerificationMethod} from "../components/interfaces";
 
 export interface IActorFactory<A> {
     documentLoader: IDocumentLoader

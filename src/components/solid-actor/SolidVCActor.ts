@@ -3,14 +3,13 @@ import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {IDocumentLoader} from "../../contexts/interfaces";
 import path from "path";
 import {AccessModes, addNamedNode, setThing} from "@inrupt/solid-client";
-import {IDidDocument, IVerificationMethod} from "./did-interfaces";
 import {exportPublicG2} from "../../utils/keypair";
 import {logger} from "../../logger";
 import {joinUrlPaths} from "../../utils/url";
 import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
 import {Vocab, vocabs} from "../../utils/namespace";
 import {NamedNode} from "n3";
-import {ISolidActor, ISolidProxy, UploadConfiguration} from "../interfaces";
+import {IDidDocument, ISolidActor, ISolidProxy, IVerificationMethod, UploadConfiguration} from "../interfaces";
 
 export class SolidVCActor
     extends AbstractBls12381G2VCActor

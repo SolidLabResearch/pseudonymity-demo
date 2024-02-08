@@ -1,7 +1,7 @@
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import {IDidDocument} from "./did-interfaces";
 import {exportPublicG2} from "../../utils/keypair";
 import {IBls12381G2KeyPairActor} from "./KeyPairActor";
+import {IDidDocument} from "../interfaces";
 
 export class DidActor implements IBls12381G2KeyPairActor {
     key?: Bls12381G2KeyPair;
