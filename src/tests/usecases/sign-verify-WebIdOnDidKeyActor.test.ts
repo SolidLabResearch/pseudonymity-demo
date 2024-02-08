@@ -417,11 +417,7 @@ describe('Use case: Sign-Verify (alice: WebIdOnDidKey; others are SolidVCActors)
         for (const result of verificationResult.results) {
             expect(result).toHaveProperty('verified', true);
         }
-        writeJsonFile('tmp.finaltestoutput.WebIdOnDidKeyActor.json', {
-            p,
-            vp,
-            verificationResult
-        })
+        
     })
 
 });
