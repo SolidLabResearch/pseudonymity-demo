@@ -27,7 +27,7 @@ describe('Use case: Sign-Verify (alice: WebIdOnDidKey; others are SolidVCActors)
 
     async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
         const { webId } = r.userConfig;
-        const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
+        const proxy = new CssProxy(r.clientCredentials!, webId)
         // Determine URL for DIDs container, based on the pod url
         const didsContainer = webId.replace('#me','')
         const controllerId = didsContainer

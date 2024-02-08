@@ -55,13 +55,13 @@ describe(`'Test CSSProxy for one test actor'`, (): void => {
         })
 
         it(`[${r.testConfig.name}] Should initialize a CSSProxy`, async () => {
-            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
+            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId)
             await proxy.initialize()
             expect(proxy.isInitialized())
         })
 
         it(`[${r.testConfig.name}] CSSProxy can add plain text file to Solid Pod`, async () => {
-            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
+            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId)
             await proxy.initialize();
 
             const containerUrl = proxy.webId.replace('card#me', '')
@@ -85,7 +85,7 @@ describe(`'Test CSSProxy for one test actor'`, (): void => {
         })
 
         it(`[${r.testConfig.name}] CSSProxy allows WebIDProfile to be updated using its profile builder.`, async () => {
-            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId, r.controls!)
+            const proxy = new CssProxy(r.clientCredentials!, r.userConfig.webId)
             await proxy.initialize();
 
             const pb = await proxy.getProfileBuilder()
