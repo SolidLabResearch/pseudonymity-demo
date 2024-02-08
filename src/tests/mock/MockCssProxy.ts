@@ -1,10 +1,9 @@
-import {ISolidProxy} from "../../components/solid-actor/interfaces";
-
 import {AccessModes, SolidDataset, ThingBuilder} from "@inrupt/solid-client";
 import express from 'express';
 import path from "path";
 import {IncomingMessage, Server, ServerResponse} from "http";
 import fetch from "cross-fetch";
+import {ISolidProxy} from "../../components/interfaces";
 
 export class MockCssProxy implements ISolidProxy {
     fetch?: typeof fetch;

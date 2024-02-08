@@ -1,5 +1,4 @@
 import {IDocumentLoader} from "../../contexts/interfaces";
-import {VerificationResult} from "./interfaces";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import {deriveProof} from "@mattrglobal/jsonld-signatures-bbs";
 import {klona} from "klona";
@@ -9,6 +8,7 @@ import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/v
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import {JsonLdDocument} from "jsonld";
+import {VerificationResult} from "../interfaces";
 
 export type VerifiableCredential = VCDIVerifiableCredential
 

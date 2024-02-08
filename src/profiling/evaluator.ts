@@ -1,4 +1,3 @@
-import {ICredentialActor, VerifiableCredential, VerificationResult} from "../components/solid-actor/interfaces";
 import fs, {writeFileSync} from 'fs'
 // @ts-ignore
 import credentialsContext from 'credentials-context';
@@ -7,6 +6,7 @@ import path from "path";
 import {dirProfilingReports} from "./config";
 import {IActorReport, IStepRecord} from "./interfaces";
 import {trackStep} from "./track";
+import {ICredentialActor, VerifiableCredential, VerificationResult} from "../components/interfaces";
 
 
 function readJsonFile(path:string) {

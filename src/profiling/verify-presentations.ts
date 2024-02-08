@@ -2,10 +2,10 @@ import {createCustomDocumentLoader,} from "../contexts/contexts";
 import {credentialResources} from "./multi-actor";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {AbstractActorFactory, DidVCActorFactory, SolidVCActorFactory} from "../tests/ActorFactory";
-import {ICredentialActor} from "../components/solid-actor/interfaces";
 import {performance} from "node:perf_hooks";
 import {writeJsonFile} from "../utils/io";
 import assert  from "node:assert";
+import {ICredentialActor} from "../components/interfaces";
 function getDocumentLoader(ctx: Map<any,any>) {
 
 

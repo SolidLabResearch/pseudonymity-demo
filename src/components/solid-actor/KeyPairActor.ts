@@ -1,5 +1,5 @@
-import {IActor} from "./interfaces";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
+import {IActor} from "../interfaces";
 
 export abstract class KeyPairActor<K> implements IActor {
     key?: K

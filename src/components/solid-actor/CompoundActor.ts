@@ -1,4 +1,4 @@
-import {IActor, ICredentialActor} from "./interfaces";
+import {IActor, ICredentialActor} from "../interfaces";
 
 export class CompoundActor<A1 extends ICredentialActor, A2 extends ICredentialActor> implements IActor {
     protected a1: A1

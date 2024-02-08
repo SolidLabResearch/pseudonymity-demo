@@ -1,4 +1,3 @@
-import {ICredentialActor, VerificationResult} from "../components/solid-actor/interfaces";
 import {customVocab} from "../contexts/customVocab";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
@@ -17,6 +16,7 @@ import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredent
 import {writeJsonFile} from "../utils/io";
 import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
 import {getHostReport} from "../utils/profiling";
+import {ICredentialActor, VerificationResult} from "../components/interfaces";
 
 export const credentialResources = {
     'identity': {

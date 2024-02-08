@@ -1,5 +1,5 @@
-import {IActorMetadata, ICredentialActor} from "../components/solid-actor/interfaces";
 import {DocumentLoaderCacheOptions} from "../contexts/contexts";
+import {IActorMetadata, ICredentialActor} from "../components/interfaces";
 
 export interface IStepRecord extends ITimeTrackRecord {
     name: string

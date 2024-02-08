@@ -1,4 +1,3 @@
-import {ISolidActor, ISolidProxy, UploadConfiguration} from "./interfaces";
 import {CssProxy} from "./CssProxy";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {IDocumentLoader} from "../../contexts/interfaces";
@@ -11,6 +10,7 @@ import {joinUrlPaths} from "../../utils/url";
 import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
 import {Vocab, vocabs} from "../../utils/namespace";
 import {NamedNode} from "n3";
+import {ISolidActor, ISolidProxy, UploadConfiguration} from "../interfaces";
 
 export class SolidVCActor
     extends AbstractBls12381G2VCActor

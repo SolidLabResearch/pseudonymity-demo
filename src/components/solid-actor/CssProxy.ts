@@ -22,7 +22,8 @@ import {
 import {logger} from "../../logger";
 import {fetch} from "@inrupt/universal-fetch";
 import {obtainAccessToken} from "../../utils/css";
-import {ISolidPod, ISolidProxy} from "./interfaces";
+
+import {ISolidPod, ISolidProxy} from "../interfaces";
 
 export class CssProxy implements ISolidProxy {
     clientCredentials: ClientCredentials;

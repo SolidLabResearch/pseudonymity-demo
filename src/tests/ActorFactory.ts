@@ -13,8 +13,8 @@ import {IDocumentLoader} from "../contexts/interfaces";
 import {CompoundActor} from "../components/solid-actor/CompoundActor";
 import {WebIdOnDidKeyActor} from "../components/solid-actor/WebIdOnDidKeyActor";
 import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
-import {ICredentialActor} from "../components/solid-actor/interfaces";
 import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
+import {ICredentialActor} from "../components/interfaces";
 
 export interface IActorFactory<A> {
     documentLoader: IDocumentLoader
