@@ -4,11 +4,9 @@ import {CssProxy} from "../components/solid-actor/CssProxy";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {createCustomDocumentLoader, DocumentLoaderCacheOptions} from "../contexts/contexts";
 import {getContextMap} from "./config/contextmap";
-import {DidActor} from "../components/solid-actor/DidActor";
 import {DidVCActor} from "../components/solid-actor/DidVCActor";
 import {toDidKeyDocument} from "../utils/keypair";
 import {obtainClientCredentials, register} from "../utils/css";
-import {CompoundActor} from "../components/solid-actor/CompoundActor";
 import {WebIdOnDidKeyActor} from "../components/solid-actor/WebIdOnDidKeyActor";
 import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
 import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
@@ -41,18 +39,7 @@ export abstract class AbstractActorFactory<A> implements IActorFactory<A> {
     abstract createInitializedActor(r: ITestRecord): Promise<A>
 }
 
-export class DidActorFactory extends AbstractActorFactory<DidActor> {
-    async createInitializedActor(r?: ITestRecord): Promise<DidActor> {
-        const name = r! ? r!.testConfig.name : 'testactor'
-        const seed = r! ? r!.testConfig.name! : 'testseed'
-        const controller = `urn:${name}:controller`
-        const keyName = "key-g2"
-        const actor = new DidActor(seed, controller,keyName);
-        await actor.initialize()
-        return actor
-    }
 
-}
 export class DidVCActorFactory extends AbstractActorFactory<DidVCActor> {
 
 
