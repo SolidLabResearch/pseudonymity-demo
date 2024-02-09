@@ -10,5 +10,5 @@ export interface ITestRecord {
     app?: App;
     controls?: CssControlsApiResponse;
     clientCredentials?: ClientCredentials,
-    actor?: IActor | CompoundActor<ICredentialActor, ICredentialActor>
+    actor?: IActor | ICredentialActor | CompoundActor<ICredentialActor, ICredentialActor>
 }

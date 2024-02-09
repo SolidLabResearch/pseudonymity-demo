@@ -22,7 +22,7 @@ describe('WebIdOnWebIdActor', (): void => {
 
     it('Can initialize', async () => {
         actor = await createInitializedActor()
-        expect(actor.isInitialized()===true)
+        // expect(actor.isInitialized()===true)
     })
 
     it('Can create & sign with public actor (WebId actor) and verify with both', async () => {

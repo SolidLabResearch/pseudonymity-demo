@@ -81,7 +81,7 @@ export class DidVCActorFactory extends AbstractActorFactory<DidVCActor> {
             publicKeyBase58: key.publicKey
         })
         const actor = new DidVCActor(key,this.documentLoader);
-        await actor.initialize()
+
         this.cache[r.userConfig.email] = actor
         console.log(`DidVCActor cache size: ${Object.keys(this.cache).length}`)
         return actor

@@ -1,10 +1,10 @@
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import {IActor} from "../interfaces";
+import {IActor, IInitializableActor} from "../interfaces";
 
-export abstract class KeyPairActor<K> implements IActor {
+export abstract class KeyPairActor<K> implements Partial<IInitializableActor> {
     key?: K
 
-    abstract initialize(): Promise<void>
+    // abstract initialize(): Promise<void>
 
     isInitialized(): boolean {
         return this.key !== undefined

@@ -51,9 +51,6 @@ export abstract class GenericVCActor<S,V,D> {
     }
 
 
-    async initialize() {
-        // this.initializeSuites(); // TODO: safe delete
-    }
 
     isInitialized(): boolean{
         return this.signSuite !== undefined

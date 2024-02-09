@@ -60,9 +60,9 @@ export interface IActorMetadata {
     documentLoaderCacheOptions?: DocumentLoaderCacheOptions
 }
 
-export interface IActor extends IActorMetadata {
+export interface IActor extends IActorMetadata {}
+export interface IInitializableActor extends IActor {
     initialize(): Promise<void>
-
     isInitialized(): boolean
 }
 
@@ -75,6 +75,8 @@ export interface ISolidProxy extends ISolidActor {
     controls?: any
     storage?: ISolidPod
     fetch?: typeof fetch
+
+    initialize(): Promise<void>
 
     get cardUrl(): string
 

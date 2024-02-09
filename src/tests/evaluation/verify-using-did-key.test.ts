@@ -37,7 +37,7 @@ describe('Evaluation - Phase 1 - Using did:key', (): void => {
         })
         const documentLoader: IDocumentLoader = createCustomDocumentLoader(getContextMap())
         const actor = new DidVCActor(key,documentLoader);
-        await actor.initialize()
+        // await actor.initialize()
         return actor
     }
 

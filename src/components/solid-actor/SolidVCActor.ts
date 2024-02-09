@@ -121,16 +121,16 @@ export class SolidVCActor
 
 
     async initialize(): Promise<void> {
-        await super.initialize();
+        // await super.initialize();
         await this.proxy.initialize()
         await this.uploadResourcesToPod(this.uploadConfigurations)
         await this.addControllerDocumentToWebIdProfileDocument()
     }
 
-    isInitialized(): boolean {
-        return [
-            super.isInitialized(),
-            this.proxy.isInitialized()
-        ].every(x => x)
-    }
+    // isInitialized(): boolean {
+    //     return [
+    //         super.isInitialized(),
+    //         this.proxy.isInitialized()
+    //     ].every(x => x)
+    // }
 }
