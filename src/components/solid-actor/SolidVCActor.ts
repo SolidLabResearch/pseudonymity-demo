@@ -1,10 +1,6 @@
-import {CssProxy} from "./CssProxy";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import path from "path";
-import {AccessModes, addNamedNode, setThing} from "@inrupt/solid-client";
+import {AccessModes, setThing} from "@inrupt/solid-client";
 import {exportPublicG2} from "../../utils/keypair";
-import {logger} from "../../logger";
-import {joinUrlPaths} from "../../utils/url";
 import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
 import {Vocab, vocabs} from "../../utils/namespace";
 import {NamedNode} from "n3";
@@ -71,20 +67,6 @@ export class SolidVCActor
         }
     }
 
-    async uploadResourcesToPod(uploadConfigurations: UploadConfiguration[]) {
-        logger.debug('uploadResourcesToPod()')
-        for await (const uc of uploadConfigurations) {
-            const ser = await uc.serialize!(uc.o());
-            await this.proxy.addFileToContainer(
-                uc.destContainer,
-                Buffer.from(ser),
-                uc.mimeType,
-                uc.slug,
-                uc.access?.public)
-            logger.debug(`Added file ${uc.slug} to ${uc.destContainer}`)
-        }
-    }
-
     async addControllerDocumentToWebIdProfileDocument() {
 
         let card = await this.proxy.getCard()
@@ -121,9 +103,7 @@ export class SolidVCActor
 
 
     async initialize(): Promise<void> {
-        // await super.initialize();
         await this.proxy.initialize()
-        await this.uploadResourcesToPod(this.uploadConfigurations)
         await this.addControllerDocumentToWebIdProfileDocument()
     }
 
