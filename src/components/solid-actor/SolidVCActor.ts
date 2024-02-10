@@ -1,10 +1,10 @@
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import {AccessModes, setThing} from "@inrupt/solid-client";
+import {setThing} from "@inrupt/solid-client";
 import {exportPublicG2} from "../../utils/keypair";
 import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
 import {Vocab, vocabs} from "../../utils/namespace";
 import {NamedNode} from "n3";
-import {IDidDocument, ISolidActor, ISolidProxy, IVerificationMethod, UploadConfiguration} from "../interfaces";
+import {IDidDocument, ISolidActor, ISolidProxy, IVerificationMethod} from "../interfaces";
 import {IDocumentLoader} from "../../interfaces";
 
 export class SolidVCActor
@@ -15,7 +15,7 @@ export class SolidVCActor
     proxy: ISolidProxy
     _controllerContainer: string
     _controllerId: string
-    uploadConfigurations: UploadConfiguration[]
+
 
     constructor(key: Bls12381G2KeyPair, keyName: string, documentLoader: IDocumentLoader, proxy: ISolidProxy) {
         super(key, documentLoader);
@@ -24,20 +24,6 @@ export class SolidVCActor
         this.keyName = keyName
         this._controllerContainer = this.webId.replace('#me','')
         this._controllerId = this.webId
-
-        // this._controllerContainer = this.webId.replace('profile/card#me', 'dids/')
-        // this._controllerId = joinUrlPaths(this.controllerContainer, 'controller')
-        this.uploadConfigurations = [
-            {
-                description: `Uploads controller document to Solid Pod`,
-                o: () => this.controllerDocument,
-                serialize: async (o: object) => JSON.stringify(o, null, 2),
-                destContainer: this.controllerContainer,
-                slug: 'controller',
-                mimeType: 'application/ld+json',
-                access: {public: {read: true} as AccessModes}
-            } as UploadConfiguration
-        ]
     }
 
     get identifier(): string {
