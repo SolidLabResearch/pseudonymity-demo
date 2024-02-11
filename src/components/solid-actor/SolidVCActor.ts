@@ -29,12 +29,7 @@ export class SolidVCActor
         return this.webId
     }
 
-    /**
-     * Refs
-     * https://www.w3.org/TR/did-core/#did-document-properties
-     * https://www.w3.org/TR/vc-data-integrity/#controller-documents
-     */
-    get controllerDocument(): IDidDocument {
+    createControllerDocument(key: Bls12381G2KeyPair): IDidDocument {
         return {
             '@context': this.controllerDocumentContext,
             'id': this.controllerId,
@@ -45,7 +40,6 @@ export class SolidVCActor
     }
 
     async addControllerDocumentToWebIdProfileDocument() {
-
         let card = await this.proxy.getCard()
         const keyIri = this.webId.replace('#me', '#key')
 

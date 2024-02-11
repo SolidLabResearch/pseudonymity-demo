@@ -2,7 +2,6 @@ import {GenericVCActor} from "./GenericVCActor";
 import {BbsBlsSignature2020, BbsBlsSignatureProof2020, Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {KeyPairActor} from "./KeyPairActor";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
-import {toDidKeyDocumentDirect} from "../../utils/keypair";
 import {ICredentialActor, IDidDocument} from "../interfaces";
 import {IDocumentLoader} from "../../interfaces";
 
@@ -11,7 +10,7 @@ export abstract class AbstractBls12381G2VCActor
     implements ICredentialActor, KeyPairActor<Bls12381G2KeyPair> {
     key: Bls12381G2KeyPair;
     fingerprint?: string
-    _controllerDocument?: IDidDocument
+    _controllerDocument: IDidDocument
 
     constructor(key: Bls12381G2KeyPair, documentLoader: IDocumentLoader) {
         super(documentLoader,
@@ -22,23 +21,26 @@ export abstract class AbstractBls12381G2VCActor
 
         this.key = key;
         this.fingerprint = this.key.fingerprint()
-        this._controllerDocument = toDidKeyDocumentDirect(this.fingerprint, this.key.publicKey)
+        // this._controllerDocument = toDidKeyDocumentDirect(this.fingerprint, this.key.publicKey)
+        this._controllerDocument = this.createControllerDocument(this.key)
+    }
+
+    get controllerDocument(): IDidDocument {
+        return this._controllerDocument
     }
 
     abstract get identifier(): string
 
-    abstract get controllerDocument(): IDidDocument
 
-
+    abstract createControllerDocument(key: Bls12381G2KeyPair): IDidDocument
 
     get controllerDocumentContext(): string[] {
         // TODO: replace with namespaces.did
         return ['https://www.w3.org/ns/did/v1']
     }
 
-    get controllerId(): string {
+    get controllerId(): string { // TODO: delete controllerId (replace usages with identifier)
         return this.identifier
     }
-
 
 }
