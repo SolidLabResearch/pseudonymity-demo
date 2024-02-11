@@ -13,29 +13,20 @@ export class SolidVCActor
     webId: string;
     keyName: string
     proxy: ISolidProxy
-    _controllerContainer: string
-    _controllerId: string
-
 
     constructor(key: Bls12381G2KeyPair, keyName: string, documentLoader: IDocumentLoader, proxy: ISolidProxy) {
         super(key, documentLoader);
         this.webId = proxy.webId;
         this.proxy = proxy;
         this.keyName = keyName
-        this._controllerContainer = this.webId.replace('#me','')
-        this._controllerId = this.webId
     }
 
     get identifier(): string {
         return this.webId;
     }
 
-    get controllerContainer(): string {
-        return this._controllerContainer
-    }
-
     get controllerId(): string {
-        return this._controllerId
+        return this.webId
     }
 
     /**
