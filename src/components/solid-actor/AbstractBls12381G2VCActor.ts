@@ -1,12 +1,11 @@
 import {GenericVCActor} from "./GenericVCActor";
 import {BbsBlsSignature2020, BbsBlsSignatureProof2020, Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {_hack_addEnsureContextFunction} from "../../utils/cryptosuite";
-import {ICredentialActor, IDidDocument} from "../interfaces";
+import {IDidDocument} from "../interfaces";
 import {IDocumentLoader} from "../../interfaces";
 
 export abstract class AbstractBls12381G2VCActor
-    extends GenericVCActor<BbsBlsSignature2020, BbsBlsSignature2020, BbsBlsSignatureProof2020>
-    implements ICredentialActor {
+    extends GenericVCActor<BbsBlsSignature2020, BbsBlsSignature2020, BbsBlsSignatureProof2020> {
     key: Bls12381G2KeyPair;
     fingerprint?: string
     _controllerDocument: IDidDocument
@@ -22,8 +21,6 @@ export abstract class AbstractBls12381G2VCActor
         this.fingerprint = this.key.fingerprint()
         this._controllerDocument = this.createControllerDocument(this.key)
     }
-
-    abstract get identifier(): string
 
     abstract createControllerDocument(key: Bls12381G2KeyPair): IDidDocument
 

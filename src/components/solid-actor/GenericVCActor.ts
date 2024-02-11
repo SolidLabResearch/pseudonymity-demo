@@ -7,19 +7,18 @@ import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/v
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import {JsonLdDocument} from "jsonld";
-import {VerificationResult} from "../interfaces";
+import {ICredentialActor, VerificationResult} from "../interfaces";
 import {IDocumentLoader} from "../../interfaces";
 
 export type VerifiableCredential = VCDIVerifiableCredential
 
-export abstract class GenericVCActor<S,V,D> {
+export abstract class GenericVCActor<S,V,D> implements ICredentialActor {
     signSuite: S
     verifySuite: V
     deriveSuite: D
     private documentLoader: IDocumentLoader
     abstract get controllerId(): string
-
-
+    abstract get identifier(): string
 
     constructor(documentLoader: IDocumentLoader,
                 signSuite: S,
@@ -31,7 +30,6 @@ export abstract class GenericVCActor<S,V,D> {
         this.verifySuite = verifySuite;
         this.deriveSuite = deriveSuite;
     }
-
 
     get credentialContext(): string[] {
 
@@ -49,8 +47,6 @@ export abstract class GenericVCActor<S,V,D> {
             ...option01
         ]
     }
-
-
 
     isInitialized(): boolean{
         return this.signSuite !== undefined
