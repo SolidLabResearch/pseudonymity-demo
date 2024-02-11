@@ -21,18 +21,16 @@ export abstract class AbstractBls12381G2VCActor
 
         this.key = key;
         this.fingerprint = this.key.fingerprint()
-        // this._controllerDocument = toDidKeyDocumentDirect(this.fingerprint, this.key.publicKey)
         this._controllerDocument = this.createControllerDocument(this.key)
-    }
-
-    get controllerDocument(): IDidDocument {
-        return this._controllerDocument
     }
 
     abstract get identifier(): string
 
-
     abstract createControllerDocument(key: Bls12381G2KeyPair): IDidDocument
+
+    get controllerDocument(): IDidDocument {
+        return this._controllerDocument
+    }
 
     get controllerDocumentContext(): string[] {
         // TODO: replace with namespaces.did
