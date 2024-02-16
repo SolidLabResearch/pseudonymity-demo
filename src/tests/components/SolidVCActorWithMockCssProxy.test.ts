@@ -71,7 +71,6 @@ describe('SolidVCActor', (): void => {
 
         it(`[${r.testConfig.name}] should be able to initialize a SolidVCActorV2`, async () => {
             actor = await createInitializedActor(r)
-            expect(actor.isInitialized())
             // Sanity check
             expect(actor.key).toBeDefined()
         })

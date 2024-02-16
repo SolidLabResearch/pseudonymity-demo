@@ -27,16 +27,12 @@ describe('SolidVCActor', (): void => {
         let actor: SolidVCActor
         it(`[${r.testConfig.name}] should be able to initialize a SolidVCActor`, async () => {
             actor = await createInitializedActor(r)
-            expect(actor.isInitialized())
             // Sanity check
             expect(actor.key).toBeDefined()
         })
 
         it(`[${r.testConfig.name}] SolidVCActor should add controller semantics to WebID Document`, async () => {
-            // const actor = await createInitializedActor(r) // TODO: delete
-            expect(actor.isInitialized())
             // Controller Doc Checks
-
             // The controller doc is available as a json-ld representation
             const {status, statusText, headers} = await fetch(actor.key.controller!, {headers: {accept: 'application/ld+json'}})
             expect(status).toBe(200)
