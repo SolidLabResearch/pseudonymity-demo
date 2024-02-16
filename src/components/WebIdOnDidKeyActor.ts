@@ -1,5 +1,5 @@
 import {SolidVCActor} from "./SolidVCActor";
-import {DidVCActor} from "./DidVCActor";
+import {DidKeyVCActor} from "./DidKeyVCActor";
 import {CompoundCredentialActor} from "./CompoundCredentialActor";
 
-export class WebIdOnDidKeyActor extends CompoundCredentialActor<SolidVCActor, DidVCActor> {}
+export class WebIdOnDidKeyActor extends CompoundCredentialActor<SolidVCActor, DidKeyVCActor> {}

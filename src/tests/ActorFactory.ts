@@ -4,7 +4,7 @@ import {CssProxy} from "../components/CssProxy";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {createCustomDocumentLoader, DocumentLoaderCacheOptions} from "../contexts/contexts";
 import {getContextMap} from "./config/contextmap";
-import {DidVCActor} from "../components/DidVCActor";
+import {DidKeyVCActor} from "../components/DidKeyVCActor";
 import {toDidKeyDocument} from "../utils/keypair";
 import {obtainClientCredentials, register} from "../utils/css";
 import {WebIdOnDidKeyActor} from "../components/WebIdOnDidKeyActor";
@@ -40,14 +40,14 @@ export abstract class AbstractActorFactory<A> implements IActorFactory<A> {
 }
 
 
-export class DidVCActorFactory extends AbstractActorFactory<DidVCActor> {
+export class DidVCActorFactory extends AbstractActorFactory<DidKeyVCActor> {
 
 
     constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
         super(documentLoaderCacheOptions);
     }
 
-    async createInitializedActor(r: ITestRecord): Promise<DidVCActor> {
+    async createInitializedActor(r: ITestRecord): Promise<DidKeyVCActor> {
 
         if(Object.keys(this.cache).includes(r.userConfig.email)) {
             console.log('returning from CACHE!')
@@ -67,7 +67,7 @@ export class DidVCActorFactory extends AbstractActorFactory<DidVCActor> {
             privateKeyBase58: key.privateKey,
             publicKeyBase58: key.publicKey
         })
-        const actor = new DidVCActor(key,this.documentLoader);
+        const actor = new DidKeyVCActor(key,this.documentLoader);
 
         this.cache[r.userConfig.email] = actor
         console.log(`DidVCActor cache size: ${Object.keys(this.cache).length}`)
@@ -158,7 +158,7 @@ export class AbstractCompoundCredentialActorFactory<
     }
 
 }
-export class WebIdOnDidKeyActorFactory extends AbstractCompoundCredentialActorFactory<SolidVCActor, DidVCActor>{
+export class WebIdOnDidKeyActorFactory extends AbstractCompoundCredentialActorFactory<SolidVCActor, DidKeyVCActor>{
     constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
         super(
             new SolidVCActorFactory(documentLoaderCacheOptions),
@@ -174,7 +174,7 @@ export class WebIdOnDidKeyActorFactory extends AbstractCompoundCredentialActorFa
 
 
 export class WebIdOnWebIdActorFactory
-    extends AbstractCompoundCredentialActorFactory<SolidVCActor,DidVCActor> {
+    extends AbstractCompoundCredentialActorFactory<SolidVCActor,DidKeyVCActor> {
     constructor(documentLoaderCacheOptions: DocumentLoaderCacheOptions) {
         super(
             new SolidVCActorFactory(documentLoaderCacheOptions),
