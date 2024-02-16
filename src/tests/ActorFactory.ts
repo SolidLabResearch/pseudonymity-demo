@@ -1,15 +1,15 @@
 import {ITestRecord} from "./interfaces";
-import {SolidVCActor} from "../components/solid-actor/SolidVCActor";
-import {CssProxy} from "../components/solid-actor/CssProxy";
+import {SolidVCActor} from "../components/SolidVCActor";
+import {CssProxy} from "../components/CssProxy";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {createCustomDocumentLoader, DocumentLoaderCacheOptions} from "../contexts/contexts";
 import {getContextMap} from "./config/contextmap";
-import {DidVCActor} from "../components/solid-actor/DidVCActor";
+import {DidVCActor} from "../components/DidVCActor";
 import {toDidKeyDocument} from "../utils/keypair";
 import {obtainClientCredentials, register} from "../utils/css";
-import {WebIdOnDidKeyActor} from "../components/solid-actor/WebIdOnDidKeyActor";
-import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
-import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
+import {WebIdOnDidKeyActor} from "../components/WebIdOnDidKeyActor";
+import {WebIdOnWebIdActor} from "../components/WebIdOnWebIdActor";
+import {CompoundCredentialActor} from "../components/CompoundCredentialActor";
 import {ICredentialActor, IVerificationMethod} from "../components/interfaces";
 import {IDocumentLoader} from "../interfaces";
 

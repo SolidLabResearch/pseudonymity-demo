@@ -5,7 +5,7 @@ import {readJsonFile} from "../../utils/io";
 import credentialsContext from 'credentials-context';
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
-import {DidVCActor} from "../../components/solid-actor/DidVCActor";
+import {DidVCActor} from "../../components/DidVCActor";
 import {DidVCActorFactory} from "../ActorFactory";
 import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
 import {ITestRecord} from "../interfaces";

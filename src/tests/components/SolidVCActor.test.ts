@@ -5,7 +5,7 @@ import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/V
 import {ITestRecord} from "../interfaces";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {SolidVCActor} from "../../components/SolidVCActor";
 import n3 from 'n3'
 import {SolidVCActorFactory} from "../ActorFactory";
 import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";

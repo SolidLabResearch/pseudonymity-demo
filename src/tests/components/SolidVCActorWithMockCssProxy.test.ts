@@ -1,7 +1,7 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
-import {CssProxy} from "../../components/solid-actor/CssProxy";
+import {CssProxy} from "../../components/CssProxy";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
@@ -9,7 +9,7 @@ import {ITestRecord} from "../interfaces";
 import credentialsContext from 'credentials-context';
 import {getContextMap} from "../config/contextmap";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {SolidVCActor} from "../../components/SolidVCActor";
 import {klona} from "klona";
 import {MockCssProxy} from "../mock/MockCssProxy";
 import {fetch} from 'cross-fetch'

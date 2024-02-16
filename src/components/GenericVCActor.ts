@@ -7,8 +7,8 @@ import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/v
 // @ts-ignore
 import credentialsContext from "credentials-context";
 import {JsonLdDocument} from "jsonld";
-import {ICredentialActor, VerificationResult} from "../interfaces";
-import {IDocumentLoader} from "../../interfaces";
+import {ICredentialActor, VerificationResult} from "./interfaces";
+import {IDocumentLoader} from "../interfaces";
 
 export type VerifiableCredential = VCDIVerifiableCredential
 

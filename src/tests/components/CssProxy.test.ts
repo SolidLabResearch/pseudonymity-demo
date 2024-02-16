@@ -5,7 +5,7 @@ import {cssTestConfigRecords, ICssTestConfig} from "../config/actorsOnCssTestCon
 import {obtainClientCredentials, register} from "../../utils/css";
 
 import {ClientCredentials, CssControlsApiResponse, CssUserConfig, IDocumentLoader} from "../../interfaces";
-import {CssProxy} from "../../components/solid-actor/CssProxy";
+import {CssProxy} from "../../components/CssProxy";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {AccessModes} from "@inrupt/solid-client";
 import * as path from "path";

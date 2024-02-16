@@ -6,7 +6,7 @@ import {ITestRecord} from "../interfaces";
 import credentialsContext from 'credentials-context';
 import {WebIdOnWebIdActorFactory} from "../ActorFactory";
 import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
-import {WebIdOnWebIdActor} from "../../components/solid-actor/WebIdOnWebIdActor";
+import {WebIdOnWebIdActor} from "../../components/WebIdOnWebIdActor";
 
 describe('WebIdOnWebIdActor', (): void => {
 

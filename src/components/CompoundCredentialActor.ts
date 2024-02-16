@@ -2,8 +2,8 @@ import {CompoundActor} from "./CompoundActor";
 import {CredentialSubject} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import {JsonLdDocument} from "jsonld";
-import {ICompoundCredentialActor} from "../../profiling/interfaces";
-import {ICredentialActor, VerifiableCredential, VerificationResult} from "../interfaces";
+import {ICompoundCredentialActor} from "../profiling/interfaces";
+import {ICredentialActor, VerifiableCredential, VerificationResult} from "./interfaces";
 
 export class CompoundCredentialActor<A1 extends ICredentialActor, A2 extends ICredentialActor>
     extends CompoundActor<A1, A2>

@@ -1,14 +1,14 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
-import {CssProxy} from "../../components/solid-actor/CssProxy";
+import {CssProxy} from "../../components/CssProxy";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {ITestRecord} from "../interfaces";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {defaultDocumentLoaderCacheOptions, getContextMap} from "../config/contextmap";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {SolidVCActor} from "../../components/SolidVCActor";
 import {WebIdOnDidKeyActorFactory} from "../ActorFactory";
-import {WebIdOnDidKeyActor} from "../../components/solid-actor/WebIdOnDidKeyActor";
+import {WebIdOnDidKeyActor} from "../../components/WebIdOnDidKeyActor";
 import {writeJsonFile} from "../../utils/io";
 
 
@@ -417,7 +417,7 @@ describe('Use case: Sign-Verify (alice: WebIdOnDidKey; others are SolidVCActors)
         for (const result of verificationResult.results) {
             expect(result).toHaveProperty('verified', true);
         }
-        
+
     })
 
 });

@@ -1,5 +1,5 @@
 import {buildAuthenticatedFetch} from "@inrupt/solid-client-authn-core";
-import {ClientCredentials} from "../../interfaces";
+import {ClientCredentials} from "../interfaces";
 
 import {
     AccessModes,
@@ -19,11 +19,11 @@ import {
     universalAccess,
     UrlString
 } from "@inrupt/solid-client";
-import {logger} from "../../logger";
+import {logger} from "../logger";
 import {fetch} from "@inrupt/universal-fetch";
-import {obtainAccessToken} from "../../utils/css";
+import {obtainAccessToken} from "../utils/css";
 
-import {ISolidPod, ISolidProxy} from "../interfaces";
+import {ISolidPod, ISolidProxy} from "./interfaces";
 
 export class CssProxy implements ISolidProxy {
     clientCredentials: ClientCredentials;
