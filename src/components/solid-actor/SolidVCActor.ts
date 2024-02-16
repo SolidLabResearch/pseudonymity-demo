@@ -4,12 +4,12 @@ import {exportPublicG2} from "../../utils/keypair";
 import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
 import {Vocab, vocabs} from "../../utils/namespace";
 import {NamedNode} from "n3";
-import {IDidDocument, ISolidActor, ISolidProxy, IVerificationMethod} from "../interfaces";
+import {IDidDocument, Initializable, ISolidActor, ISolidProxy, IVerificationMethod} from "../interfaces";
 import {IDocumentLoader} from "../../interfaces";
 
 export class SolidVCActor
     extends AbstractBls12381G2VCActor
-    implements ISolidActor {
+    implements ISolidActor, Initializable {
     webId: string;
     keyName: string
     proxy: ISolidProxy
@@ -78,10 +78,4 @@ export class SolidVCActor
         await this.addControllerDocumentToWebIdProfileDocument()
     }
 
-    // isInitialized(): boolean {
-    //     return [
-    //         super.isInitialized(),
-    //         this.proxy.isInitialized()
-    //     ].every(x => x)
-    // }
 }

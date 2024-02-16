@@ -61,22 +61,25 @@ export interface IActorMetadata {
 }
 
 export interface IActor extends IActorMetadata {}
-export interface IInitializableActor extends IActor {
+
+export interface Initializable {
     initialize(): Promise<void>
-    isInitialized(): boolean
 }
 
 export interface ISolidActor extends IActor {
     webId: string
 }
 
-export interface ISolidProxy extends ISolidActor {
+export interface ISolidProxy
+    extends
+        ISolidActor,
+        Initializable {
     clientCredentials?: ClientCredentials
     controls?: any
     storage?: ISolidPod
     fetch?: typeof fetch
 
-    initialize(): Promise<void>
+    // initialize(): Promise<void>/**/
 
     get cardUrl(): string
 
