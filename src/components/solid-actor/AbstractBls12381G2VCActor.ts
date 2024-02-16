@@ -39,8 +39,4 @@ export abstract class AbstractBls12381G2VCActor
         return ['https://www.w3.org/ns/did/v1']
     }
 
-    get controllerId(): string { // TODO: delete controllerId (replace usages with identifier)
-        return this.identifier
-    }
-
 }

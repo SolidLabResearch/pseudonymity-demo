@@ -39,7 +39,7 @@ describe('SolidVCActor', (): void => {
             expect(headers.get('content-type')).toContain('application/ld+json')
 
             // SolidVCActor has updated the WebID Profile Document to contain verificationMethod & assertionMethod
-            const urlControllerDoc = actor.controllerId
+            const urlControllerDoc = actor.identifier
             const store = new n3.Store()
             new n3.Parser({format: 'application/n-quads'})
                 .parse(
@@ -61,7 +61,7 @@ describe('SolidVCActor', (): void => {
             const controllerQuads = store.getQuads(
                 actor.key!.id!,
                 'https://w3id.org/security#controller',
-                actor.controllerId,
+                actor.identifier,
                 null
             )
 

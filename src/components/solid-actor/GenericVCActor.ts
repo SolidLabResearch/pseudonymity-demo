@@ -17,7 +17,7 @@ export abstract class GenericVCActor<S,V,D> implements ICredentialActor {
     verifySuite: V
     deriveSuite: D
     private documentLoader: IDocumentLoader
-    abstract get controllerId(): string
+
     abstract get identifier(): string
 
     constructor(documentLoader: IDocumentLoader,
@@ -58,7 +58,7 @@ export abstract class GenericVCActor<S,V,D> implements ICredentialActor {
         return {
             '@context': this.credentialContext,
             type: ['VerifiableCredential'],
-            issuer: this.controllerId,
+            issuer: this.identifier,
             credentialSubject
         } as VerifiableCredential
     }

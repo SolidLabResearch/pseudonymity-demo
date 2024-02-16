@@ -25,14 +25,12 @@ export class SolidVCActor
         return this.webId;
     }
 
-    get controllerId(): string {
-        return this.webId
-    }
+
 
     createControllerDocument(key: Bls12381G2KeyPair): IDidDocument {
         return {
             '@context': this.controllerDocumentContext,
-            'id': this.controllerId,
+            'id': this.identifier,
             alsoKnownAs: this.webId,
             verificationMethod: [exportPublicG2(this.key!)],
             assertionMethod: [this.key.id!]
