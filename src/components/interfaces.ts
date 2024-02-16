@@ -1,4 +1,3 @@
-import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import {AccessModes, SolidDataset, ThingBuilder} from "@inrupt/solid-client";
 import {DocumentLoaderCacheOptions} from "../contexts/contexts";
@@ -6,26 +5,7 @@ import {CredentialSubject, VCDIVerifiableCredential} from "@digitalcredentials/v
 import {JsonLdDocument} from "jsonld";
 import {ClientCredentials} from "../interfaces";
 
-export interface BlsKeys {
-    G2?: Bls12381G2KeyPair & { url?: string }
-}
-
 export type VerificationResult = any // Joachim is sad now :(
-/**
- * Upload configurations allow to define different parameters
- * for uploading objects to a Solid Pod.
- */
-export interface UploadConfiguration {
-    o: () => object,
-    slug: string,
-    mimeType: string,
-    destContainer: string,
-    serialize?: (o: object) => Promise<string>
-    access?: {
-        public?: AccessModes
-    },
-    description?: string
-}
 
 export interface IKeyPairBase {
     '@context': string | string[]
@@ -49,9 +29,7 @@ export interface IKeyPairPublicExport extends IKeyPairBase {
     publicKeyBase58?: string
 }
 
-export interface ISolidPod {
-
-}
+export interface ISolidPod {}
 
 export interface IActorMetadata {
     className?: string
