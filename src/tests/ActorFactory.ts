@@ -10,8 +10,8 @@ import {obtainClientCredentials, register} from "../utils/css";
 import {WebIdOnDidKeyActor} from "../components/WebIdOnDidKeyActor";
 import {WebIdOnWebIdActor} from "../components/WebIdOnWebIdActor";
 import {CompoundCredentialActor} from "../components/CompoundCredentialActor";
-import {ICredentialActor, IVerificationMethod} from "../components/interfaces";
 import {IDocumentLoader} from "../interfaces";
+import {ICredentialActor, IVerificationMethod} from "../interfaces/did";
 
 export interface IActorFactory<A> {
     documentLoader: IDocumentLoader

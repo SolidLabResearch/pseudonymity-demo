@@ -1,7 +1,7 @@
 import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
-import {IDidDocument} from "./interfaces";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocumentDirect} from "../utils/keypair";
+import {IDidDocument} from "../interfaces/did";
 
 export class DidVCActor extends AbstractBls12381G2VCActor {
 

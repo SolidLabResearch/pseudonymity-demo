@@ -10,8 +10,8 @@ import {DidVCActorFactory} from "../ActorFactory";
 import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
 import {ITestRecord} from "../interfaces";
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
-import {IVerificationMethod} from "../../components/interfaces";
 import {IDocumentLoader} from "../../interfaces";
+import {IVerificationMethod} from "../../interfaces/did";
 
 /**
  * Build context map

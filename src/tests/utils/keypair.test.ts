@@ -2,7 +2,8 @@ import {describe, expect, it} from '@jest/globals';
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
 
-import {IVerificationMethod} from "../../components/interfaces";
+
+import {IVerificationMethod} from "../../interfaces/did";
 
 
 describe('Keypair utils', (): void => {

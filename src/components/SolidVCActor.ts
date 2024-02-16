@@ -4,8 +4,9 @@ import {exportPublicG2} from "../utils/keypair";
 import {AbstractBls12381G2VCActor} from "./AbstractBls12381G2VCActor";
 import {Vocab, vocabs} from "../utils/namespace";
 import {NamedNode} from "n3";
-import {IDidDocument, Initializable, ISolidActor, ISolidProxy, IVerificationMethod} from "./interfaces";
+import {Initializable, ISolidActor, ISolidProxy} from "./interfaces";
 import {IDocumentLoader} from "../interfaces";
+import {IDidDocument, IVerificationMethod} from "../interfaces/did";
 
 export class SolidVCActor
     extends AbstractBls12381G2VCActor

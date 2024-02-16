@@ -1,8 +1,8 @@
 import {GenericVCActor} from "./GenericVCActor";
 import {BbsBlsSignature2020, BbsBlsSignatureProof2020, Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {_hack_addEnsureContextFunction} from "../utils/cryptosuite";
-import {IDidDocument} from "./interfaces";
 import {IDocumentLoader} from "../interfaces";
+import {IDidDocument} from "../interfaces/did";
 
 export abstract class AbstractBls12381G2VCActor
     extends GenericVCActor<BbsBlsSignature2020, BbsBlsSignature2020, BbsBlsSignatureProof2020> {

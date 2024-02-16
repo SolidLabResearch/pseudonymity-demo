@@ -3,7 +3,8 @@ import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
 import {SolidVCActorFactory, WebIdOnDidKeyActorFactory} from "../tests/ActorFactory";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {DocumentLoaderCacheOptions} from "../contexts/contexts";
-import {ICredentialActor} from "../components/interfaces";
+
+import {ICredentialActor} from "../interfaces/did";
 
 export async function initializeUseCaseActorsForDidKeySolution(dlco: DocumentLoaderCacheOptions): Promise<IUseCaseActorsSetup> {
     let alice: ICompoundCredentialActor = await new WebIdOnDidKeyActorFactory(dlco).createInitializedActor(

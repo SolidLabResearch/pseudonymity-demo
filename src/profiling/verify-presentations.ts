@@ -5,7 +5,8 @@ import {AbstractActorFactory, DidVCActorFactory, SolidVCActorFactory} from "../t
 import {performance} from "node:perf_hooks";
 import {writeJsonFile} from "../utils/io";
 import assert  from "node:assert";
-import {ICredentialActor} from "../components/interfaces";
+
+import {ICredentialActor} from "../interfaces/did";
 
 
 async function getActors(factory: AbstractActorFactory<any>): Promise<{[p:string]: ICredentialActor}> {

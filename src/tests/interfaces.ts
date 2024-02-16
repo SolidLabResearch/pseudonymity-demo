@@ -2,7 +2,8 @@ import {ICssTestConfig} from "./config/actorsOnCssTestConfigs";
 import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../interfaces";
 import {App} from "@solid/community-server";
 import {CompoundActor} from "../components/CompoundActor";
-import {IActor, ICredentialActor} from "../components/interfaces";
+import {IActor} from "../components/interfaces";
+import {ICredentialActor} from "../interfaces/did";
 
 export interface ITestRecord {
     testConfig: ICssTestConfig;

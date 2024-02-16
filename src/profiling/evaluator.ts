@@ -6,7 +6,8 @@ import path from "path";
 import {dirProfilingReports} from "./config";
 import {IActorReport, IStepRecord} from "./interfaces";
 import {trackStep} from "./track";
-import {ICredentialActor, VerifiableCredential, VerificationResult} from "../components/interfaces";
+import {ICredentialActor} from "../interfaces/did";
+import {VerifiableCredential, VerificationResult} from "../interfaces/credentials";
 
 
 function readJsonFile(path:string) {

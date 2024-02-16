@@ -16,7 +16,8 @@ import {CompoundCredentialActor} from "../components/CompoundCredentialActor";
 import {writeJsonFile} from "../utils/io";
 import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
 import {getHostReport} from "../utils/profiling";
-import {ICredentialActor, VerificationResult} from "../components/interfaces";
+import {ICredentialActor} from "../interfaces/did";
+import {VerificationResult} from "../interfaces/credentials";
 
 export const credentialResources = {
     'identity': {
