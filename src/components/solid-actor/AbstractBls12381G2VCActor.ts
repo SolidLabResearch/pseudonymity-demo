@@ -22,6 +22,12 @@ export abstract class AbstractBls12381G2VCActor
         this._controllerDocument = this.createControllerDocument(this.key)
     }
 
+    /**
+     * Depends on the type of identifier used by the concrete VC Actor.
+     * For example, the controller document of a DID Key VC Actor will be
+     * created differently from a Solid VC Actor (using a WebID as identifier)
+     * @param key
+     */
     abstract createControllerDocument(key: Bls12381G2KeyPair): IDidDocument
 
     get controllerDocument(): IDidDocument {
