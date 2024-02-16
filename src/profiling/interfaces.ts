@@ -1,6 +1,6 @@
 import {DocumentLoaderCacheOptions} from "../contexts/contexts";
-import {IActorMetadata} from "../components/interfaces";
 import {ICredentialActor} from "../interfaces/did";
+import {IActorMetadata, ICompoundCredentialActor} from "../interfaces/actor";
 
 export interface IStepRecord extends ITimeTrackRecord {
     name: string
@@ -29,18 +29,6 @@ export interface IActorReport extends ITimeTrackRecord {
 export interface IMultiActorReport extends ITimeTrackRecord {
     records: IActorStepRecord[],
     documentLoaderCacheOptions?: DocumentLoaderCacheOptions
-}
-
-export interface ICompoundCredentialActor extends ICredentialActor { // TODO: refactor to interfaces.ts
-    enablePublicActor(): void
-
-    enablePseudonymousActor(): void
-
-    setActorMode(mode: 'pseudo' | 'public'): void
-
-    get publicActor(): ICredentialActor
-
-    get pseudonymousActor(): ICredentialActor
 }
 
 export interface IActorStep {

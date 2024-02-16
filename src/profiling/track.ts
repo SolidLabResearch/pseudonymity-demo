@@ -1,6 +1,7 @@
 import {IActorStep, IActorStepRecord, IStepRecord} from "./interfaces";
 
-import {IActorMetadata} from "../components/interfaces";
+
+import {IActorMetadata} from "../interfaces/actor";
 
 export async function trackStep(f: Function) {
     const {name} = f

@@ -3,7 +3,8 @@ import express from 'express';
 import path from "path";
 import {IncomingMessage, Server, ServerResponse} from "http";
 import fetch from "cross-fetch";
-import {ISolidProxy} from "../../components/interfaces";
+
+import {ISolidProxy} from "../../interfaces/solid";
 
 export class MockCssProxy implements ISolidProxy {
     fetch?: typeof fetch;

@@ -1,7 +1,7 @@
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {namespaces} from "./namespace";
-import {IKeyPairPublicExport} from "../components/interfaces";
 import {IDidDocument, IVerificationMethod} from "../interfaces/did";
+import {IKeyPairPublicExport} from "../interfaces/keypair";
 
 
 export function exportPublicG2(k: Bls12381G2KeyPair) {

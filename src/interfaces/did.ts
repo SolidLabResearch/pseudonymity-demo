@@ -1,5 +1,5 @@
-import {IActor, IActorMetadata} from "../components/interfaces";
 import {ICredentialCreator, IDeriver, ISigner, IVerifier} from "./credentials";
+import {IActor, IActorMetadata} from "./actor";
 
 export interface ICredentialActor extends IActor,
     IActorMetadata,
