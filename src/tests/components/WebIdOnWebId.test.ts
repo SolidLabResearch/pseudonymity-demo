@@ -4,7 +4,7 @@ import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/V
 import {ITestRecord} from "../interfaces";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
-import {WebIdOnWebIdActorFactory} from "../ActorFactory";
+import {WebIdOnWebIdActorFactory} from "../../factory/ActorFactory";
 import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
 import {WebIdOnWebIdActor} from "../../components/WebIdOnWebIdActor";
 

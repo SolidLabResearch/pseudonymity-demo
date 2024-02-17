@@ -1,9 +1,9 @@
-import {ITestRecord} from "./interfaces";
+import {ITestRecord} from "../tests/interfaces";
 import {SolidVCActor} from "../components/SolidVCActor";
 import {CssProxy} from "../components/CssProxy";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {createCustomDocumentLoader, DocumentLoaderCacheOptions} from "../contexts/contexts";
-import {getContextMap} from "./config/contextmap";
+import {getContextMap} from "../tests/config/contextmap";
 import {DidKeyVCActor} from "../components/DidKeyVCActor";
 import {toDidKeyDocument} from "../utils/keypair";
 import {obtainClientCredentials, register} from "../utils/css";

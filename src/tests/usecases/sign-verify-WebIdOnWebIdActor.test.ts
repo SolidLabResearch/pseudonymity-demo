@@ -10,7 +10,7 @@ import {defaultDocumentLoaderCacheOptions, getContextMap} from "../config/contex
 import {SolidVCActor} from "../../components/SolidVCActor";
 import {joinUrlPaths} from "../../utils/url";
 import {WebIdOnWebIdActor} from "../../components/WebIdOnWebIdActor";
-import {WebIdOnWebIdActorFactory} from "../ActorFactory";
+import {WebIdOnWebIdActorFactory} from "../../factory/ActorFactory";
 import {writeJsonFile} from "../../utils/io";
 import {IDocumentLoader} from "../../interfaces";
 

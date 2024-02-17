@@ -6,7 +6,7 @@ import {
     ProfileMode,
     profileMode
 } from "./config";
-import {DidVCActorFactory, SolidVCActorFactory} from "../tests/ActorFactory";
+import {DidVCActorFactory, SolidVCActorFactory} from "../factory/ActorFactory";
 import path from "path";
 import {runMultiActorEvaluation, runMultiActorEvaluationV2} from "./multi-actor";
 import {NotYetImplementedError} from "../errors";

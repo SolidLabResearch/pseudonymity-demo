@@ -7,7 +7,7 @@ import {ITestRecord} from "../interfaces";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {defaultDocumentLoaderCacheOptions, getContextMap} from "../config/contextmap";
 import {SolidVCActor} from "../../components/SolidVCActor";
-import {WebIdOnDidKeyActorFactory} from "../ActorFactory";
+import {WebIdOnDidKeyActorFactory} from "../../factory/ActorFactory";
 import {WebIdOnDidKeyActor} from "../../components/WebIdOnDidKeyActor";
 import {writeJsonFile} from "../../utils/io";
 

@@ -7,7 +7,7 @@ import {ITestRecord} from "../interfaces";
 import credentialsContext from 'credentials-context';
 import {SolidVCActor} from "../../components/SolidVCActor";
 import n3 from 'n3'
-import {SolidVCActorFactory} from "../ActorFactory";
+import {SolidVCActorFactory} from "../../factory/ActorFactory";
 import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
 
 describe('SolidVCActor', (): void => {

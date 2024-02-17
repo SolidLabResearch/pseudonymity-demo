@@ -1,7 +1,7 @@
 import {createCustomDocumentLoader,} from "../contexts/contexts";
 import {credentialResources} from "./multi-actor";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
-import {AbstractActorFactory, DidVCActorFactory, SolidVCActorFactory} from "../tests/ActorFactory";
+import {AbstractActorFactory, DidVCActorFactory, SolidVCActorFactory} from "../factory/ActorFactory";
 import {performance} from "node:perf_hooks";
 import {writeJsonFile} from "../utils/io";
 import assert  from "node:assert";

@@ -1,4 +1,4 @@
-import {AbstractActorFactory} from "../src/tests/ActorFactory";
+import {AbstractActorFactory} from "../src/factory/ActorFactory";
 import {DocumentLoaderCacheOptions} from "../src/contexts/contexts";
 import {ITestRecord} from "../src/tests/interfaces";
 import {obtainClientCredentialsV2} from "../src/utils/css";
