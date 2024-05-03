@@ -1,0 +1,80 @@
+
+...@vars.d2
+# VCs: "" {
+#   ...@vcs.d2
+# }
+
+seq: "WebID on WebID solution" {
+  shape: sequence_diagram
+  alice
+  pseudomizer
+
+  recruiter: "Recruiter\n${recruiter.webid}"
+  pod_alice: Pod Alice\n${alice.pod}
+  idp_alice: IDP Alice\n${alice.idp}
+  idp_pseudo: IDP Pseudo\n${pseudo.idp}
+
+  pod_alice."Contains VC01 and VC02"  
+
+
+  create_pseudo: "Create pseudonymous account" {
+    alice -> pseudomizer: "Create"
+    pseudomizer -> idp_pseudo: "Create pseudonymous account for Alice"
+    idp_pseudo -> pseudomizer: "Account created (WebID: ${pseudo.webid})"
+  }
+  
+  phase01: "Phase 01: Diploma Verification" {
+    ctx_pseudo: "Context: pseudo" {
+      pseudomizer -> recruiter: "Get Presentation Request (Diploma)"
+      recruiter -> pseudomizer: "Presentation Request (Diploma)"
+    }
+  
+    ctx_alice: "Context: Alice" {
+      pseudomizer -> pod_alice: "Fetch diploma VC"
+      pod_alice -> pseudomizer: "VC01"
+    }
+  
+  
+    ctx_pseudo2: "Context: pseudo" {
+      pseudomizer.|
+       Alice uses the pseudomizer to selectively disclose the degree from VC01.
+        1. Derive: dVC01 = SelectiveDisclosure(VC01, {degree})
+        2. Create Presentation: VP01 = [ dVC01 ]
+        3. Sign VP01 (using pseudo identity)
+      |
+      
+      pseudomizer -> recruiter: "Present VP01"
+      recruiter."Verify VP01"
+      recruiter -> pseudomizer: "Response: RVP01"
+    }
+  }
+  
+  phase02: "Phase02: Identity Verification" {
+    ctx_pseudo: "Context: pseudo" {
+      pseudomizer -> recruiter: "Get Presentation Request (Identity)"
+      recruiter -> pseudomizer: "Presentation Request (Identity)"
+    }
+
+    # Create VP02
+    ctx_alice: "Context: Alice" {
+      pseudomizer -> pod_alice: "Fetch identity VC"
+      pod_alice -> pseudomizer: "VC02"
+    }
+    
+    pseudomizer.|
+    Alice uses the pseudomizer to selectively disclose the WebID from VC02.
+      1. Derive: dVC02 = SelectiveDisclosure(VC02, {WebID})
+      2. Create Presentation: VP02 = [ dVC02 ]
+      3. Sign VP02
+    |
+
+    # Exchange VP02
+    pseudomizer -> recruiter: "Present VP02"
+    recruiter."Verify VP02"
+    recruiter -> pseudomizer: "Response: RVP02"
+  }
+    
+
+  
+
+}
