@@ -227,9 +227,6 @@ export namespace ActorSteps {
     export async function createPresentation02(actor: ICredentialActor){
         // Create Identity Linking Credentials
         const idLinkingVCs = await createIdentityLinkingCredentials(actor as CompoundCredentialActor<any, any>)
-        console.log({
-            idLinkingVCs
-        })
         // Add Identity Linking Credentials to VP
         p02 = actor.createPresentation([
             dvcIdentity,
