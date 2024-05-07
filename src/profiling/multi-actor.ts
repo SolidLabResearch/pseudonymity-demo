@@ -252,27 +252,8 @@ export namespace ActorSteps {
 }
 
 export namespace MultiActorEvaluator {
-    export const createActorSteps = () : IActorStep[] => {
-        return [
-            {actor: university, f: ActorSteps.createDiplomaCredential},
-            {actor: university, f: ActorSteps.signDiplomaCredential},
-            {actor: government, f: ActorSteps.createIdentityCredential},
-            {actor: government, f: ActorSteps.signIdentityCredential},
 
-            {actor: holder, mode: 'pseudo', f: ActorSteps.deriveDiplomaCredential},
-            {actor: holder, mode: 'pseudo', f: ActorSteps.createPresentation01},
-            {actor: holder, mode: 'pseudo', f: ActorSteps.signPresentation01},
-
-            {actor: recruiter, f: ActorSteps.verifyPresentation01},
-
-            {actor: holder, mode: 'public', f: ActorSteps.deriveIdentityCredential},
-            {actor: holder, mode: 'public', f: ActorSteps.createPresentation02},
-            {actor: holder, mode: 'public', f: ActorSteps.signPresentation02},
-
-            {actor: recruiter, f: ActorSteps.verifyPresentation02},
-        ]
-    }
-    export const createActorStepsV2 = (actors: IUseCaseActorsSetup) : IActorStep[] => {
+    export const createActorSteps = (actors: IUseCaseActorsSetup) : IActorStep[] => {
         const {
             alice: holder, university,
             recruiter,
@@ -322,57 +303,14 @@ export namespace MultiActorEvaluator {
 }
 
 /**
- * Run multi actor evaluation on provided actor factories.
- * Export results to given parent dir.
- * /parentDir
- *      documentLoaderCacheOptions.json
- *      actorFactory-X/
- *          multiactor-report-1.json
- *          multiactor-report-2.json
- *          ...
- *      actorFactory-Y/
- *         multiactor-report-1.json
- *         multiactor-report-2.json
- *         ...
- * @param actorFactories
- * @param parentDir
- */
-export async function runMultiActorEvaluation(actorFactories: IActorFactory<ICredentialActor>[], parentDir: string) {
-
-
-    for await (const actorFactory of actorFactories) {
-        console.log(`Profiling (${(actorFactory as any).constructor.name})`)
-        await initializeActors(actorFactory)
-        .then(MultiActorEvaluator.createActorSteps)
-        .then(MultiActorEvaluator.evaluate)
-        .then(async (multiActorReport: IMultiActorReport) => {
-            const filenameReport = [
-                'multiactor-report',
-                multiActorReport.start
-            ].join('-') + '.json'
-
-            await mkdirp(parentDir)
-            const fpathReport =path.join(parentDir, filenameReport)
-            const multiActorReportUpdate = {
-                ...multiActorReport,
-                documentLoaderCacheOptions: actorFactory.documentLoaderCacheOptions
-            }
-            writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate, null, 2))
-
-        })
-    }
-
-}
-
-/**
  * TODO: cleanup, improve.
  * @param usecaseActors
  * @param parentDir
  */
-export async function runMultiActorEvaluationV2(usecaseActors: IUseCaseActorsSetup, parentDir: string) {
+export async function runMultiActorEvaluation(usecaseActors: IUseCaseActorsSetup, parentDir: string) {
 
 
-    const actorSteps = MultiActorEvaluator.createActorStepsV2(usecaseActors)
+    const actorSteps = MultiActorEvaluator.createActorSteps(usecaseActors)
     const hostReport = getHostReport()
     const multiActorReport = await MultiActorEvaluator.evaluate(
         actorSteps
