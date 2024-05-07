@@ -17,7 +17,7 @@ import {writeJsonFile} from "../utils/io";
 import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
 import {getHostReport} from "../utils/profiling";
 import {ICredentialActor} from "../interfaces/did";
-import {VerificationResult} from "../interfaces/credentials";
+import {ICredentialCreator, VerifiableCredential, VerificationResult} from "../interfaces/credentials";
 
 export const credentialResources = {
     'identity': {
@@ -35,9 +35,9 @@ export const credentialResources = {
                 id: 'urn:test:id000',
                 "type": ["PermanentResident", "Person"],
                 'identifier': '123456789ab',
-                'givenName': 'John',
+                'givenName': 'Alice',
                 'familyName': "Doe",
-                'solid:webid': "https://gov.be/john.doe"
+                'solid:webid': "http://localhost:3000/alice/profile/card#me"
             }
         },
         derivationFrame: {
@@ -171,6 +171,28 @@ export namespace ActorSteps {
         return cIdentity
     }
 
+    export async function createIdentityLinkingCredentials(actor: CompoundCredentialActor<any, any>) {
+        // T(rue) acknowledges P(seudo): The true-identity actor creates a VC
+        // stating that the identity link between T is bound to P
+        actor.enablePublicActor();
+        let vcTackP = await actor.signCredential(
+            actor.createCredential({
+                'ex:pseudoId': actor.pseudonymousIdentifier,
+                'ex:trueId': actor.publicIdentifier
+            })
+        )
+        // P(seudo) acknowledges T(rue): The pseudo-identity actor creates a VC
+        // stating the identity link between P is bound to T
+        actor.enablePseudonymousActor()
+        let vcPackT = await actor.signCredential(
+            actor.createCredential({
+                'ex:pseudoId': actor.pseudonymousIdentifier,
+                'ex:trueId': actor.publicIdentifier
+            })
+        )
+        return [ vcTackP, vcPackT ]
+    }
+
     export async function signIdentityCredential(actor: ICredentialActor) {
         vcIdentity = await actor.signCredential(cIdentity)
         return vcIdentity
@@ -178,7 +200,6 @@ export namespace ActorSteps {
 
     export async function deriveDiplomaCredential(actor: ICredentialActor) {
         dvcDiploma = await actor.deriveCredential(vcDiploma, credentialResources.diploma.derivationFrame)
-
         return dvcDiploma
     }
 
@@ -200,13 +221,20 @@ export namespace ActorSteps {
 
     export async function deriveIdentityCredential(actor: ICredentialActor) {
         dvcIdentity = await actor.deriveCredential(vcIdentity, credentialResources.identity.derivationFrame)
-
-
         return dvcIdentity
     }
 
     export async function createPresentation02(actor: ICredentialActor){
-        p02 = actor.createPresentation([dvcIdentity], actor.identifier)
+        // Create Identity Linking Credentials
+        const idLinkingVCs = await createIdentityLinkingCredentials(actor as CompoundCredentialActor<any, any>)
+        console.log({
+            idLinkingVCs
+        })
+        // Add Identity Linking Credentials to VP
+        p02 = actor.createPresentation([
+            dvcIdentity,
+            ...idLinkingVCs
+        ], actor.identifier)
         return p02
     }
 
