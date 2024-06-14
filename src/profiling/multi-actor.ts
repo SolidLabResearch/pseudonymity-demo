@@ -123,6 +123,7 @@ let vp02: VerifiablePresentation
 let vr02: VerificationResult
 
 
+// TODO: delete initializeActors
 export async function initializeActors(actorFactory: IActorFactory<any>) {
 
     const actorTags = ['alice', 'university', 'government', 'recruiter']
