@@ -1,5 +1,4 @@
 import {ICredentialActor} from "../interfaces/did";
-import {IActor} from "../interfaces/actor";
 
 export class CompoundActor<A1 extends ICredentialActor, A2 extends ICredentialActor> {
     protected a1: A1

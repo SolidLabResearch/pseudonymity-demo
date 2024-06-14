@@ -1,5 +1,4 @@
 import {IUseCaseActorsSetup} from "./interfaces";
-import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
 import {SolidVCActorFactory, WebIdOnDidKeyActorFactory} from "../factory/ActorFactory";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {DocumentLoaderCacheOptions} from "../contexts/contexts";

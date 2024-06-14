@@ -1,6 +1,5 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
-import {obtainClientCredentials, register} from "../../utils/css";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
 // @ts-ignore

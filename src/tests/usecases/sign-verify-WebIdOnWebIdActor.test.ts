@@ -4,15 +4,11 @@ import {obtainClientCredentials, register} from "../../utils/css";
 import {CssProxy} from "../../components/CssProxy";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {ITestRecord} from "../interfaces";
-import path from "path";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {defaultDocumentLoaderCacheOptions, getContextMap} from "../config/contextmap";
 import {SolidVCActor} from "../../components/SolidVCActor";
-import {joinUrlPaths} from "../../utils/url";
 import {WebIdOnWebIdActor} from "../../components/WebIdOnWebIdActor";
 import {WebIdOnWebIdActorFactory} from "../../factory/ActorFactory";
-import {writeJsonFile} from "../../utils/io";
-import {IDocumentLoader} from "../../interfaces";
 
 
 describe('Use case: Sign-Verify (alice: WebIdOnWebIdActor; others are SolidVCActors)', (): void => {

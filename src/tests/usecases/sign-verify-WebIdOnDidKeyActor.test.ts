@@ -9,7 +9,6 @@ import {defaultDocumentLoaderCacheOptions, getContextMap} from "../config/contex
 import {SolidVCActor} from "../../components/SolidVCActor";
 import {WebIdOnDidKeyActorFactory} from "../../factory/ActorFactory";
 import {WebIdOnDidKeyActor} from "../../components/WebIdOnDidKeyActor";
-import {writeJsonFile} from "../../utils/io";
 
 
 describe('Use case: Sign-Verify (alice: WebIdOnDidKey; others are SolidVCActors)', (): void => {

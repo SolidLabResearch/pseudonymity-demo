@@ -1,6 +1,5 @@
 import {joinFilePath, LogLevel} from "@solid/community-server";
 import {CssUserConfig} from "../../interfaces";
-import {UserConfig} from "../../utils/css";
 
 export type ActorName = string
 

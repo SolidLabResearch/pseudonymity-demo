@@ -5,10 +5,7 @@ import {obtainClientCredentialsV2} from "../src/utils/css";
 import {SolidVCActor} from "../src/components/SolidVCActor";
 import {CssProxy} from "../src/components/CssProxy";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import {getThing} from "@inrupt/solid-client";
-import {ttl2jld} from "../src/utils/parsing";
 import n3, {Quad} from "n3";
-import {N3Parser} from "rdflib";
 
 function createTestRecord(name: string, port: number, email: string, password: string): ITestRecord {
 

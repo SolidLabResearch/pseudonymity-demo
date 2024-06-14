@@ -8,7 +8,6 @@ import {ClientCredentials, CssControlsApiResponse, CssUserConfig, IDocumentLoade
 import {CssProxy} from "../../components/CssProxy";
 import {createCustomDocumentLoader, ctx} from "../../contexts/contexts";
 import {AccessModes} from "@inrupt/solid-client";
-import * as path from "path";
 import {joinUrlPaths} from "../../utils/url";
 
 

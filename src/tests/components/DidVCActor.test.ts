@@ -3,15 +3,12 @@ import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {readJsonFile} from "../../utils/io";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
-import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {toDidKeyDocument} from "../../utils/keypair";
 import {DidKeyVCActor} from "../../components/DidKeyVCActor";
 import {DidVCActorFactory} from "../../factory/ActorFactory";
 import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
-import {ITestRecord} from "../interfaces";
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {IDocumentLoader} from "../../interfaces";
-import {IVerificationMethod} from "../../interfaces/did";
 
 /**
  * Build context map

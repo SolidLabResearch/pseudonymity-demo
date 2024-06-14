@@ -1,4 +1,3 @@
-import {createCustomDocumentLoader,} from "../contexts/contexts";
 import {credentialResources} from "./multi-actor";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {AbstractActorFactory, DidVCActorFactory, SolidVCActorFactory} from "../factory/ActorFactory";

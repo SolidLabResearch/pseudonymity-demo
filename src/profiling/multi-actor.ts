@@ -1,4 +1,3 @@
-import {customVocab} from "../contexts/customVocab";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import assert from "node:assert";
@@ -11,10 +10,7 @@ import {trackActorStep} from "./track";
 import path from "path";
 import {writeFileSync} from "fs";
 import {mkdirp} from "fs-extra";
-import {WebIdOnWebIdActor} from "../components/WebIdOnWebIdActor";
 import {CompoundCredentialActor} from "../components/CompoundCredentialActor";
-import {writeJsonFile} from "../utils/io";
-import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
 import {getHostReport} from "../utils/profiling";
 import {ICredentialActor} from "../interfaces/did";
 import {ICredentialCreator, VerifiableCredential, VerificationResult} from "../interfaces/credentials";
