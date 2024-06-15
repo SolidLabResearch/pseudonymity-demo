@@ -1,9 +1,7 @@
-import {ICredentialActor, VerificationResult} from "../components/solid-actor/interfaces";
-import {customVocab} from "../contexts/customVocab";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {VerifiablePresentation} from "@digitalcredentials/vc-data-model";
 import assert from "node:assert";
-import {IActorFactory} from "../tests/ActorFactory";
+import {IActorFactory} from "../factory/ActorFactory";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {ITestRecord} from "../tests/interfaces";
 
@@ -12,11 +10,10 @@ import {trackActorStep} from "./track";
 import path from "path";
 import {writeFileSync} from "fs";
 import {mkdirp} from "fs-extra";
-import {WebIdOnWebIdActor} from "../components/solid-actor/WebIdOnWebIdActor";
-import {CompoundCredentialActor} from "../components/solid-actor/CompoundCredentialActor";
-import {writeJsonFile} from "../utils/io";
-import {defaultDocumentLoaderCacheOptions} from "../tests/config/contextmap";
+import {CompoundCredentialActor} from "../components/CompoundCredentialActor";
 import {getHostReport} from "../utils/profiling";
+import {ICredentialActor} from "../interfaces/did";
+import {ICredentialCreator, VerifiableCredential, VerificationResult} from "../interfaces/credentials";
 
 export const credentialResources = {
     'identity': {
@@ -34,9 +31,9 @@ export const credentialResources = {
                 id: 'urn:test:id000',
                 "type": ["PermanentResident", "Person"],
                 'identifier': '123456789ab',
-                'givenName': 'John',
+                'givenName': 'Alice',
                 'familyName': "Doe",
-                'solid:webid': "https://gov.be/john.doe"
+                'solid:webid': "http://localhost:3000/alice/profile/card#me"
             }
         },
         derivationFrame: {
@@ -122,6 +119,7 @@ let vp02: VerifiablePresentation
 let vr02: VerificationResult
 
 
+// TODO: delete initializeActors
 export async function initializeActors(actorFactory: IActorFactory<any>) {
 
     const actorTags = ['alice', 'university', 'government', 'recruiter']
@@ -170,6 +168,28 @@ export namespace ActorSteps {
         return cIdentity
     }
 
+    export async function createIdentityLinkingCredentials(actor: CompoundCredentialActor<any, any>) {
+        // T(rue) acknowledges P(seudo): The true-identity actor creates a VC
+        // stating that the identity link between T is bound to P
+        actor.enablePublicActor();
+        let vcTackP = await actor.signCredential(
+            actor.createCredential({
+                'ex:pseudoId': actor.pseudonymousIdentifier,
+                'ex:trueId': actor.publicIdentifier
+            })
+        )
+        // P(seudo) acknowledges T(rue): The pseudo-identity actor creates a VC
+        // stating the identity link between P is bound to T
+        actor.enablePseudonymousActor()
+        let vcPackT = await actor.signCredential(
+            actor.createCredential({
+                'ex:pseudoId': actor.pseudonymousIdentifier,
+                'ex:trueId': actor.publicIdentifier
+            })
+        )
+        return [ vcTackP, vcPackT ]
+    }
+
     export async function signIdentityCredential(actor: ICredentialActor) {
         vcIdentity = await actor.signCredential(cIdentity)
         return vcIdentity
@@ -177,7 +197,6 @@ export namespace ActorSteps {
 
     export async function deriveDiplomaCredential(actor: ICredentialActor) {
         dvcDiploma = await actor.deriveCredential(vcDiploma, credentialResources.diploma.derivationFrame)
-
         return dvcDiploma
     }
 
@@ -199,13 +218,17 @@ export namespace ActorSteps {
 
     export async function deriveIdentityCredential(actor: ICredentialActor) {
         dvcIdentity = await actor.deriveCredential(vcIdentity, credentialResources.identity.derivationFrame)
-
-
         return dvcIdentity
     }
 
     export async function createPresentation02(actor: ICredentialActor){
-        p02 = actor.createPresentation([dvcIdentity], actor.identifier)
+        // Create Identity Linking Credentials
+        const idLinkingVCs = await createIdentityLinkingCredentials(actor as CompoundCredentialActor<any, any>)
+        // Add Identity Linking Credentials to VP
+        p02 = actor.createPresentation([
+            dvcIdentity,
+            ...idLinkingVCs
+        ], actor.identifier)
         return p02
     }
 
@@ -223,27 +246,8 @@ export namespace ActorSteps {
 }
 
 export namespace MultiActorEvaluator {
-    export const createActorSteps = () : IActorStep[] => {
-        return [
-            {actor: university, f: ActorSteps.createDiplomaCredential},
-            {actor: university, f: ActorSteps.signDiplomaCredential},
-            {actor: government, f: ActorSteps.createIdentityCredential},
-            {actor: government, f: ActorSteps.signIdentityCredential},
 
-            {actor: holder, mode: 'pseudo', f: ActorSteps.deriveDiplomaCredential},
-            {actor: holder, mode: 'pseudo', f: ActorSteps.createPresentation01},
-            {actor: holder, mode: 'pseudo', f: ActorSteps.signPresentation01},
-
-            {actor: recruiter, f: ActorSteps.verifyPresentation01},
-
-            {actor: holder, mode: 'public', f: ActorSteps.deriveIdentityCredential},
-            {actor: holder, mode: 'public', f: ActorSteps.createPresentation02},
-            {actor: holder, mode: 'public', f: ActorSteps.signPresentation02},
-
-            {actor: recruiter, f: ActorSteps.verifyPresentation02},
-        ]
-    }
-    export const createActorStepsV2 = (actors: IUseCaseActorsSetup) : IActorStep[] => {
+    export const createActorSteps = (actors: IUseCaseActorsSetup) : IActorStep[] => {
         const {
             alice: holder, university,
             recruiter,
@@ -293,57 +297,14 @@ export namespace MultiActorEvaluator {
 }
 
 /**
- * Run multi actor evaluation on provided actor factories.
- * Export results to given parent dir.
- * /parentDir
- *      documentLoaderCacheOptions.json
- *      actorFactory-X/
- *          multiactor-report-1.json
- *          multiactor-report-2.json
- *          ...
- *      actorFactory-Y/
- *         multiactor-report-1.json
- *         multiactor-report-2.json
- *         ...
- * @param actorFactories
- * @param parentDir
- */
-export async function runMultiActorEvaluation(actorFactories: IActorFactory<ICredentialActor>[], parentDir: string) {
-
-
-    for await (const actorFactory of actorFactories) {
-        console.log(`Profiling (${(actorFactory as any).constructor.name})`)
-        await initializeActors(actorFactory)
-        .then(MultiActorEvaluator.createActorSteps)
-        .then(MultiActorEvaluator.evaluate)
-        .then(async (multiActorReport: IMultiActorReport) => {
-            const filenameReport = [
-                'multiactor-report',
-                multiActorReport.start
-            ].join('-') + '.json'
-
-            await mkdirp(parentDir)
-            const fpathReport =path.join(parentDir, filenameReport)
-            const multiActorReportUpdate = {
-                ...multiActorReport,
-                documentLoaderCacheOptions: actorFactory.documentLoaderCacheOptions
-            }
-            writeFileSync(fpathReport, JSON.stringify(multiActorReportUpdate, null, 2))
-
-        })
-    }
-
-}
-
-/**
  * TODO: cleanup, improve.
  * @param usecaseActors
  * @param parentDir
  */
-export async function runMultiActorEvaluationV2(usecaseActors: IUseCaseActorsSetup, parentDir: string) {
+export async function runMultiActorEvaluation(usecaseActors: IUseCaseActorsSetup, parentDir: string) {
 
 
-    const actorSteps = MultiActorEvaluator.createActorStepsV2(usecaseActors)
+    const actorSteps = MultiActorEvaluator.createActorSteps(usecaseActors)
     const hostReport = getHostReport()
     const multiActorReport = await MultiActorEvaluator.evaluate(
         actorSteps

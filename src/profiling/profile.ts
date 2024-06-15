@@ -6,10 +6,9 @@ import {
     ProfileMode,
     profileMode
 } from "./config";
-import {DidVCActorFactory, SolidVCActorFactory} from "../tests/ActorFactory";
 import path from "path";
-import {runMultiActorEvaluation, runMultiActorEvaluationV2} from "./multi-actor";
-import {NotYetImplementedError} from "../components/solid-actor/errors";
+import {runMultiActorEvaluation} from "./multi-actor";
+import {NotYetImplementedError} from "../errors";
 import {initializeUseCaseActorsForThirdPartyServiceSolution} from "./third-party-pseudonymizer";
 import {initializeUseCaseActorsForDidKeySolution} from "./did-key-pseudonymizer";
 
@@ -22,34 +21,9 @@ const cliArgs = {
 
 }
 
-async function multiActorRunV1() {
-    const N = cliArgs.nIterations! ? parseInt(cliArgs.nIterations!.split('=')[1]) :  nIterations
-    const dcloConfigIndex = parseInt(cliArgs.dcloConfigIndex!.split('=')[1]) ?? defaultDCLOConfigIndex
 
-    const reportStart = Date.now()
-    const reportDir = path.join(dirProfilingReports, `${reportStart}`)
 
-    const dclo = documentLoaderCacheOptionConfigurations[dcloConfigIndex]
-    const actorFactories = [
-        new SolidVCActorFactory(dclo),
-        new DidVCActorFactory(dclo)
-    ]
-
-    console.log(`
-            Nr. iterations: ${N}
-            DocumentLoaderCacheOptionConfiguration: ${JSON.stringify(dclo)}
-            `)
-    for(let i = 0; i< N; i++) {
-        console.log(`Iteration: ${i}`)
-        await runMultiActorEvaluation(
-            actorFactories,
-            reportDir
-        )
-    }
-
-}
-
-async function profileThirdPartyServiceSolution() {
+async function profileWebIdSolution() {
     const N = cliArgs.nIterations! ? parseInt(cliArgs.nIterations!.split('=')[1]) :  nIterations
     const dcloConfigIndex = parseInt(cliArgs.dcloConfigIndex!.split('=')[1]) ?? defaultDCLOConfigIndex
 
@@ -66,7 +40,7 @@ async function profileThirdPartyServiceSolution() {
     const usecaseActors = await initializeUseCaseActorsForThirdPartyServiceSolution(dclo)
     for(let i = 0; i< N; i++) {
         console.log(`Iteration: ${i}`)
-        await runMultiActorEvaluationV2(
+        await runMultiActorEvaluation(
             usecaseActors,
             reportDir
         )
@@ -90,7 +64,7 @@ async function profileDidKeySolution() {
     const usecaseActors = await initializeUseCaseActorsForDidKeySolution(dclo)
     for(let i = 0; i< N; i++) {
         console.log(`Iteration: ${i}`)
-        await runMultiActorEvaluationV2(
+        await runMultiActorEvaluation(
             usecaseActors,
             reportDir
         )
@@ -101,14 +75,11 @@ switch (profileMode) {
         throw new NotYetImplementedError('TODO: ProfileMode.singleActor')
         break
     case ProfileMode.multiActor:
-        multiActorRunV1().then()
-            .catch(console.error)
-        break;
-    case ProfileMode.multiActorV2:
+
         const solution = cliArgs.solution!.split('=')[1]
         switch (solution) {
-            case 'third-party':
-                profileThirdPartyServiceSolution().then().catch(console.error)
+            case 'webid':
+                profileWebIdSolution().then().catch(console.error)
                 break;
             case 'did-key':
                 profileDidKeySolution().then().catch(console.error)

@@ -1,8 +1,10 @@
-import {ICompoundCredentialActor, IUseCaseActorsSetup} from "./interfaces";
-import {ICredentialActor} from "../components/solid-actor/interfaces";
-import {SolidVCActorFactory, WebIdOnWebIdActorFactory} from "../tests/ActorFactory";
+import {IUseCaseActorsSetup} from "./interfaces";
+import {SolidVCActorFactory, WebIdOnWebIdActorFactory} from "../factory/ActorFactory";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
 import {DocumentLoaderCacheOptions} from "../contexts/contexts";
+
+import {ICredentialActor} from "../interfaces/did";
+import {ICompoundCredentialActor} from "../interfaces/actor";
 
 
 export async function initializeUseCaseActorsForThirdPartyServiceSolution(dlco: DocumentLoaderCacheOptions): Promise<IUseCaseActorsSetup> {

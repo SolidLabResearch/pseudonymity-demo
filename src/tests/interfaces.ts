@@ -1,8 +1,9 @@
 import {ICssTestConfig} from "./config/actorsOnCssTestConfigs";
 import {ClientCredentials, CssControlsApiResponse, CssUserConfig} from "../interfaces";
 import {App} from "@solid/community-server";
-import {IActor, ICredentialActor} from "../components/solid-actor/interfaces";
-import {CompoundActor} from "../components/solid-actor/CompoundActor";
+import {CompoundActor} from "../components/CompoundActor";
+import {ICredentialActor} from "../interfaces/did";
+import {IActor} from "../interfaces/actor";
 
 export interface ITestRecord {
     testConfig: ICssTestConfig;
@@ -10,5 +11,5 @@ export interface ITestRecord {
     app?: App;
     controls?: CssControlsApiResponse;
     clientCredentials?: ClientCredentials,
-    actor?: IActor | CompoundActor<ICredentialActor, ICredentialActor>
+    actor?: IActor | ICredentialActor | CompoundActor<ICredentialActor, ICredentialActor>
 }

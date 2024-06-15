@@ -5,7 +5,7 @@ services:
       - all
       - components
       - usecases
-    image: solidproject/community-server:7
+    image: solidproject/community-server:${CSS_TAG}
     environment:
       - CSS_PORT=${CSS_PORT_ALICE}
       - CSS_SHOW_STACK_TRACE=${CSS_SHOW_STACK_TRACE}
@@ -23,7 +23,7 @@ services:
       - all
       - components
       - usecases
-    image: solidproject/community-server:7
+    image: solidproject/community-server:${CSS_TAG}
     environment:
       - CSS_PORT=${CSS_PORT_PSEUDO}
       - CSS_SHOW_STACK_TRACE=${CSS_SHOW_STACK_TRACE}
@@ -40,7 +40,7 @@ services:
     profiles:
       - all
       - usecases
-    image: solidproject/community-server:7
+    image: solidproject/community-server:${CSS_TAG}
     environment:
       - CSS_PORT=${CSS_PORT_RECRUITER}
       - CSS_SHOW_STACK_TRACE=${CSS_SHOW_STACK_TRACE}
@@ -57,7 +57,7 @@ services:
     profiles:
       - all
       - usecases
-    image: solidproject/community-server:7
+    image: solidproject/community-server:${CSS_TAG}
     environment:
       - CSS_PORT=${CSS_PORT_UNIVERSITY}
       - CSS_SHOW_STACK_TRACE=${CSS_SHOW_STACK_TRACE}
@@ -74,7 +74,7 @@ services:
     profiles:
       - all
       - usecases
-    image: solidproject/community-server:7
+    image: solidproject/community-server:${CSS_TAG}
     environment:
       - CSS_PORT=${CSS_PORT_GOVERNMENT}
       - CSS_SHOW_STACK_TRACE=${CSS_SHOW_STACK_TRACE}

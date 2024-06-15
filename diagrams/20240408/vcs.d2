@@ -1,0 +1,44 @@
+...@vars.d2
+VC01: {
+  shape: sql_table
+  webid: ${alice.webid}
+  ssn: ${alice.ssn}
+  birth_date: "1990-01-01"
+  gender: "F"
+  eid_public_key: ${alice.eid.public_key}
+  eid_secret_key: ${alice.eid.secret_key}
+}
+
+VC02: {
+  shape: sql_table
+  degree: "Msc. Physics"
+  graduation_date: "2016-06-30"
+  grade: "Distinction"
+  university: "Ghent University"
+  ssn: ${alice.ssn}
+}
+
+
+# VPs with derived credentials
+
+VP_D: {
+  # direction: down
+  # holder: ${pseudo.webid}
+  credentials: {
+    dVC02: {
+      shape: sql_table
+      degree: "Msc. Physics"
+    }
+  }
+}
+
+VP_ID: "VP_ID"{
+  credentials: {
+    dVC01: {
+      shape: sql_table
+      webid: ${alice.webid}
+    }
+  }
+  
+}
+

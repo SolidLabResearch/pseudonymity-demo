@@ -1,13 +1,12 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
-import {obtainClientCredentials, register} from "../../utils/css";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
 // @ts-ignore
 import credentialsContext from 'credentials-context';
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
+import {SolidVCActor} from "../../components/SolidVCActor";
 import n3 from 'n3'
-import {SolidVCActorFactory} from "../ActorFactory";
+import {SolidVCActorFactory} from "../../factory/ActorFactory";
 import {defaultDocumentLoaderCacheOptions} from "../config/contextmap";
 
 describe('SolidVCActor', (): void => {
@@ -27,23 +26,19 @@ describe('SolidVCActor', (): void => {
         let actor: SolidVCActor
         it(`[${r.testConfig.name}] should be able to initialize a SolidVCActor`, async () => {
             actor = await createInitializedActor(r)
-            expect(actor.isInitialized())
             // Sanity check
             expect(actor.key).toBeDefined()
         })
 
         it(`[${r.testConfig.name}] SolidVCActor should add controller semantics to WebID Document`, async () => {
-            // const actor = await createInitializedActor(r) // TODO: delete
-            expect(actor.isInitialized())
             // Controller Doc Checks
-
             // The controller doc is available as a json-ld representation
             const {status, statusText, headers} = await fetch(actor.key.controller!, {headers: {accept: 'application/ld+json'}})
             expect(status).toBe(200)
             expect(headers.get('content-type')).toContain('application/ld+json')
 
             // SolidVCActor has updated the WebID Profile Document to contain verificationMethod & assertionMethod
-            const urlControllerDoc = actor.controllerId
+            const urlControllerDoc = actor.identifier
             const store = new n3.Store()
             new n3.Parser({format: 'application/n-quads'})
                 .parse(
@@ -65,7 +60,7 @@ describe('SolidVCActor', (): void => {
             const controllerQuads = store.getQuads(
                 actor.key!.id!,
                 'https://w3id.org/security#controller',
-                actor.controllerId,
+                actor.identifier,
                 null
             )
 

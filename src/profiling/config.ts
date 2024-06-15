@@ -6,11 +6,9 @@ export const dirProfilingReports = path.join(dirReports, 'profiling')
 
 export enum ProfileMode {
     singleActor,
-    multiActor,
-    multiActorV2
-
+    multiActor
 }
-export const profileMode : ProfileMode = ProfileMode.multiActorV2
+export const profileMode : ProfileMode = ProfileMode.multiActor
 
 export const nIterations = 1
 

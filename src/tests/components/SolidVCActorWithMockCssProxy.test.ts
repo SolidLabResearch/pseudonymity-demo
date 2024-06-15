@@ -1,8 +1,5 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
-import {obtainClientCredentials, register} from "../../utils/css";
-import {CssProxy} from "../../components/solid-actor/CssProxy";
-import {IDocumentLoader} from "../../contexts/interfaces";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {VCDIVerifiableCredential} from "@digitalcredentials/vc-data-model/dist/VerifiableCredential";
 import {ITestRecord} from "../interfaces";
@@ -10,13 +7,11 @@ import {ITestRecord} from "../interfaces";
 import credentialsContext from 'credentials-context';
 import {getContextMap} from "../config/contextmap";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
-import {klona} from "klona";
+import {SolidVCActor} from "../../components/SolidVCActor";
 import {MockCssProxy} from "../mock/MockCssProxy";
-import {fetch} from 'cross-fetch'
-import {isValidUrl} from "../../utils/url";
 import {exportPublicG2} from "../../utils/keypair";
 import {namespaces} from "../../utils/namespace";
+import {IDocumentLoader} from "../../interfaces";
 describe('SolidVCActor', (): void => {
     const SELECTED_TEST_ACTOR = 'alice'
 
@@ -71,7 +66,6 @@ describe('SolidVCActor', (): void => {
 
         it(`[${r.testConfig.name}] should be able to initialize a SolidVCActorV2`, async () => {
             actor = await createInitializedActor(r)
-            expect(actor.isInitialized())
             // Sanity check
             expect(actor.key).toBeDefined()
         })

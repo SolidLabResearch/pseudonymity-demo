@@ -1,18 +1,14 @@
 import {afterAll, beforeAll, describe, expect, it} from '@jest/globals';
 import {cssTestConfigRecords} from "../config/actorsOnCssTestConfigs";
 import {obtainClientCredentials, register} from "../../utils/css";
-import {CssProxy} from "../../components/solid-actor/CssProxy";
+import {CssProxy} from "../../components/CssProxy";
 import {createCustomDocumentLoader} from "../../contexts/contexts";
 import {ITestRecord} from "../interfaces";
-import path from "path";
 import {Bls12381G2KeyPair} from "@mattrglobal/jsonld-signatures-bbs";
 import {defaultDocumentLoaderCacheOptions, getContextMap} from "../config/contextmap";
-import {SolidVCActor} from "../../components/solid-actor/SolidVCActor";
-import {joinUrlPaths} from "../../utils/url";
-import {IDocumentLoader} from "../../contexts/interfaces";
-import {WebIdOnWebIdActor} from "../../components/solid-actor/WebIdOnWebIdActor";
-import {WebIdOnWebIdActorFactory} from "../ActorFactory";
-import {writeJsonFile} from "../../utils/io";
+import {SolidVCActor} from "../../components/SolidVCActor";
+import {WebIdOnWebIdActor} from "../../components/WebIdOnWebIdActor";
+import {WebIdOnWebIdActorFactory} from "../../factory/ActorFactory";
 
 
 describe('Use case: Sign-Verify (alice: WebIdOnWebIdActor; others are SolidVCActors)', (): void => {
@@ -30,7 +26,7 @@ describe('Use case: Sign-Verify (alice: WebIdOnWebIdActor; others are SolidVCAct
 
     async function createInitializedActor(r: ITestRecord): Promise<SolidVCActor> {
         const { webId } = r.userConfig;
-        const proxy = new CssProxy(r.clientCredentials!, webId, r.controls!)
+        const proxy = new CssProxy(r.clientCredentials!, webId)
         // Determine URL for DIDs container, based on the pod url
         const didsContainer = webId.replace('#me','')
         const controllerId = didsContainer

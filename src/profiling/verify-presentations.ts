@@ -1,20 +1,11 @@
-import {createCustomDocumentLoader,} from "../contexts/contexts";
 import {credentialResources} from "./multi-actor";
 import {cssTestConfigRecords} from "../tests/config/actorsOnCssTestConfigs";
-import {AbstractActorFactory, DidVCActorFactory, SolidVCActorFactory} from "../tests/ActorFactory";
-import {ICredentialActor} from "../components/solid-actor/interfaces";
+import {AbstractActorFactory, DidVCActorFactory, SolidVCActorFactory} from "../factory/ActorFactory";
 import {performance} from "node:perf_hooks";
 import {writeJsonFile} from "../utils/io";
 import assert  from "node:assert";
-function getDocumentLoader(ctx: Map<any,any>) {
 
-
-    const dl = createCustomDocumentLoader(ctx)
-    return (url: string) => {
-        console.log({url})
-        return dl(url)
-    }
-}
+import {ICredentialActor} from "../interfaces/did";
 
 
 async function getActors(factory: AbstractActorFactory<any>): Promise<{[p:string]: ICredentialActor}> {

@@ -1,12 +1,11 @@
 import {joinFilePath, LogLevel} from "@solid/community-server";
 import {CssUserConfig} from "../../interfaces";
-import {UserConfig} from "../../utils/css";
 
 export type ActorName = string
 
 export interface ICssTestConfig {
     name: ActorName
-    config: string
+    config?: string
     port: number
     logLevel?: LogLevel
 }
@@ -16,7 +15,7 @@ export type ActorTestConfiguration = {
     testConfig: ICssTestConfig
 }
 
-function combineCssTestConfigAndUserConfig(tc: ICssTestConfig): ActorTestConfiguration {
+export function combineCssTestConfigAndUserConfig(tc: ICssTestConfig): ActorTestConfiguration {
     const {name, port} = tc
     return {
         userConfig: {
