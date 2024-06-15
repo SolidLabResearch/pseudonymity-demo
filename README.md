@@ -8,9 +8,13 @@ This repository contains resources necessary for evaluating the Solid DIF PoC.
 Table of Contents
 
 - [Evaluation](#evaluation)
-    - [Usage](#usage)
-    - [Testing](#testing)
-    - [Background](#background)
+  - [Prerequisites](#prerequisites)
+  - [Usage](#usage)
+  - [Testing](#testing)
+    - [Components](#components)
+    - [Use cases](#use-cases)
+  - [Profiling](#profiling)
+  - [Background](#background)
 
 ## Prerequisites
 
@@ -66,7 +70,7 @@ To teardown the test infrastructure, execute:
 npm run test:usecases:teardown
 ```
 
-## Evaluation
+## Profiling
 
 Execution time of the interactions is profiled across different actors.
 The actors differ in how they manage and use their identity.
@@ -78,7 +82,7 @@ The evaluation workflow consists of the following steps:
     ```bash
     ./profiler.sh
     ```
-    This will generate log records in `reports/profiling/`.
+    This will execute different implementations and generate log records in `reports/`.
 
 2. Generate the profiling report using the [`profiling-report.ipynb`](./profiling-report.ipynb)-notebook.</br> This will generate several aggregate statistics and export them to `reports/profiling/nb`.
 
