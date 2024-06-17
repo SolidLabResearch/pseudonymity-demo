@@ -80,7 +80,7 @@ The evaluation workflow consists of the following steps:
 1. Run the profiler, as follows:
 
     ```bash
-    ./profiler.sh
+    ./profiler.sh -n <nr of iterations> [-d <dlco config>] [-s did-key|webid]
     ```
     This will execute different implementations and generate log records in `reports/`.
 
