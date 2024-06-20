@@ -1,5 +1,5 @@
 set -e
-
+DIR_PROFILING_REPORTS=$(pwd)/profiling
 while getopts f:s: option
 do
     case "${option}"
@@ -10,8 +10,9 @@ do
 done
 
 if [ -u $JSON_FILE ]; then
-    echo "⚠️ JSON_FILE (option: -f) is not set. Defaulting to latest JSON file"
-    JSON_FILE=$(ls -t profiling/*/*|head -n 1)
+    echo "⚠️ JSON_FILE (option: -f) is not set."
+    JSON_FILE=$(ls -t $DIR_PROFILING_REPORTS/*/*|head -n 1)
+    echo "Defaulting to latest JSON file: $JSON_FILE"
 fi
 
 if [ -u $STEP ]; then
