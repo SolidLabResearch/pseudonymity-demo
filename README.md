@@ -1,13 +1,13 @@
 <!-- omit in toc -->
 
-# Evaluation
+# Pseudonymity PoC
 
 This repository contains an implementation for pseudonymity combining WebID and DID Key.
 
 ---
 Table of Contents
 
-- [Evaluation](#evaluation)
+- [Pseudonymity PoC](#pseudonymity-poc)
   - [Prerequisites](#prerequisites)
   - [Install](#install)
   - [Testing](#testing)
