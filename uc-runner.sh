@@ -1,5 +1,5 @@
 #####################################################################
-# Profiler script.
+# Use-case Runner
 #
 # Arguments:
 # -d <0,1,2,3>            // Document Loader Cache Option (0,1,2, or 3; cfr. src/profiling/config.ts for details) (default: 3)
@@ -24,7 +24,7 @@ do
     esac
 done
 
-echo "Executing profiler with following parameters:"
+echo "Executing use case with following parameters:"
 echo "SOLUTION: $SOLUTION"
 echo "DLCO_INDEX: $DLCO_INDEX"
 echo "N: $N"
