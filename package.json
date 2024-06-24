@@ -42,9 +42,7 @@
     "test:usecases:sign-verify-WebIdOnWebIdActor": "npm run test:usecases:setup && jest -i src/tests/usecases/sign-verify-WebIdOnWebIdActor.test.ts",
     "test:usecases:sign-verify-WebIdOnDidKeyActor": "npm run test:usecases:setup && jest -i src/tests/usecases/sign-verify-WebIdOnDidKeyActor.test.ts",
     "test:usecases": "npm run test:usecases:sign-verify-WebIdOnWebIdActor && npm run test:usecases:sign-verify-WebIdOnDidKeyActor &&  npm run test:usecases:teardown",
-    "profile": "npm run test:usecases:setup && npx ts-node src/profiling/profile.ts",
-    "profile:single": "npm run profile -- --dcloConfig=0 --n=1 --solution=\"did-key\"",
-    "profile:3rd-party": "npm run test:usecases:setup && ts-node src/profiling/third-party-pseudonymizer.ts"
+    "profile": "npm run test:usecases:setup && npx ts-node src/profiling/profile.ts"
   },
   "author": "GDM",
   "license": "MIT",
