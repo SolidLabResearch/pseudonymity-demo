@@ -9,25 +9,37 @@ Table of Contents
 
 - [Pseudonymity PoC](#pseudonymity-poc)
   - [Prerequisites](#prerequisites)
-  - [Install](#install)
+  - [Pseudonymity demo](#pseudonymity-demo)
   - [Testing](#testing)
   - [Use case](#use-case)
-    - [Implementations](#implementations)
-    - [Running the use case implementations](#running-the-use-case-implementations)
-  - [Background](#background)
   - [License](#license)
 
 ## Prerequisites
 
 - Docker Compose
 
-## Install
+## Pseudonymity demo
 
-Install the package as follows:
+This demo executes the use case explained [here](#use-case).
+
+> Before running the demo,
+make sure that Docker and Docker Compose are installed.
+
+To install this package, run:
 
 ```bash
 npm install
 ```
+
+Then, you can execute the demo:
+
+```bash
+npm run demo
+```
+
+During execution, intermediary outputs are written to the console output.
+Upon completion, these raw outputs can be found in [`./pseudonymity-demo-output.json`](./pseudonymity-demo-output.json).
+In [`demo-output-readme`](demo-output-readme.md), these outputs are explained.
 
 ## Testing
 
@@ -55,35 +67,6 @@ Hence, to reduce any bias in the selection procedure, Alice wants to apply for a
 > This allows Alice to hide her real identity up until the HR department closes the job application round.
 When Alice’s pseudonymous identity has been selected, she can then prove that her public identifier is bound to that pseudonymous identifier.
 
-### Implementations
-
-We provide two implementations in which a pseudonymous identity can established:
-
-1. Using a WebID (label: `webid`)
-2. Using a DID Key (label: `did-key`)
-
-### Running the use case implementations
-
-Run a specific use case implementation as follows:
-
-```bash
-./uc-runner.sh [-s did-key|webid] [-n <nr of iterations>] [-d <dlco config>] 
-# E.g. ./uc-runner.sh -s did-key
-```
-
-Arguments:
-
-- `-d`: (Optional) Document Loader Cache Option (0,1,2, or 3; cfr. [`src/profiling/config.ts`](src/profiling/config.ts) for details) (default: 3).
-- `-n`: (Optional) Number of iterations (default: 1).
-- `-s`: (Optional) Implementation to execute (default: ALL). Possible values: "ALL|webid|did-key".
-
-> Execution time of the interactions is profiled across different actors.
-The actors differ in how they manage and use their identity.
-Logs are recorded in `reports/profiling`.
-
-## Background
-
-See [docs/solutions](docs/solutions.md).
 
 ## License
 

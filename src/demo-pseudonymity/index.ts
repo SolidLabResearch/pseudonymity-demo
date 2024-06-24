@@ -285,6 +285,7 @@ export namespace MultiActorEvaluator {
                 (s.actor as CompoundCredentialActor<any, any>).setActorMode(s.mode!)
 
             const actorStepRecord = await trackActorStep(s)
+            console.log(actorStepRecord)
             stepRecords.push({  index: stepIndex, ...actorStepRecord,})
             stepIndex++;
         }
@@ -324,7 +325,7 @@ async function main() {
         DID: { cacheResolvedDIDDocs: false }
     }
     const actorsSetup = await initializeUseCaseActorsForDidKeySolution(documentLoaderCachingOptions)
-    // TODO: log actors
+    console.log(actorsSetup)
     const demoOutput = await runDemo(actorsSetup)
     const outputDir = path.resolve(__dirname, '..', '..')
     const outputFilepath = path.resolve(outputDir, 'pseudonymity-demo-output.json')
