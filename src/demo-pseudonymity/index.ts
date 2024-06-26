@@ -8,15 +8,13 @@ import {ITestRecord} from "../tests/interfaces";
 import {IActorStep, IActorStepRecord, IMultiActorReport, IUseCaseActorsSetup} from "../profiling/interfaces";
 import {trackActorStep} from "../profiling/track";
 import path from "path";
-import fs, {writeFileSync} from "fs";
-import {mkdirp} from "fs-extra";
+import fs from "fs";
 import {CompoundCredentialActor} from "../components/CompoundCredentialActor";
 import {getHostReport} from "../utils/profiling";
 import {ICredentialActor} from "../interfaces/did";
 import {VerifiableCredential, VerificationResult} from "../interfaces/credentials";
 import {initializeUseCaseActorsForDidKeySolution} from "../profiling/did-key-pseudonymizer";
 import {DocumentLoaderCacheOptions} from "../contexts/contexts";
-import {output} from "rdflib/lib/utils-js";
 
 export const credentialResources = {
     'identity': {
@@ -122,38 +120,6 @@ let vp02: VerifiablePresentation
 let vr02: VerificationResult
 
 
-// TODO: delete initializeActors
-export async function initializeActors(actorFactory: IActorFactory<any>) {
-
-    const actorTags = ['alice', 'university', 'government', 'recruiter']
-    const actorConfigRecords = Object.fromEntries(
-        actorTags.map((actorTag: string) => [
-            actorTag,
-            (cssTestConfigRecords as Array<ITestRecord>)
-                .find(r => r.testConfig.name === actorTag)
-        ])
-    )
-
-    const initializedActors = Object.fromEntries(
-        await Promise.all(
-            Object.entries(actorConfigRecords).map(
-                async ([actorTag, acr]) => {
-                    assert(acr!!)
-                    // acr = await registerActor(acr!)
-                    let actor: ICredentialActor = await actorFactory.createInitializedActor(acr!)
-                    actor.tag = actorTag
-                    actor.className = (actor as any).constructor.name
-                    return [actorTag, actor]
-                }
-            )
-        )
-    ) as {[p: string]: ICredentialActor}
-
-    holder = initializedActors['alice']
-    university = initializedActors['university']
-    government = initializedActors['government']
-    recruiter = initializedActors['recruiter']
-}
 export namespace ActorSteps {
     export async function createDiplomaCredential(actor: ICredentialActor)  {
         cDiploma = actor.createCredential(credentialResources.diploma.unsigned.credentialSubject)
