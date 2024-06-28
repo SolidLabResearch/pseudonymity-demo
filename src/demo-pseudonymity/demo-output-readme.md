@@ -24,9 +24,9 @@ University issues a Diploma credential to Alice, with the following contents:
   },
   "proof": {
     "type": "BbsBlsSignature2020",
-    "created": "2024-06-24T11:57:01Z",
+    "created": "2024-06-28T13:49:13Z",
     "proofPurpose": "assertionMethod",
-    "proofValue": "uQ7AHPDeBGOjaLmf8Im5pmVZpbGJRwbqcztTspQu+MlwUCsoICVzKn39xeJigiulYUHlKfzccE4m7waZyoLEkBLFiK2g54Q2i+CdtYBgDdkUDsoULSBMcH1MwGHwdjfXpldFNFrHFx/IAvLVniyeMQ==",
+    "proofValue": "r1fclhLwITjWAUD/1zjJ7vQeMAyMGL+vQBRKuB/er7mxTse3tRk4dlRDLiNCPq2NYUHlKfzccE4m7waZyoLEkBLFiK2g54Q2i+CdtYBgDdkUDsoULSBMcH1MwGHwdjfXpldFNFrHFx/IAvLVniyeMQ==",
     "verificationMethod": "http://localhost:3003/university/profile/card#key"
   }
 }
@@ -60,9 +60,9 @@ Government issues an Identity credential to Alice, with the following contents:
   },
   "proof": {
     "type": "BbsBlsSignature2020",
-    "created": "2024-06-24T11:57:01Z",
+    "created": "2024-06-28T13:49:14Z",
     "proofPurpose": "assertionMethod",
-    "proofValue": "jTlcVMVsFej8/X+Xq0ViFu4XfJEZIo1rewCXOYJx4/qQckwkb/kYVhO2wAElVWoNMKVg9X44OT7IyqxonIH7xLuNJjBkG7KYma9urLMBCo4x5JoTWPaG1p7URXapIpy1ng+avITVXJin9XQoxPxyNA==",
+    "proofValue": "mCMGiGkwkMZ0SXotSU72/8YicmmyfU9pb+xRAzs51lIARlcWoE7AAPXVb7IyFVSSMKVg9X44OT7IyqxonIH7xLuNJjBkG7KYma9urLMBCo4x5JoTWPaG1p7URXapIpy1ng+avITVXJin9XQoxPxyNA==",
     "verificationMethod": "http://localhost:3004/government/profile/card#key"
   }
 }
@@ -90,10 +90,10 @@ The derived credential has the following contents:
   "issuer": "http://localhost:3003/university/profile/card#me",
   "proof": {
     "type": "BbsBlsSignatureProof2020",
-    "created": "2024-06-24T11:57:01Z",
-    "nonce": "2DGdnibR9NfML6GrFxg1sG4ZRsk5Hb9xAgNHxiz0ADbMToIe6zCFQ2l0OJ0EAiRA0lY=",
+    "created": "2024-06-28T13:49:13Z",
+    "nonce": "AhSkxLPKA5M1sxragUu+H0Bzzgvor8St9NtaHYT4VzaJjz4pihGM760cNu6G02bHU1A=",
     "proofPurpose": "assertionMethod",
-    "proofValue": "AAoDn5fk+Vhh1rUZlW7eScGiSelY3KBsPHa8GMFtc6bIfFIO98zVtaMRmL3gOJCEj+lYOaSMeqm1O57urm7kNpcw8pKgzr1hqCllmPJzFWb85P3kKf1Ku6icmQz68987Hbvk0K3ECoBVWI7bDkK7fHA3URoU7+Ul0h6miJKl3Z2uYw42ZfvEdzpaDPT0dzNss2E3qwAAAHSNnqnM/QiNpQI0Qawdbn7zdt6ESLOlg3dt9ItwFKntvUsbXvG5lgGm3b5jD/T+BPwAAAACciI5vkFySdpbow6IKur5aSZr52lG4l2kNqKqMgkC4LUbEau3NSfk8f7kGxeE+E2tnWQkmhAt2EAR1uiyUOlCwbiGVG7vNNGpTLsSU2mQo+V6o2Uv6ydp/615LP9Nt37CjOhnIycYZRYuZTO9hLCDFAAAAARj9QbPWxcO4sDMMP1rQDjvE/vT7k882zHsSrwaxhzUTGEXmp9WbT9esh32iA9hOehJH4uqlSWd2Y7j5PgQgLzmQLXA0xencmkmGl4deuU9OmxHsMUhmWKMptvia0qQ/1cgi1ufk42JoXxiqAecusb3c11b/5kHZroSvRJQi7yPQQ==",
+    "proofValue": "AAoDn61eTuRmu20K99K8QVW0eDQ4K4pH6JCYGMU3Q+YxJyTnnBOUNGScDQJzqI4KhVSWN5FKS429dr4OzhxM5G6wYy5xkcAFY0vs+0ZJ7Fp1PVSbDn9YERPmIHlV60h6Xci9mYBz5tAZexkU1HnXY4BCKLZG6VmQmhrnNLylxpjk2RwVLdhNfOUQwCLzWZaZt0I4WwAAAHS1lpcZ6MDqmXX2bf/rVbdCosKcqBujo8TbrA5yQOWdA6YiN4mipI6IQCjEA090WZoAAAACTmBpik2Lp7lD81n3K416NFQd/yviZaR0n3j1CfGiD34HYssW/TnxW2YsAshCogUYh5oLGqw9LPBZiNmyxKrsqqqFmSu4VEdL1wPCVZ852ma4Hn/k5iypUFkPsYAgnXt6Q+r+VvzkqWJUVJDyKmrVugAAAARnn+Q6QgtubaTadTzsc+hSSsmyBGOxH3igYdcFuOn06h1F63BM8hmtEMT8pVVTyD0HpztBs6zgq7G6ACM7cctUaGucvepLCmzqFq/fvr0TUUvwO9o0uxvRDOH3Sc9FocsO/GY8cyKWfRhIA0o1eREUaFWG1fHeZFLsaH9QSofKUA==",
     "verificationMethod": "http://localhost:3003/university/profile/card#key"
   }
 }
@@ -131,19 +131,19 @@ Thus, as part of the diploma verification, Alice will pseudonymously present the
       "issuer": "http://localhost:3003/university/profile/card#me",
       "proof": {
         "type": "BbsBlsSignatureProof2020",
-        "created": "2024-06-24T11:57:01Z",
-        "nonce": "2DGdnibR9NfML6GrFxg1sG4ZRsk5Hb9xAgNHxiz0ADbMToIe6zCFQ2l0OJ0EAiRA0lY=",
+        "created": "2024-06-28T13:49:13Z",
+        "nonce": "AhSkxLPKA5M1sxragUu+H0Bzzgvor8St9NtaHYT4VzaJjz4pihGM760cNu6G02bHU1A=",
         "proofPurpose": "assertionMethod",
-        "proofValue": "AAoDn5fk+Vhh1rUZlW7eScGiSelY3KBsPHa8GMFtc6bIfFIO98zVtaMRmL3gOJCEj+lYOaSMeqm1O57urm7kNpcw8pKgzr1hqCllmPJzFWb85P3kKf1Ku6icmQz68987Hbvk0K3ECoBVWI7bDkK7fHA3URoU7+Ul0h6miJKl3Z2uYw42ZfvEdzpaDPT0dzNss2E3qwAAAHSNnqnM/QiNpQI0Qawdbn7zdt6ESLOlg3dt9ItwFKntvUsbXvG5lgGm3b5jD/T+BPwAAAACciI5vkFySdpbow6IKur5aSZr52lG4l2kNqKqMgkC4LUbEau3NSfk8f7kGxeE+E2tnWQkmhAt2EAR1uiyUOlCwbiGVG7vNNGpTLsSU2mQo+V6o2Uv6ydp/615LP9Nt37CjOhnIycYZRYuZTO9hLCDFAAAAARj9QbPWxcO4sDMMP1rQDjvE/vT7k882zHsSrwaxhzUTGEXmp9WbT9esh32iA9hOehJH4uqlSWd2Y7j5PgQgLzmQLXA0xencmkmGl4deuU9OmxHsMUhmWKMptvia0qQ/1cgi1ufk42JoXxiqAecusb3c11b/5kHZroSvRJQi7yPQQ==",
+        "proofValue": "AAoDn61eTuRmu20K99K8QVW0eDQ4K4pH6JCYGMU3Q+YxJyTnnBOUNGScDQJzqI4KhVSWN5FKS429dr4OzhxM5G6wYy5xkcAFY0vs+0ZJ7Fp1PVSbDn9YERPmIHlV60h6Xci9mYBz5tAZexkU1HnXY4BCKLZG6VmQmhrnNLylxpjk2RwVLdhNfOUQwCLzWZaZt0I4WwAAAHS1lpcZ6MDqmXX2bf/rVbdCosKcqBujo8TbrA5yQOWdA6YiN4mipI6IQCjEA090WZoAAAACTmBpik2Lp7lD81n3K416NFQd/yviZaR0n3j1CfGiD34HYssW/TnxW2YsAshCogUYh5oLGqw9LPBZiNmyxKrsqqqFmSu4VEdL1wPCVZ852ma4Hn/k5iypUFkPsYAgnXt6Q+r+VvzkqWJUVJDyKmrVugAAAARnn+Q6QgtubaTadTzsc+hSSsmyBGOxH3igYdcFuOn06h1F63BM8hmtEMT8pVVTyD0HpztBs6zgq7G6ACM7cctUaGucvepLCmzqFq/fvr0TUUvwO9o0uxvRDOH3Sc9FocsO/GY8cyKWfRhIA0o1eREUaFWG1fHeZFLsaH9QSofKUA==",
         "verificationMethod": "http://localhost:3003/university/profile/card#key"
       }
     }
   ],
   "proof": {
     "type": "BbsBlsSignature2020",
-    "created": "2024-06-24T11:57:05Z",
+    "created": "2024-06-28T13:49:15Z",
     "proofPurpose": "assertionMethod",
-    "proofValue": "ihi4ytM0wwDdabMVnK2jkLAj1XU3lyqoBkufU328uUt5hhC92q1WqeOuOQNEElGmJ11Jnv3EWamCZATkLRzCvrMF94q/GCjPp7EMm1zp12dzQqEElOgNk4tEUmAgmqNHzUQEJsCEe3+tWNDHb1xUYg==",
+    "proofValue": "qraQ/bLUPEmmSueB+UrTf6X3sm5VongfvIOU1NASoRVEu4kSUacxC9qV3yXsh0sbJ11Jnv3EWamCZATkLRzCvrMF94q/GCjPp7EMm1zp12dzQqEElOgNk4tEUmAgmqNHzUQEJsCEe3+tWNDHb1xUYg==",
     "verificationMethod": "did:key:zUC79TstVxxe4f9EWDBxMCnfxB2BcFyEUNDruQ1NtLMvTyvRpUkRLWz9uhhkvTBhno4LDdwkKFWY767GQtPb34BSXaNQAFmhnadbDe398xAQwTaTgivdoMhx3ZtL9TZpLPiefMe#zUC79TstVxxe4f9EWDBxMCnfxB2BcFyEUNDruQ1NtLMvTyvRpUkRLWz9uhhkvTBhno4LDdwkKFWY767GQtPb34BSXaNQAFmhnadbDe398xAQwTaTgivdoMhx3ZtL9TZpLPiefMe"
   }
 }
@@ -162,9 +162,9 @@ The verification result is as follows:
       "proof": {
         "@context": "https://w3id.org/security/v2",
         "type": "sec:BbsBlsSignature2020",
-        "created": "2024-06-24T11:57:05Z",
+        "created": "2024-06-28T13:49:15Z",
         "proofPurpose": "assertionMethod",
-        "proofValue": "ihi4ytM0wwDdabMVnK2jkLAj1XU3lyqoBkufU328uUt5hhC92q1WqeOuOQNEElGmJ11Jnv3EWamCZATkLRzCvrMF94q/GCjPp7EMm1zp12dzQqEElOgNk4tEUmAgmqNHzUQEJsCEe3+tWNDHb1xUYg==",
+        "proofValue": "qraQ/bLUPEmmSueB+UrTf6X3sm5VongfvIOU1NASoRVEu4kSUacxC9qV3yXsh0sbJ11Jnv3EWamCZATkLRzCvrMF94q/GCjPp7EMm1zp12dzQqEElOgNk4tEUmAgmqNHzUQEJsCEe3+tWNDHb1xUYg==",
         "verificationMethod": "did:key:zUC79TstVxxe4f9EWDBxMCnfxB2BcFyEUNDruQ1NtLMvTyvRpUkRLWz9uhhkvTBhno4LDdwkKFWY767GQtPb34BSXaNQAFmhnadbDe398xAQwTaTgivdoMhx3ZtL9TZpLPiefMe#zUC79TstVxxe4f9EWDBxMCnfxB2BcFyEUNDruQ1NtLMvTyvRpUkRLWz9uhhkvTBhno4LDdwkKFWY767GQtPb34BSXaNQAFmhnadbDe398xAQwTaTgivdoMhx3ZtL9TZpLPiefMe"
       },
       "verified": true
@@ -204,10 +204,10 @@ The derived credential has the following contents:
   "issuer": "http://localhost:3004/government/profile/card#me",
   "proof": {
     "type": "BbsBlsSignatureProof2020",
-    "created": "2024-06-24T11:57:01Z",
-    "nonce": "pBulGUayMvjSTBjT637/Atz/5pDCoOUKXN/jmNqKZlrM5iOhgp5CkLZr+OqUFsy6u04=",
+    "created": "2024-06-28T13:49:14Z",
+    "nonce": "Pz+E2w4CLnrYJk47B2MhjqQN/6bXohTwcmxHVvq6erVAjFUHreZ+fKETZDVboHsZfWo=",
     "proofPurpose": "assertionMethod",
-    "proofValue": "AA0fj6kWvlR/pWsn64wGh0yxRzawutnjqKow5wPSZawTDtLFVmUxu1l6M8TlTZ/7pIgnsYUX8a17mqKCG5Oil/DdF24bdmDmFce3+KANXJub1kZuwIS1Ix/3ihZaUsqUnr05IoJjMZwGiNX1e9GCYicZoVnKDEqJDeD1yROVrMinmLzeS1fMNk88uQQxQYq/azCN+gAAAHSsfnmsbIIFVmMSlzggqapXaAltWMChjihb9gv6jjcUGw4A2FUULqynjUH9LXkK91oAAAACR72Z4y3KLxvBps5tUoTMs0HC8ymlsd6F1ZRYlJNH5ZkY/ESFLYe4Mr/fnhP2kcjqS5mul/rV47mQPOTLet2j3qd5Y40qNt6UfhrgJWkkqFWpVO835LcDbi8aFO6K3Zx8xncrs+3g7vjE1gg0pevaOQAAAAUvEYjyDmOUbVALHefTvP3i0h0xhlm/pz2H5CjiSFVLclbAuPDIB7PE7Hzljd4/CpYFo7NQjn/KBQePWDPALSfpWPhFDbTnLl1kWQo+J1gD9G6eyZRsmb4UQ/6HNwnhd/dyUxc9rVY4O2fZySdOlCnAWr5YZPlwR2ZawkoN/u2fvUmG+R0FzKZuniTnd/LUivB5hnOIOdXvf006fTxMRx0h",
+    "proofValue": "AA0fj6qu5j/wNcn2yXyU7fgeOln7NN4JSt6Fcw402OGosWmriPUKvx6zS0aVsnvxmupWi5kwJehVD4kC+3CS8LkEcFRLX7ZIHd6TtLCc5672ShLiwUzSwH6GfbfKj3SA6bQDpo2YRDbqCgrQUITOXPApwsWkNx0OimxqRm1xiTJV1hXxAFKA2DyeINDD9vkGojB7NAAAAHShXaCA4EFHcl4soeCk7QF7pdIBQJjUyLShps1PHj+G37QO3hRHjC7lEh1/H0Bud5cAAAACJk9ecDOJVt+Ds08wdDocpufg6BQ7GxmRum0XNeIhbJsLjYQp5wDNzO1V9EcuN4XXbMdzvbOsb33XoRzbvTwKALfyuez4zmDtYI15ugi5Lz5Gv1PWc8yAPVc2CsclzwRQiL0QSti3VIlOzXO017c/9QAAAAUIV6bnBmIYKEIsRtPTY+9mMW8EFjHMrGsLBADZIHfoo0H/RFULWrQSdnh6iZ7pV3l+cZ0/x63XCsgSsspjsyCSbJXOX57EPid0oldSRrHXMre+O7gxC4etLZ6AvIjJIIkAGa+6aqh+AJyEOxSenyRd6UMH6XQqMS80Gs6gPAbCjCeDAhwjhydsUXFWPOXQ9FrSeo5riKLjdWWc9t0Xq16X",
     "verificationMethod": "http://localhost:3004/government/profile/card#key"
   }
 }
@@ -257,10 +257,10 @@ which she will present to the recruiter.
       "issuer": "http://localhost:3004/government/profile/card#me",
       "proof": {
         "type": "BbsBlsSignatureProof2020",
-        "created": "2024-06-24T11:57:01Z",
-        "nonce": "pBulGUayMvjSTBjT637/Atz/5pDCoOUKXN/jmNqKZlrM5iOhgp5CkLZr+OqUFsy6u04=",
+        "created": "2024-06-28T13:49:14Z",
+        "nonce": "Pz+E2w4CLnrYJk47B2MhjqQN/6bXohTwcmxHVvq6erVAjFUHreZ+fKETZDVboHsZfWo=",
         "proofPurpose": "assertionMethod",
-        "proofValue": "AA0fj6kWvlR/pWsn64wGh0yxRzawutnjqKow5wPSZawTDtLFVmUxu1l6M8TlTZ/7pIgnsYUX8a17mqKCG5Oil/DdF24bdmDmFce3+KANXJub1kZuwIS1Ix/3ihZaUsqUnr05IoJjMZwGiNX1e9GCYicZoVnKDEqJDeD1yROVrMinmLzeS1fMNk88uQQxQYq/azCN+gAAAHSsfnmsbIIFVmMSlzggqapXaAltWMChjihb9gv6jjcUGw4A2FUULqynjUH9LXkK91oAAAACR72Z4y3KLxvBps5tUoTMs0HC8ymlsd6F1ZRYlJNH5ZkY/ESFLYe4Mr/fnhP2kcjqS5mul/rV47mQPOTLet2j3qd5Y40qNt6UfhrgJWkkqFWpVO835LcDbi8aFO6K3Zx8xncrs+3g7vjE1gg0pevaOQAAAAUvEYjyDmOUbVALHefTvP3i0h0xhlm/pz2H5CjiSFVLclbAuPDIB7PE7Hzljd4/CpYFo7NQjn/KBQePWDPALSfpWPhFDbTnLl1kWQo+J1gD9G6eyZRsmb4UQ/6HNwnhd/dyUxc9rVY4O2fZySdOlCnAWr5YZPlwR2ZawkoN/u2fvUmG+R0FzKZuniTnd/LUivB5hnOIOdXvf006fTxMRx0h",
+        "proofValue": "AA0fj6qu5j/wNcn2yXyU7fgeOln7NN4JSt6Fcw402OGosWmriPUKvx6zS0aVsnvxmupWi5kwJehVD4kC+3CS8LkEcFRLX7ZIHd6TtLCc5672ShLiwUzSwH6GfbfKj3SA6bQDpo2YRDbqCgrQUITOXPApwsWkNx0OimxqRm1xiTJV1hXxAFKA2DyeINDD9vkGojB7NAAAAHShXaCA4EFHcl4soeCk7QF7pdIBQJjUyLShps1PHj+G37QO3hRHjC7lEh1/H0Bud5cAAAACJk9ecDOJVt+Ds08wdDocpufg6BQ7GxmRum0XNeIhbJsLjYQp5wDNzO1V9EcuN4XXbMdzvbOsb33XoRzbvTwKALfyuez4zmDtYI15ugi5Lz5Gv1PWc8yAPVc2CsclzwRQiL0QSti3VIlOzXO017c/9QAAAAUIV6bnBmIYKEIsRtPTY+9mMW8EFjHMrGsLBADZIHfoo0H/RFULWrQSdnh6iZ7pV3l+cZ0/x63XCsgSsspjsyCSbJXOX57EPid0oldSRrHXMre+O7gxC4etLZ6AvIjJIIkAGa+6aqh+AJyEOxSenyRd6UMH6XQqMS80Gs6gPAbCjCeDAhwjhydsUXFWPOXQ9FrSeo5riKLjdWWc9t0Xq16X",
         "verificationMethod": "http://localhost:3004/government/profile/card#key"
       }
     },
@@ -279,9 +279,9 @@ which she will present to the recruiter.
       },
       "proof": {
         "type": "BbsBlsSignature2020",
-        "created": "2024-06-24T11:57:07Z",
+        "created": "2024-06-28T13:49:17Z",
         "proofPurpose": "assertionMethod",
-        "proofValue": "mTUd64dt1q+9yp0TtB/5QtWJh6TX/EqdmCa5Attb5gSY9iJuHpH9h37kCVFxZfHvXnzy7QugCy9A8Uqg6uDpBGCKl9vYbEaSMeuQqI/jEFEeKBVaOR81Vz6rz2Q1fRLn0vUtqgAq1GD3aey8P6bSiQ==",
+        "proofValue": "kw+webAqsH5FjROh9DcOWM+jTbLvndNRnOrRJpyWfXoYmvOfwen3uKyb+L9pueOxXnzy7QugCy9A8Uqg6uDpBGCKl9vYbEaSMeuQqI/jEFEeKBVaOR81Vz6rz2Q1fRLn0vUtqgAq1GD3aey8P6bSiQ==",
         "verificationMethod": "http://localhost:3000/alice/profile/card#key"
       }
     },
@@ -300,18 +300,18 @@ which she will present to the recruiter.
       },
       "proof": {
         "type": "BbsBlsSignature2020",
-        "created": "2024-06-24T11:57:07Z",
+        "created": "2024-06-28T13:49:17Z",
         "proofPurpose": "assertionMethod",
-        "proofValue": "r4CtohKnrIUaEz9I9xw+ZJSBVxcCPwkmHzajDkiW/4uxsGTosdCuXtNgzDZNqaLIIHdu/qvAC3aBwoj+4STYxtPK/H47rNWetTj+YyAwM61W9YHcCXhUueBxdX8b3p6vZbAc+1h96iUgedKrygbcJg==",
+        "proofValue": "iIv8AGnfVHyQeZz7ykenL5XqNJeoXhmfppUp3yGTXJDP2LG/+sSZtMLk4GiykGS5IHdu/qvAC3aBwoj+4STYxtPK/H47rNWetTj+YyAwM61W9YHcCXhUueBxdX8b3p6vZbAc+1h96iUgedKrygbcJg==",
         "verificationMethod": "did:key:zUC79TstVxxe4f9EWDBxMCnfxB2BcFyEUNDruQ1NtLMvTyvRpUkRLWz9uhhkvTBhno4LDdwkKFWY767GQtPb34BSXaNQAFmhnadbDe398xAQwTaTgivdoMhx3ZtL9TZpLPiefMe#zUC79TstVxxe4f9EWDBxMCnfxB2BcFyEUNDruQ1NtLMvTyvRpUkRLWz9uhhkvTBhno4LDdwkKFWY767GQtPb34BSXaNQAFmhnadbDe398xAQwTaTgivdoMhx3ZtL9TZpLPiefMe"
       }
     }
   ],
   "proof": {
     "type": "BbsBlsSignature2020",
-    "created": "2024-06-24T11:57:07Z",
+    "created": "2024-06-28T13:49:17Z",
     "proofPurpose": "assertionMethod",
-    "proofValue": "thZ9Uhtq69A9mK1ihUAN00qD/27e3IPnejf5c74vWfONKp7dM4B/l3U8VKQStmI1Bw3nBWo8LiETn9iS5vfJcyl9Ppex73U7VSrq/AX1dGkSCUYHoZ7x/bwgjL5nxqZTOmiaK9HlI7c2R6PVrMGmHQ==",
+    "proofValue": "jQ+uayjQxB26bkr2cE4MfAQ07E0RLyqatYPr9tyJUY05ij8bIyl30Z2WnCpRKcqnBw3nBWo8LiETn9iS5vfJcyl9Ppex73U7VSrq/AX1dGkSCUYHoZ7x/bwgjL5nxqZTOmiaK9HlI7c2R6PVrMGmHQ==",
     "verificationMethod": "http://localhost:3000/alice/profile/card#key"
   }
 }
@@ -330,9 +330,9 @@ The verification result is as follows:
       "proof": {
         "@context": "https://w3id.org/security/v2",
         "type": "sec:BbsBlsSignature2020",
-        "created": "2024-06-24T11:57:07Z",
+        "created": "2024-06-28T13:49:17Z",
         "proofPurpose": "assertionMethod",
-        "proofValue": "thZ9Uhtq69A9mK1ihUAN00qD/27e3IPnejf5c74vWfONKp7dM4B/l3U8VKQStmI1Bw3nBWo8LiETn9iS5vfJcyl9Ppex73U7VSrq/AX1dGkSCUYHoZ7x/bwgjL5nxqZTOmiaK9HlI7c2R6PVrMGmHQ==",
+        "proofValue": "jQ+uayjQxB26bkr2cE4MfAQ07E0RLyqatYPr9tyJUY05ij8bIyl30Z2WnCpRKcqnBw3nBWo8LiETn9iS5vfJcyl9Ppex73U7VSrq/AX1dGkSCUYHoZ7x/bwgjL5nxqZTOmiaK9HlI7c2R6PVrMGmHQ==",
         "verificationMethod": "http://localhost:3000/alice/profile/card#key"
       },
       "verified": true

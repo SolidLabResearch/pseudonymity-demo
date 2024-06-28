@@ -293,7 +293,7 @@ async function main() {
     const actorsSetup = await initializeUseCaseActorsForDidKeySolution(documentLoaderCachingOptions)
     console.log(actorsSetup)
     const demoOutput = await runDemo(actorsSetup)
-    const outputDir = path.resolve(__dirname, '..', '..')
+    const outputDir = path.resolve(__dirname)
     const outputFilepath = path.resolve(outputDir, 'pseudonymity-demo-output.json')
     console.log(`Writing demo output to ${outputFilepath}`)
     fs.writeFileSync(outputFilepath, JSON.stringify(demoOutput, null, 2))
