@@ -1,0 +1,82 @@
+
+...@vars.d2
+# VCs: "" {
+#   ...@vcs.d2
+# }
+
+seq: "Pseudonymous Job Application" {
+  shape: sequence_diagram
+  alice
+  pseudomizer
+
+  recruiter: "Recruiter\n${recruiter.webid}"
+  pod_alice: Pod Alice\n${alice.pod}
+  # idp_alice: IDP Alice\n${alice.idp}
+  # idp_pseudo: IDP Pseudo\n${pseudo.idp}
+
+  pod_alice."Contains VC01 and VC02"
+  # create_pseudo: "Create pseudonymous account" {
+  #   alice -> pseudomizer: "Create"
+  #   pseudomizer -> idp_pseudo: "Create pseudonymous account for Alice"
+  #   idp_pseudo -> pseudomizer: "Account created (WebID: ${pseudo.webid})"
+  # }
+  phase01: "Phase 1: Diploma Verification" {
+    ctx_pseudo: "Context: Pseudonymous Identity" {
+      pseudomizer -> recruiter: "Get Presentation Request (Diploma)"
+      recruiter -> pseudomizer: "Presentation Request (Diploma)"
+    }
+  
+    ctx_alice: "Context: Alice" {
+      pseudomizer -> pod_alice: "Fetch diploma VC"
+      pod_alice -> pseudomizer: "VC01"
+    }
+  
+    ctx_pseudo2: "Context: Pseudonymous Identity" {
+      # pseudomizer.|
+      #  Alice uses the pseudomizer to create the Diploma VP
+      #  to which she adds a derived identity credential only containing the
+      #  requested diploma attributes.
+      # |
+
+      ctx_create_vp01: "Create VP01: Diploma Presentation" {
+        pseudomizer -> pseudomizer: "Derive Diploma Credential"
+      }
+      
+      pseudomizer -> recruiter: "Present VP01"
+      recruiter."Verify VP01"
+      recruiter -> pseudomizer: "Response: RVP01"
+    }
+  }
+  
+  phase02: "Phase 2: Identity Verification" {
+    ctx_pseudo: "Context: Pseudonymous Identity" {
+      pseudomizer -> recruiter: "Get Presentation Request (Identity)"
+      recruiter -> pseudomizer: "Presentation Request (Identity)"
+    }
+
+    # Create VP02
+    ctx_alice: "Context: Alice" {
+      pseudomizer -> pod_alice: "Fetch identity VC"
+      pod_alice -> pseudomizer: "VC02"
+    }
+    
+    # pseudomizer.|
+    # Alice uses the pseudomizer to create the Identity VP
+    # in which she has to prove her true identity as well as the
+    # binding with the pseudonymous identity.
+    # To this end, she adds a derived credential that selectively disclose the WebID from VC02.
+    # Furthermore, to prove the binding, two more credentials are added that
+    # both attest the binding between the pseudonymous and the true identity,
+    # but one is signed by the pseudonymous identity and the other by the true identity.
+    # |
+    ctx_create_vp02: "Create VP02: Identity Presentation" {
+      pseudomizer -> pseudomizer: "Derive Identity Credential"
+      pseudomizer -> pseudomizer: "Add cross-signed binding credentials"
+    }
+    
+    # Exchange VP02
+    pseudomizer -> recruiter: "Present VP02"
+    recruiter."Verify VP02"
+    recruiter -> pseudomizer: "Response: RVP02"
+  }
+}
