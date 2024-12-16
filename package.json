@@ -45,7 +45,7 @@
     "profile": "npm run test:usecases:setup && npx ts-node src/profiling/profile.ts",
     "demo": "npm run test:usecases:setup && npx ts-node src/demo-pseudonymity/index.ts"
   },
-  "author": "gertjan.demulder@ugent",
+  "author": "",
   "license": "MIT",
   "devDependencies": {
     "@jest-performance-reporter/core": "^2.1.3",
